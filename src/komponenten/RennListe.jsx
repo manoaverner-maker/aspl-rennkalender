@@ -10,7 +10,7 @@ function heroBildUrl(strecke) {
 
 // Seitenleiste mit allen Rennen der gewaehlten Series (auf Mobile unter dem Globus).
 // Optional darunter: alle weiteren ACC-Strecken (Toggle "Alle ACC-Strecken").
-export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hinweis, accStrecken = [] }) {
+export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hinweis, accStrecken = [], siegerMap = {}, seriesId }) {
   const [suche, setSuche] = useState('')
 
   const passt = (strecke) =>
@@ -42,7 +42,8 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
         aria-label="Strecke oder Land suchen"
       />
       {hinweis && !suche && <div className={'liste-hinweis' + (alleTbd ? ' tbd' : '')}>{hinweis}</div>}
-      <ol className="rennkarten">
+      {/* key = Serieswechsel loest sanftes Einblenden der Liste aus */}
+      <ol className="rennkarten" key={seriesId}>
         {gefiltert.map((e, i) => {
           if (e.typ === 'pause') {
             return (
@@ -93,9 +94,14 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
                     {formatiereDatum(e.verschobenAuf || e.datum)}
                     {e.startzeit ? ' · ' + e.startzeit : ''}
                   </span>
-                  <span className={'badge badge-' + e.status}>
-                    {STATUS_TEXT[e.status]}
-                    {e.istNaechstes ? ' · NEXT' : ''}
+                  <span className="karte-status-zeile">
+                    <span className={'badge badge-' + e.status}>
+                      {STATUS_TEXT[e.status]}
+                      {e.istNaechstes ? ' · NEXT' : ''}
+                    </span>
+                    {e.status === 'gefahren' && siegerMap[e.streckeId] && (
+                      <span className="karte-sieger">🥇 {siegerMap[e.streckeId]}</span>
+                    )}
                   </span>
                 </div>
               </button>

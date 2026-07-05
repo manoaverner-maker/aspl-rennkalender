@@ -90,6 +90,16 @@ export default function App() {
     (e) => e.saisonId === kalender?.saisonId && e.seriesId === kalender?.seriesId
   )
 
+  // Sieger pro Strecke — fuer die Einblendung auf gefahrenen Rennkarten
+  const siegerMap = useMemo(() => {
+    const m = {}
+    for (const [streckeId, liste] of Object.entries(ergebnisse?.strecken ?? {})) {
+      const p1 = liste.find((e) => e.platz === 1)
+      if (p1) m[streckeId] = p1.fahrer
+    }
+    return m
+  }, [ergebnisse])
+
   // Eintraege mit automatisch berechnetem Status anreichern
   const eintraege = useMemo(
     () => (kalender ? annotiereEintraege(kalender.eintraege) : []),
@@ -166,8 +176,11 @@ export default function App() {
       <header className="kopf">
         <div className="kopf-innen">
           <a className="logo" href="#/">
-            <span className="logo-aspl">ASPL</span>
-            <span className="logo-sub">RENNKALENDER</span>
+            <img className="logo-icon" src={import.meta.env.BASE_URL + 'logo.svg'} alt="" />
+            <span className="logo-text">
+              <span className="logo-aspl">ASPL</span>
+              <span className="logo-sub">RENNKALENDER</span>
+            </span>
           </a>
           <SeriesAuswahl
             saisons={saisons}
@@ -224,22 +237,29 @@ export default function App() {
               onMarkerKlick={waehleRennen}
               onHintergrundKlick={schliessePanel}
             />
-            <div className="legende">
-              <span className="legende-punkt gefahren" /> Gefahren
-              <span className="legende-punkt ausstehend" /> Ausstehend
-              {kalenderMarker.some((m) => m.status === 'verschoben') && (
-                <>
-                  <span className="legende-punkt verschoben" /> Verschoben
-                </>
-              )}
-              <span className="legende-punkt naechstes" /> Naechstes Rennen
-              {alleStrecken && (
-                <>
-                  <span className="legende-punkt acc" /> ACC-Strecke
-                </>
-              )}
-            </div>
           </section>
+          {/* Desktop: Overlay unten links am Globus — Mobile: eigene Zeile darunter */}
+          <div className="legende">
+              <span className="legende-item">
+                <span className="legende-punkt gefahren" /> Gefahren
+              </span>
+              <span className="legende-item">
+                <span className="legende-punkt ausstehend" /> Ausstehend
+              </span>
+              {kalenderMarker.some((m) => m.status === 'verschoben') && (
+                <span className="legende-item">
+                  <span className="legende-punkt verschoben" /> Verschoben
+                </span>
+              )}
+              <span className="legende-item">
+                <span className="legende-punkt naechstes" /> Next
+              </span>
+              {alleStrecken && (
+                <span className="legende-item">
+                  <span className="legende-punkt acc" /> ACC
+                </span>
+              )}
+          </div>
           <RennListe
             eintraege={eintraege}
             streckenMap={streckenMap}
@@ -247,6 +267,8 @@ export default function App() {
             onWahl={waehleRennen}
             hinweis={kalender?.hinweis}
             accStrecken={alleStrecken ? accStrecken : []}
+            siegerMap={siegerMap}
+            seriesId={kalender?.seriesId}
           />
         </main>
       )}

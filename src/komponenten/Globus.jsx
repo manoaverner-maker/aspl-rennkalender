@@ -61,6 +61,12 @@ const TAG_NACHT_SHADER = {
       float intensity = dot(normalize(vNormal), normalize(rotatedSunDirection));
       vec4 dayColor = texture2D(dayTexture, vUv);
       vec4 nightColor = texture2D(nightTexture, vUv);
+      // Dezente Farbanhebung (Saettigung + Kontrast), damit die Fernansicht
+      // farblich zu den Satellitenkacheln der Nahansicht passt
+      float grau = dot(dayColor.rgb, vec3(0.299, 0.587, 0.114));
+      vec3 tagFarbe = clamp(mix(vec3(grau), dayColor.rgb, 1.22), 0.0, 1.0);
+      tagFarbe = clamp((tagFarbe - 0.5) * 1.07 + 0.5, 0.0, 1.0);
+      dayColor = vec4(tagFarbe, 1.0);
       // Nachtseite: Stadtlichter + schwaches Mondlicht aus der Tag-Textur,
       // damit Land und Meer auch nachts erkennbar bleiben
       vec4 nachtSeite = nightColor + vec4(dayColor.rgb * vec3(0.10, 0.13, 0.20), 0.0);
@@ -105,12 +111,13 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     })
     globusRef.current = globus
 
-    // Texturen laden (Tag: NASA Blue Marble, Nacht: 8K-Nachtkarte)
+    // Texturen laden (Tag: NASA Blue Marble Juni — sattes Sommergruen aus
+    // derselben Bildfamilie wie die Esri-Kacheln; Nacht: 8K-Nachtkarte)
     const lader = new THREE.TextureLoader()
     // Wichtig: KEIN colorSpace setzen — der Custom-Shader gibt die Texel
     // unveraendert aus; mit SRGBColorSpace wuerde doppelt Gamma angewendet
     // und die Mitteltoene wuerden stark abdunkeln
-    const tagTextur = lader.load(BASIS + 'textures/earth-day-8k.jpg')
+    const tagTextur = lader.load(BASIS + 'textures/earth-tag.jpg')
     const nachtTextur = lader.load(BASIS + 'textures/earth-night-8k.jpg')
 
     const material = new THREE.ShaderMaterial({
@@ -138,19 +145,19 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
 
     // Reagiert auf die Zoom-Hoehe: Nacht und Wolken ausblenden, Kacheln umschalten
     const setzeZoomStufe = (altitude) => {
-      // Nachtseite zwischen Hoehe 1.0 und 0.35 sanft ausblenden
+      // Nachtseite zwischen Hoehe 1.1 und 0.45 sanft ausblenden
       material.uniforms.dayBoost.value =
-        1 - Math.min(1, Math.max(0, (altitude - 0.35) / 0.65))
-      // Wolken zwischen Hoehe 0.8 und 0.4 ausblenden
+        1 - Math.min(1, Math.max(0, (altitude - 0.45) / 0.65))
+      // Wolken zwischen Hoehe 0.9 und 0.5 ausblenden
       if (wolken) {
-        const deckkraft = Math.min(1, Math.max(0, (altitude - 0.4) / 0.4))
+        const deckkraft = Math.min(1, Math.max(0, (altitude - 0.5) / 0.4))
         wolken.material.opacity = deckkraft
         wolken.visible = deckkraft > 0.02
       }
-      // Kacheln mit Hysterese (an < 0.30, aus > 0.45) — aber NICHT mitten in
+      // Kacheln mit Hysterese (an < 0.42, aus > 0.60) — aber NICHT mitten in
       // der Zoom-Geste umschalten: der Umbau der Globus-Oberflaeche laesst den
       // Zoom sonst haken. Darum erst, wenn die Geste kurz zur Ruhe kommt.
-      const sollTiles = tilesAktiv ? altitude < 0.45 : altitude < 0.3
+      const sollTiles = tilesAktiv ? altitude < 0.6 : altitude < 0.42
       clearTimeout(tileWechselTimer)
       if (sollTiles !== tilesAktiv) {
         tileWechselTimer = setTimeout(() => {
@@ -164,7 +171,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     // Debug-Schalter per URL: ?shader=0 (nur Tag-Textur) / ?atmo=0 (ohne Glow)
     const debugParams = new URLSearchParams(window.location.search)
     if (debugParams.get('shader') === '0') {
-      globus.globeImageUrl(BASIS + 'textures/earth-day-8k.jpg')
+      globus.globeImageUrl(BASIS + 'textures/earth-tag.jpg')
     } else {
       globus.globeMaterial(material)
     }
@@ -173,12 +180,13 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     }
 
     globus
-      .backgroundImageUrl(BASIS + 'textures/night-sky.png')
+      .backgroundImageUrl(BASIS + 'textures/sterne-milchstrasse.jpg')
       .atmosphereColor('#4a7bd5')
       .atmosphereAltitude(0.18)
       .width(container.clientWidth)
       .height(container.clientHeight)
       .onGlobeClick(() => callbacksRef.current.onHintergrundKlick?.())
+      .onGlobeReady(() => container.classList.add('bereit'))
       .globeTileEngineMaxLevel(18)
       // Kamerabewegung an den Shader melden + Zoom-Stufen aktualisieren
       .onZoom(({ lng, lat, altitude }) => {

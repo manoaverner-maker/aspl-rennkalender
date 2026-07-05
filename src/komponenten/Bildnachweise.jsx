@@ -10,8 +10,11 @@ export default function Bildnachweise() {
       <header className="kopf">
         <div className="kopf-innen">
           <a className="logo" href="#/">
-            <span className="logo-aspl">ASPL</span>
-            <span className="logo-sub">BILDNACHWEISE</span>
+            <img className="logo-icon" src={BASIS + 'logo.svg'} alt="" />
+            <span className="logo-text">
+              <span className="logo-aspl">ASPL</span>
+              <span className="logo-sub">BILDNACHWEISE</span>
+            </span>
           </a>
           <a className="zurueck-link" href="#/">
             ← Zurueck zum Kalender
@@ -59,11 +62,11 @@ export default function Bildnachweise() {
           <ul>
             <li>
               <div>
-                <strong>Tag-Textur</strong> — „Natural Earth III" (8K, mit Relief)
+                <strong>Tag-Textur</strong> — „Blue Marble Next Generation (Juni)"
                 <br />
-                Autor: Tom Patterson · Lizenz: Public domain ·{' '}
-                <a href="https://www.shadedrelief.com/natural3/" target="_blank" rel="noreferrer">
-                  Quelle (shadedrelief.com)
+                Autor: NASA Earth Observatory (Reto Stoeckli) · Lizenz: Public domain ·{' '}
+                <a href="https://visibleearth.nasa.gov/collection/1484/blue-marble" target="_blank" rel="noreferrer">
+                  Quelle (NASA Visible Earth)
                 </a>
               </div>
             </li>
@@ -99,11 +102,11 @@ export default function Bildnachweise() {
             </li>
             <li>
               <div>
-                <strong>Sternenhimmel</strong> — „night-sky.png"
+                <strong>Sternenhimmel</strong> — „The Milky Way panorama"
                 <br />
-                Autor: three-globe (Vasco Asturiano) · Lizenz: MIT ·{' '}
-                <a href="https://github.com/vasturiano/three-globe" target="_blank" rel="noreferrer">
-                  Quelle (GitHub)
+                Autor: ESO / S. Brunier · Lizenz: CC BY 4.0 (Helligkeit angepasst) ·{' '}
+                <a href="https://www.eso.org/public/images/eso0932a/" target="_blank" rel="noreferrer">
+                  Quelle (ESO)
                 </a>
               </div>
             </li>
