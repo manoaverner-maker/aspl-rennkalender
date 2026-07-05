@@ -92,8 +92,29 @@ a {
   margin-top: 3px;
 }
 
-.kopf-domain {
+/* Anmelde-Button (SimGrid) im Header */
+.kopf-anmelden {
   margin-left: auto;
+  background: var(--rot);
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--titel-font);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.5rem 0.95rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 0 0 14px rgba(225, 6, 0, 0.45);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.kopf-anmelden:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 22px rgba(225, 6, 0, 0.7);
+}
+
+.kopf-domain {
   color: var(--grau);
   text-decoration: none;
   font-weight: 600;
@@ -582,6 +603,109 @@ a {
 
 .panel-datum {
   font-weight: 600;
+}
+
+/* Anmelde-Button (SimGrid) im Detail-Panel */
+.anmelde-button {
+  display: block;
+  text-align: center;
+  background: var(--rot);
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--titel-font);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.9rem;
+  box-shadow: 0 0 16px rgba(225, 6, 0, 0.4);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.anmelde-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 26px rgba(225, 6, 0, 0.65);
+}
+
+/* ===== Wetter vor Ort (Open-Meteo) ===== */
+.wetter-box {
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-radius: 10px;
+  padding: 0.7rem 0.8rem;
+}
+
+.wetter-laden {
+  color: var(--grau);
+  font-size: 0.95rem;
+}
+
+.wetter-aktuell {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.wetter-symbol {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.wetter-temp {
+  font-family: var(--titel-font);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.wetter-text {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.wetter-text small {
+  color: var(--grau);
+  font-weight: 500;
+}
+
+.wetter-vorhersage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--linie);
+}
+
+.wetter-tag {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.88rem;
+}
+
+.wetter-tag-name {
+  color: var(--grau);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.wetter-tag-symbol {
+  font-size: 1.3rem;
+}
+
+.wetter-tag-temp {
+  font-weight: 700;
+}
+
+.wetter-tag-regen {
+  color: var(--grau);
+  font-size: 0.8rem;
 }
 
 /* Galerie: horizontal scrollbar, per Swipe/Touch bedienbar */

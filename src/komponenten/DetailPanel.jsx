@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import BildMitFallback from './BildMitFallback.jsx'
 import Lightbox from './Lightbox.jsx'
+import WetterBox from './WetterBox.jsx'
 import { formatiereDatum, STATUS_TEXT } from '../utils/status.js'
+import { SIMGRID_URL } from '../utils/links.js'
 
 const BASIS = import.meta.env.BASE_URL
 
@@ -59,6 +61,16 @@ export default function DetailPanel({ rennen, onClose }) {
               {rennen.istNaechstes ? ' · NEXT' : ''}
             </span>
           </div>
+
+          {/* Anmeldung laeuft komplett ueber SimGrid */}
+          {rennen.status !== 'gefahren' && (
+            <a className="anmelde-button" href={SIMGRID_URL} target="_blank" rel="noreferrer">
+              🏁 Zum Rennen anmelden — SimGrid
+            </a>
+          )}
+
+          <h3 className="panel-abschnitt">Wetter vor Ort</h3>
+          <WetterBox lat={strecke.lat} lng={strecke.lng} />
 
           {/* Galerie: restliche Bilder, per Klick in der Lightbox, per Swipe scrollbar */}
           {bildUrls.length > 1 && (

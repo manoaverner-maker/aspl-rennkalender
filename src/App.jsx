@@ -7,6 +7,7 @@ import ComingSoon from './komponenten/ComingSoon.jsx'
 import Bildnachweise from './komponenten/Bildnachweise.jsx'
 import streckenDaten from './data/strecken.json'
 import { annotiereEintraege } from './utils/status.js'
+import { SIMGRID_URL } from './utils/links.js'
 
 // Alle Kalender-Dateien automatisch einlesen: eine neue Saison/Series ist nur
 // eine neue JSON-Datei unter src/data/kalender/ — ohne Code-Aenderung.
@@ -109,6 +110,9 @@ export default function App() {
             onSaison={wechsleSaison}
             onSeries={wechsleSeries}
           />
+          <a className="kopf-anmelden" href={SIMGRID_URL} target="_blank" rel="noreferrer">
+            🏁 Anmelden
+          </a>
           <a className="kopf-domain" href="https://asplracing.com" target="_blank" rel="noreferrer">
             asplracing.com
           </a>

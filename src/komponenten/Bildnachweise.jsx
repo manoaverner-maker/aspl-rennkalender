@@ -53,6 +53,42 @@ export default function Bildnachweise() {
             </ul>
           </section>
         ))}
+
+        <section className="nachweis-gruppe">
+          <h2>Erd-Texturen (3D-Globus)</h2>
+          <ul>
+            <li>
+              <div>
+                <strong>Tag-Textur</strong> — „Blue Marble Next Generation"
+                <br />
+                Autor: NASA Earth Observatory · Lizenz: Public domain ·{' '}
+                <a href="https://visibleearth.nasa.gov/collection/1484/blue-marble" target="_blank" rel="noreferrer">
+                  Quelle (NASA Visible Earth)
+                </a>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Nacht-Textur</strong> — „8K Earth Night Map"
+                <br />
+                Autor: Solar System Scope · Lizenz: CC BY 4.0 ·{' '}
+                <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noreferrer">
+                  Quelle (solarsystemscope.com)
+                </a>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Sternenhimmel</strong> — „night-sky.png"
+                <br />
+                Autor: three-globe (Vasco Asturiano) · Lizenz: MIT ·{' '}
+                <a href="https://github.com/vasturiano/three-globe" target="_blank" rel="noreferrer">
+                  Quelle (GitHub)
+                </a>
+              </div>
+            </li>
+          </ul>
+        </section>
       </main>
 
       <footer className="fuss">
