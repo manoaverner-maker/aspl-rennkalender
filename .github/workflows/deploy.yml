@@ -40,12 +40,19 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       # GitHub Pages meldet direkt nach dem Artifact-Upload oefter
-      # "Deployment failed, try again later" — darum ein eingebauter Retry
+      # "Deployment failed, try again later" — darum eingebaute Retries
+      # mit wachsendem Abstand (insgesamt bis zu 3 Versuche)
       - id: versuch1
         uses: actions/deploy-pages@v4
         continue-on-error: true
       - if: steps.versuch1.outcome == 'failure'
-        run: sleep 30
-      - id: deployment
+        run: sleep 60
+      - id: versuch2
         if: steps.versuch1.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - if: steps.versuch1.outcome == 'failure' && steps.versuch2.outcome == 'failure'
+        run: sleep 120
+      - id: deployment
+        if: steps.versuch1.outcome == 'failure' && steps.versuch2.outcome == 'failure'
         uses: actions/deploy-pages@v4
