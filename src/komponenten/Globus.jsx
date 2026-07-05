@@ -148,7 +148,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
 
     // Halbtransparente Wolkenschicht, die langsam ueber dem Globus rotiert
     const WOLKEN_HOEHE = 0.006
-    const WOLKEN_DREHUNG = -0.006 // Grad pro Frame
+    const WOLKEN_DREHUNG = -0.0015 // Grad pro Frame — bewusst traege, wirkt natuerlicher
     let wolken = null
     let wolkenRaf = 0
     lader.load(BASIS + 'textures/clouds.png', (wolkenTextur) => {
@@ -244,6 +244,12 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
           '</div>'
         el.style.pointerEvents = 'auto'
         el.style.cursor = 'pointer'
+        // Optionaler Pixel-Versatz, damit fast identische Standorte
+        // (z. B. Nuerburgring GP und Nordschleife) nicht uebereinanderliegen
+        if (d.strecke.markerVersatz) {
+          el.style.marginLeft = d.strecke.markerVersatz[0] + 'px'
+          el.style.marginTop = d.strecke.markerVersatz[1] + 'px'
+        }
         el.addEventListener('click', (ev) => {
           ev.stopPropagation()
           callbacksRef.current.onMarkerKlick?.(d)

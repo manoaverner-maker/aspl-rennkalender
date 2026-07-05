@@ -607,6 +607,7 @@
     "flagge": "🇩🇪",
     "lat": 50.3306,
     "lng": 6.9475,
+    "markerVersatz": [-20, -18],
     "bilderOrdner": "nordschleife",
     "laenge": "20.832 km",
     "kurven": "ueber 170",
