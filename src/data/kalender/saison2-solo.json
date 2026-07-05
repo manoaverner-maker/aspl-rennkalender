@@ -1,0 +1,20 @@
+{
+  "saisonId": "saison2",
+  "saisonName": "Saison 2",
+  "seriesId": "solo",
+  "seriesName": "Solo-Series",
+  "sortierung": 1,
+  "comingSoon": false,
+  "hinweis": "Alle Rennen mittwochs um 20:30 Uhr",
+  "eintraege": [
+    { "typ": "rennen", "runde": "R1", "streckeId": "imola", "datum": "2026-06-10" },
+    { "typ": "rennen", "runde": "R2", "streckeId": "barcelona", "datum": "2026-06-17" },
+    { "typ": "rennen", "runde": "R3", "streckeId": "redbullring", "datum": "2026-06-24" },
+    { "typ": "rennen", "runde": "R4", "streckeId": "lagunaseca", "datum": "2026-07-01" },
+    { "typ": "rennen", "runde": "R5", "streckeId": "nuerburgring", "datum": "2026-07-08" },
+    { "typ": "pause", "titel": "Mid-Season-Pause", "beschreibung": "15. + 22.07.2026 — keine Rennen" },
+    { "typ": "rennen", "runde": "R6", "streckeId": "donington", "datum": "2026-07-29" },
+    { "typ": "rennen", "runde": "R7", "streckeId": "bathurst", "datum": "2026-08-05" },
+    { "typ": "rennen", "runde": "R8", "streckeId": "monza", "datum": "2026-08-12" }
+  ]
+}

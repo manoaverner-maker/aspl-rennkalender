@@ -1,0 +1,998 @@
+/* ===== ASPL Rennkalender — dunkles Racing-Design =====
+   Schwarz/Anthrazit, Rot #E10600 als Akzent, Weiss fuer Text.
+   Fonts: Orbitron (Titel), Rajdhani (Fliesstext) — via Google Fonts in index.html */
+
+:root {
+  --schwarz: #0a0a0c;
+  --anthrazit: #131317;
+  --karte: #1b1b21;
+  --linie: #26262e;
+  --rot: #e10600;
+  --gruen: #00e676;
+  --grau: #9a9aa5;
+  --weiss: #f5f5f7;
+  --titel-font: 'Orbitron', sans-serif;
+  --text-font: 'Rajdhani', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--schwarz);
+  color: var(--weiss);
+  font-family: var(--text-font);
+  font-size: 17px;
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--weiss);
+}
+
+/* ===== Grundlayout ===== */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.haupt {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ===== Header ===== */
+.kopf {
+  background: linear-gradient(180deg, #101014, var(--anthrazit));
+  position: relative;
+  z-index: 10;
+}
+
+.kopf-innen {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  padding: 0.7rem 1.2rem;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.logo-aspl {
+  font-family: var(--titel-font);
+  font-weight: 900;
+  font-size: 1.7rem;
+  letter-spacing: 3px;
+  color: var(--weiss);
+  text-shadow: 0 0 18px rgba(225, 6, 0, 0.55);
+}
+
+.logo-sub {
+  font-family: var(--titel-font);
+  font-weight: 500;
+  font-size: 0.62rem;
+  letter-spacing: 5px;
+  color: var(--rot);
+  margin-top: 3px;
+}
+
+.kopf-domain {
+  margin-left: auto;
+  color: var(--grau);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.kopf-domain:hover {
+  color: var(--weiss);
+}
+
+.zurueck-link {
+  margin-left: auto;
+  color: var(--grau);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.zurueck-link:hover {
+  color: var(--weiss);
+}
+
+.racing-streifen {
+  height: 3px;
+  background: linear-gradient(90deg, var(--rot) 0%, var(--rot) 35%, transparent 100%);
+}
+
+/* ===== Saison-/Series-Auswahl ===== */
+.auswahl {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.saison-select {
+  background: var(--karte);
+  color: var(--weiss);
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  font-family: var(--text-font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.series-buttons {
+  display: flex;
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.series-button {
+  background: transparent;
+  border: none;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--grau);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.series-button + .series-button {
+  border-left: 1px solid var(--linie);
+}
+
+.series-button:hover {
+  color: var(--weiss);
+}
+
+.series-button.aktiv {
+  background: var(--rot);
+  color: #fff;
+}
+
+/* ===== Globus ===== */
+.globus-bereich {
+  position: relative;
+  height: 55vh;
+  background: #000;
+}
+
+.globus-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.legende {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: var(--grau);
+  background: rgba(10, 10, 12, 0.65);
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.legende-punkt {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+.legende-punkt:first-child {
+  margin-left: 0;
+}
+
+.legende-punkt.gefahren {
+  background: var(--rot);
+}
+
+.legende-punkt.ausstehend {
+  background: var(--gruen);
+}
+
+.legende-punkt.naechstes {
+  background: var(--gruen);
+  box-shadow: 0 0 0 3px rgba(0, 230, 118, 0.35);
+}
+
+/* Marker auf dem Globus (HTML-Elemente, von globe.gl zentriert positioniert) */
+.globus-marker {
+  position: relative;
+  width: 16px;
+  height: 16px;
+}
+
+.marker-punkt {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.globus-marker.status-gefahren .marker-punkt {
+  background: var(--rot);
+  box-shadow: 0 0 10px rgba(225, 6, 0, 0.9);
+}
+
+.globus-marker.status-ausstehend .marker-punkt {
+  background: var(--gruen);
+  box-shadow: 0 0 10px rgba(0, 230, 118, 0.9);
+}
+
+.globus-marker.status-tbd .marker-punkt {
+  background: #71717c;
+  box-shadow: 0 0 8px rgba(150, 150, 160, 0.7);
+}
+
+/* Das naechste anstehende Rennen pulsiert (Ring-Animation) */
+.globus-marker.naechstes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--gruen);
+  animation: markerPuls 1.6s ease-out infinite;
+}
+
+@keyframes markerPuls {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+/* Label nur beim Hover bzw. dauerhaft am naechsten Rennen — vermeidet
+   Ueberlappungen im dichten Europa-Cluster beim Rauszoomen */
+.marker-label {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--weiss);
+  text-shadow: 0 1px 4px #000, 0 0 8px #000;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.globus-marker:hover .marker-label,
+.globus-marker.naechstes .marker-label {
+  opacity: 1;
+}
+
+/* ===== Rennliste ===== */
+.rennliste {
+  position: relative;
+  z-index: 45;
+  background: var(--anthrazit);
+  padding: 0.9rem;
+}
+
+.liste-hinweis {
+  font-size: 0.9rem;
+  color: var(--grau);
+  border: 1px dashed var(--linie);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.liste-hinweis.tbd {
+  color: var(--weiss);
+  border-color: var(--rot);
+  background: rgba(225, 6, 0, 0.08);
+}
+
+.rennkarten {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.rennkarte {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  text-align: left;
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-left: 3px solid transparent;
+  border-radius: 10px;
+  padding: 0.55rem;
+  cursor: pointer;
+  transition: transform 0.12s, border-color 0.12s, background 0.12s;
+}
+
+.rennkarte:hover {
+  transform: translateY(-2px);
+  border-color: #3a3a44;
+}
+
+.rennkarte.aktiv {
+  border-left-color: var(--rot);
+  background: #24242c;
+}
+
+.rennkarte.naechstes {
+  border-left-color: var(--gruen);
+}
+
+.karte-bild {
+  position: relative;
+  width: 104px;
+  height: 68px;
+  flex: none;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.karte-bild img,
+.karte-bild .bild-platzhalter {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.karte-runde {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-family: var(--titel-font);
+  font-size: 0.66rem;
+  font-weight: 700;
+  background: rgba(10, 10, 12, 0.8);
+  color: var(--weiss);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.karte-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  justify-content: center;
+}
+
+.karte-name {
+  font-weight: 700;
+  font-size: 1.02rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.karte-datum {
+  color: var(--grau);
+  font-size: 0.9rem;
+}
+
+/* Pause-Eintrag (nicht klickbar) */
+.pause-karte {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: repeating-linear-gradient(45deg, #141419 0 12px, #191920 12px 24px);
+  border: 1px dashed var(--linie);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  color: var(--grau);
+}
+
+.pause-karte strong {
+  display: block;
+  color: var(--weiss);
+  letter-spacing: 0.5px;
+}
+
+.pause-symbol {
+  font-size: 1.2rem;
+}
+
+.pause-text {
+  font-size: 0.88rem;
+}
+
+/* ===== Status-Badges ===== */
+.badge {
+  font-family: var(--titel-font);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.badge-gefahren {
+  background: rgba(225, 6, 0, 0.16);
+  color: #ff5a55;
+  border: 1px solid rgba(225, 6, 0, 0.55);
+}
+
+.badge-ausstehend {
+  background: rgba(0, 230, 118, 0.12);
+  color: var(--gruen);
+  border: 1px solid rgba(0, 230, 118, 0.5);
+}
+
+.badge-tbd {
+  background: rgba(150, 150, 160, 0.12);
+  color: var(--grau);
+  border: 1px solid rgba(150, 150, 160, 0.45);
+}
+
+/* ===== Bild-Platzhalter (Fallback bei fehlendem Bild) ===== */
+.bild-platzhalter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #17171c 0%, #26262e 55%, #3a0d0c 100%);
+  color: var(--grau);
+  font-family: var(--titel-font);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 0.4rem;
+}
+
+/* ===== Detail-Panel ===== */
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 40;
+}
+
+.detail-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100dvh;
+  width: min(460px, 100vw);
+  background: var(--anthrazit);
+  border-left: 2px solid var(--rot);
+  z-index: 50;
+  overflow-y: auto;
+  animation: panelRein 0.28s ease-out;
+}
+
+@keyframes panelRein {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.panel-schliessen {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background: rgba(10, 10, 12, 0.75);
+  border: 1px solid var(--linie);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.panel-schliessen:hover {
+  background: var(--rot);
+}
+
+.panel-hero {
+  position: relative;
+  height: 230px;
+  cursor: zoom-in;
+}
+
+.panel-hero img,
+.panel-hero .bild-platzhalter {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.panel-runde {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  font-family: var(--titel-font);
+  font-weight: 900;
+  font-size: 1.1rem;
+  background: var(--rot);
+  padding: 3px 10px;
+  border-radius: 5px;
+}
+
+.panel-inhalt {
+  padding: 1rem 1.2rem 2rem;
+}
+
+.panel-titel {
+  font-family: var(--titel-font);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0.2rem 0 0.1rem;
+  line-height: 1.3;
+}
+
+.panel-land {
+  color: var(--grau);
+  margin: 0 0 0.7rem;
+  font-size: 1.05rem;
+}
+
+.panel-status-zeile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.9rem;
+}
+
+.panel-datum {
+  font-weight: 600;
+}
+
+/* Galerie: horizontal scrollbar, per Swipe/Touch bedienbar */
+.galerie {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.galerie-bild {
+  width: 150px;
+  height: 95px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 8px;
+  scroll-snap-align: start;
+  cursor: zoom-in;
+  border: 1px solid var(--linie);
+  transition: border-color 0.15s;
+}
+
+.galerie-bild:hover {
+  border-color: var(--rot);
+}
+
+.panel-abschnitt {
+  font-family: var(--titel-font);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: var(--rot);
+  text-transform: uppercase;
+  margin: 1.1rem 0 0.5rem;
+}
+
+.daten-raster {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.daten-raster > div {
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+}
+
+.daten-raster dt {
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--grau);
+}
+
+.daten-raster dd {
+  margin: 2px 0 0;
+  font-weight: 700;
+  font-size: 1.02rem;
+}
+
+.besonderheiten {
+  margin: 0.7rem 0 0;
+  padding-left: 1.1rem;
+  color: #d8d8de;
+}
+
+.besonderheiten li {
+  margin-bottom: 0.3rem;
+}
+
+.rennformat {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.rennformat li {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 0.6rem;
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.95rem;
+}
+
+.rennformat strong {
+  color: var(--rot);
+  font-weight: 700;
+}
+
+/* ===== Lightbox ===== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.93);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox img {
+  max-width: 92vw;
+  max-height: 84vh;
+  border-radius: 6px;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+}
+
+.lightbox-schliessen,
+.lightbox-pfeil {
+  position: absolute;
+  background: rgba(30, 30, 36, 0.8);
+  border: 1px solid var(--linie);
+  color: var(--weiss);
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-schliessen {
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.1rem;
+}
+
+.lightbox-pfeil {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.lightbox-pfeil.links {
+  left: 14px;
+}
+
+.lightbox-pfeil.rechts {
+  right: 14px;
+}
+
+.lightbox-schliessen:hover,
+.lightbox-pfeil:hover {
+  background: var(--rot);
+}
+
+.lightbox-zaehler {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--grau);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* ===== Coming Soon (Endurance) ===== */
+.coming-soon {
+  position: relative;
+  flex: 1;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 120%, rgba(225, 6, 0, 0.25), transparent 60%),
+    var(--schwarz);
+}
+
+.cs-streifen {
+  position: absolute;
+  inset: -60%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 44px,
+    rgba(225, 6, 0, 0.07) 44px 88px
+  );
+  animation: streifenLauf 7s linear infinite;
+}
+
+@keyframes streifenLauf {
+  to {
+    transform: translateX(-124.5px);
+  }
+}
+
+.cs-inhalt {
+  position: relative;
+  text-align: center;
+  padding: 2rem;
+}
+
+.cs-flagge {
+  font-size: 3rem;
+}
+
+.cs-titel {
+  font-family: var(--titel-font);
+  font-weight: 900;
+  font-size: clamp(1.6rem, 5vw, 3rem);
+  letter-spacing: 4px;
+  margin: 0.6rem 0 0.4rem;
+}
+
+.cs-text {
+  font-family: var(--titel-font);
+  font-weight: 700;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  letter-spacing: 8px;
+  color: var(--rot);
+  margin: 0;
+  animation: glowPuls 1.8s ease-in-out infinite;
+}
+
+@keyframes glowPuls {
+  0%,
+  100% {
+    text-shadow: 0 0 8px rgba(225, 6, 0, 0.4);
+    opacity: 0.85;
+  }
+  50% {
+    text-shadow: 0 0 26px rgba(225, 6, 0, 0.95);
+    opacity: 1;
+  }
+}
+
+.cs-sub {
+  color: var(--grau);
+  margin-top: 0.9rem;
+  font-size: 1.05rem;
+}
+
+/* ===== Bildnachweise ===== */
+.nachweise {
+  flex: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.4rem 1.2rem 3rem;
+  width: 100%;
+}
+
+.nachweise-intro {
+  color: var(--grau);
+  font-size: 1.02rem;
+}
+
+.nachweise-intro a {
+  color: var(--weiss);
+}
+
+.nachweis-gruppe h2 {
+  font-family: var(--titel-font);
+  font-size: 1.05rem;
+  letter-spacing: 2px;
+  color: var(--rot);
+  border-bottom: 1px solid var(--linie);
+  padding-bottom: 0.35rem;
+  margin: 1.6rem 0 0.7rem;
+}
+
+.nachweis-gruppe ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.nachweis-gruppe li {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  font-size: 0.95rem;
+  color: #d8d8de;
+}
+
+.nachweis-thumb {
+  width: 84px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex: none;
+  border: 1px solid var(--linie);
+}
+
+.nachweis-gruppe a {
+  color: var(--grau);
+}
+
+.nachweis-gruppe a:hover {
+  color: var(--weiss);
+}
+
+/* ===== Footer ===== */
+.fuss {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.7rem 1.2rem;
+  border-top: 1px solid var(--linie);
+  background: var(--anthrazit);
+  color: var(--grau);
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 10;
+}
+
+.fuss a {
+  color: var(--grau);
+}
+
+.fuss a:hover {
+  color: var(--weiss);
+}
+
+/* ===== Scrollbars ===== */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--schwarz);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2e2e36;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3c3c46;
+}
+
+/* ===== Desktop-Layout (Globus links, Liste rechts) ===== */
+@media (min-width: 901px) {
+  .app {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .haupt {
+    flex-direction: row;
+  }
+
+  .globus-bereich {
+    flex: 1;
+    height: auto;
+  }
+
+  .rennliste {
+    width: 390px;
+    border-left: 1px solid var(--linie);
+    overflow-y: auto;
+  }
+}
+
+/* ===== Mobile: Detail-Panel als Bottom-Sheet ===== */
+@media (max-width: 900px) {
+  .detail-panel {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    max-height: 86dvh;
+    border-left: none;
+    border-top: 3px solid var(--rot);
+    border-radius: 18px 18px 0 0;
+    animation: panelHoch 0.28s ease-out;
+  }
+
+  @keyframes panelHoch {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .panel-overlay {
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  .panel-hero {
+    height: 190px;
+  }
+
+  .kopf-domain {
+    display: none;
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "aspl-rennkalender",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "ASPL GT3 Racing Series - 3D-Globus Rennkalender (ACC, PS5 & Xbox Series)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "globe.gl": "^2.32.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "vite": "^7.0.0"
+  }
+}
