@@ -59,11 +59,21 @@ export default function Bildnachweise() {
           <ul>
             <li>
               <div>
-                <strong>Tag-Textur</strong> — „Blue Marble Next Generation"
+                <strong>Tag-Textur</strong> — „Natural Earth III" (8K, mit Relief)
                 <br />
-                Autor: NASA Earth Observatory · Lizenz: Public domain ·{' '}
-                <a href="https://visibleearth.nasa.gov/collection/1484/blue-marble" target="_blank" rel="noreferrer">
-                  Quelle (NASA Visible Earth)
+                Autor: Tom Patterson · Lizenz: Public domain ·{' '}
+                <a href="https://www.shadedrelief.com/natural3/" target="_blank" rel="noreferrer">
+                  Quelle (shadedrelief.com)
+                </a>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Wolken-Textur</strong> — „clouds.png"
+                <br />
+                Autor: globe.gl-Beispieldaten (Vasco Asturiano) · Lizenz: MIT ·{' '}
+                <a href="https://github.com/vasturiano/globe.gl" target="_blank" rel="noreferrer">
+                  Quelle (GitHub)
                 </a>
               </div>
             </li>

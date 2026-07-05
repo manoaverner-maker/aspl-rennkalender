@@ -60,8 +60,11 @@ const TAG_NACHT_SHADER = {
       float intensity = dot(normalize(vNormal), normalize(rotatedSunDirection));
       vec4 dayColor = texture2D(dayTexture, vUv);
       vec4 nightColor = texture2D(nightTexture, vUv);
+      // Nachtseite: Stadtlichter + schwaches Mondlicht aus der Tag-Textur,
+      // damit Land und Meer auch nachts erkennbar bleiben
+      vec4 nachtSeite = nightColor + vec4(dayColor.rgb * vec3(0.10, 0.13, 0.20), 0.0);
       float blendFactor = smoothstep(-0.1, 0.1, intensity);
-      gl_FragColor = mix(nightColor, dayColor, blendFactor);
+      gl_FragColor = mix(nachtSeite, dayColor, blendFactor);
     }
   `,
 }
@@ -143,6 +146,26 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     setzeSonne()
     const sonnenTimer = setInterval(setzeSonne, 60000)
 
+    // Halbtransparente Wolkenschicht, die langsam ueber dem Globus rotiert
+    const WOLKEN_HOEHE = 0.006
+    const WOLKEN_DREHUNG = -0.006 // Grad pro Frame
+    let wolken = null
+    let wolkenRaf = 0
+    lader.load(BASIS + 'textures/clouds.png', (wolkenTextur) => {
+      wolkenTextur.anisotropy = maxAniso
+      wolken = new THREE.Mesh(
+        new THREE.SphereGeometry(globus.getGlobeRadius() * (1 + WOLKEN_HOEHE), 90, 90),
+        new THREE.MeshLambertMaterial({ map: wolkenTextur, transparent: true, depthWrite: false })
+      )
+      wolken.raycast = () => {} // Klicks gehen durch die Wolken hindurch
+      globus.scene().add(wolken)
+      const drehe = () => {
+        wolken.rotation.y += (WOLKEN_DREHUNG * Math.PI) / 180
+        wolkenRaf = requestAnimationFrame(drehe)
+      }
+      drehe()
+    })
+
     // Debug-Zugriff fuer Tests (Uniforms/Kamera von aussen inspizierbar)
     window.__aspl = { globus, material }
 
@@ -193,6 +216,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       clearTimeout(idleTimerRef.current)
       clearTimeout(flugTimerRef.current)
       clearInterval(sonnenTimer)
+      cancelAnimationFrame(wolkenRaf)
       container.removeEventListener('pointerdown', stoppeRotation)
       ro.disconnect()
       globus._destructor?.()
