@@ -30,6 +30,11 @@ export default function App() {
   const [seriesId, setSeriesId] = useState(alleKalender[0]?.seriesId)
   const [aktivesRennen, setAktivesRennen] = useState(null)
   const [flyZiel, setFlyZiel] = useState(null)
+  // Toggle: nur Kalender-Rennen (Standard) oder alle ACC-Strecken anzeigen
+  // (per ?alle=1 auch direkt verlinkbar)
+  const [alleStrecken, setAlleStrecken] = useState(
+    () => new URLSearchParams(window.location.search).get('alle') === '1'
+  )
 
   useEffect(() => {
     const onHash = () => setRoute(aktuelleRoute())
@@ -58,12 +63,39 @@ export default function App() {
   )
 
   // Marker-Daten fuer den Globus: Rennen + Streckenkoordinaten zusammenfuehren
-  const marker = useMemo(
+  const kalenderMarker = useMemo(
     () =>
       eintraege
         .filter((e) => e.typ === 'rennen' && streckenMap[e.streckeId])
         .map((e) => ({ ...e, strecke: streckenMap[e.streckeId] })),
     [eintraege]
+  )
+
+  // Zusaetzliche ACC-Strecken (blau): dynamisch alle Strecken, die im aktuell
+  // gewaehlten Kalender NICHT als Rennen vorkommen — bleibt automatisch korrekt,
+  // sobald z. B. die Team-Series eigene Termine bekommt
+  const accStrecken = useMemo(() => {
+    const imKalender = new Set(
+      eintraege.filter((e) => e.typ === 'rennen').map((e) => e.streckeId)
+    )
+    return streckenDaten.filter((s) => !imKalender.has(s.id))
+  }, [eintraege])
+
+  const marker = useMemo(
+    () =>
+      alleStrecken
+        ? [
+            ...kalenderMarker,
+            ...accStrecken.map((s) => ({
+              typ: 'acc',
+              id: 'acc-' + s.id,
+              streckeId: s.id,
+              status: 'acc',
+              strecke: s,
+            })),
+          ]
+        : kalenderMarker,
+    [kalenderMarker, accStrecken, alleStrecken]
   )
 
   // Klick auf Marker oder Rennkarte: Globus fliegt zur Strecke, Panel oeffnet
@@ -110,6 +142,21 @@ export default function App() {
             onSaison={wechsleSaison}
             onSeries={wechsleSeries}
           />
+          {!kalender?.comingSoon && (
+            <button
+              className={'strecken-toggle' + (alleStrecken ? ' aktiv' : '')}
+              aria-pressed={alleStrecken}
+              title={
+                alleStrecken
+                  ? 'Zeigt alle 25 ACC-Strecken — klicken fuer nur Kalender-Rennen'
+                  : 'Zeigt nur Kalender-Rennen — klicken fuer alle 25 ACC-Strecken'
+              }
+              onClick={() => setAlleStrecken(!alleStrecken)}
+            >
+              <span className="toggle-punkt" aria-hidden="true" />
+              Alle ACC-Strecken
+            </button>
+          )}
           <a className="kopf-anmelden" href={SIMGRID_URL} target="_blank" rel="noreferrer">
             🏁 Anmelden
           </a>
@@ -135,6 +182,11 @@ export default function App() {
               <span className="legende-punkt gefahren" /> Gefahren
               <span className="legende-punkt ausstehend" /> Ausstehend
               <span className="legende-punkt naechstes" /> Naechstes Rennen
+              {alleStrecken && (
+                <>
+                  <span className="legende-punkt acc" /> ACC-Strecke
+                </>
+              )}
             </div>
           </section>
           <RennListe
@@ -143,6 +195,7 @@ export default function App() {
             aktivId={aktivesRennen?.id}
             onWahl={waehleRennen}
             hinweis={kalender?.hinweis}
+            accStrecken={alleStrecken ? accStrecken : []}
           />
         </main>
       )}

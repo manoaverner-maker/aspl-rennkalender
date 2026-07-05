@@ -240,7 +240,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
           'globus-marker status-' + d.status + (d.istNaechstes ? ' naechstes' : '')
         el.innerHTML =
           '<div class="marker-punkt"></div><div class="marker-label">' +
-          d.runde + ' · ' + d.strecke.kurzname +
+          (d.runde ? d.runde + ' · ' : '') + d.strecke.kurzname +
           '</div>'
         el.style.pointerEvents = 'auto'
         el.style.cursor = 'pointer'

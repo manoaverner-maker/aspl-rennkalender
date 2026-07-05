@@ -16,7 +16,13 @@
       "Eine der wenigen Strecken, die gegen den Uhrzeigersinn gefahren werden",
       "Beruechtigte Kurvenfolgen: Tamburello, Acque Minerali und Variante Alta"
     ],
-    "bilder": ["imola_1.jpg", "imola_2.jpg", "imola_3.jpg", "imola_4.jpg", "imola_5.jpg"]
+    "bilder": [
+      "imola_1.jpg",
+      "imola_2.jpg",
+      "imola_3.jpg",
+      "imola_4.jpg",
+      "imola_5.jpg"
+    ]
   },
   {
     "id": "barcelona",
@@ -35,7 +41,13 @@
       "Klassische Teststrecke der Formel 1 — jeder Meter ist tausendfach dokumentiert",
       "Sehr schnelle Kurve 3 und lange Zielgerade mit Windschatten-Duellen"
     ],
-    "bilder": ["barcelona_1.jpg", "barcelona_2.jpg", "barcelona_3.jpg", "barcelona_4.jpg", "barcelona_5.jpg"]
+    "bilder": [
+      "barcelona_1.jpg",
+      "barcelona_2.jpg",
+      "barcelona_3.jpg",
+      "barcelona_4.jpg",
+      "barcelona_5.jpg"
+    ]
   },
   {
     "id": "redbullring",
@@ -54,7 +66,13 @@
       "Nur 10 Kurven, aber rund 65 Meter Hoehenunterschied in der Steiermark",
       "Kurze Runde mit drei harten Bremszonen — Ueberholfestival garantiert"
     ],
-    "bilder": ["redbullring_1.jpg", "redbullring_2.jpg", "redbullring_3.jpg", "redbullring_4.jpg", "redbullring_5.jpg"]
+    "bilder": [
+      "redbullring_1.jpg",
+      "redbullring_2.jpg",
+      "redbullring_3.jpg",
+      "redbullring_4.jpg",
+      "redbullring_5.jpg"
+    ]
   },
   {
     "id": "lagunaseca",
@@ -73,7 +91,13 @@
       "Die legendaere Corkscrew: blindes Einlenken, dann ca. 18 Meter Gefaelle auf wenigen Metern",
       "Rund 55 Meter Hoehenunterschied auf nur 3.6 km — Achterbahn-Charakter"
     ],
-    "bilder": ["lagunaseca_1.jpg", "lagunaseca_2.jpg", "lagunaseca_3.jpg", "lagunaseca_4.jpg", "lagunaseca_5.jpg"]
+    "bilder": [
+      "lagunaseca_1.jpg",
+      "lagunaseca_2.jpg",
+      "lagunaseca_3.jpg",
+      "lagunaseca_4.jpg",
+      "lagunaseca_5.jpg"
+    ]
   },
   {
     "id": "nuerburgring",
@@ -92,7 +116,13 @@
       "GP-Strecke direkt neben der beruehmten Nordschleife in der Eifel",
       "Enge Mercedes-Arena und wechselhaftes Eifelwetter als Zusatzgegner"
     ],
-    "bilder": ["nuerburgring_1.jpg", "nuerburgring_2.jpg", "nuerburgring_3.jpg", "nuerburgring_4.jpg"]
+    "bilder": [
+      "nuerburgring_1.jpg",
+      "nuerburgring_2.jpg",
+      "nuerburgring_3.jpg",
+      "nuerburgring_4.jpg",
+      "nuerburgring_5.jpg"
+    ]
   },
   {
     "id": "donington",
@@ -111,7 +141,13 @@
       "Craner Curves: eines der schnellsten und schoensten Bergab-Kurvengeschlaenge Europas",
       "Traditionskurs von 1931 — Schauplatz von Sennas Regen-Wunderrunde 1993"
     ],
-    "bilder": ["donington_1.jpg", "donington_2.jpg", "donington_3.jpg", "donington_4.jpg", "donington_5.jpg"]
+    "bilder": [
+      "donington_1.jpg",
+      "donington_2.jpg",
+      "donington_3.jpg",
+      "donington_4.jpg",
+      "donington_5.jpg"
+    ]
   },
   {
     "id": "bathurst",
@@ -130,7 +166,13 @@
       "The Chase und der Mountain-Abschnitt: 174 Meter Hoehenunterschied, Mauern statt Auslaufzonen",
       "Im Alltag eine oeffentliche Strasse — Tempolimit 60 km/h"
     ],
-    "bilder": ["bathurst_1.jpg", "bathurst_2.jpg", "bathurst_3.jpg", "bathurst_4.jpg", "bathurst_5.jpg"]
+    "bilder": [
+      "bathurst_1.jpg",
+      "bathurst_2.jpg",
+      "bathurst_3.jpg",
+      "bathurst_4.jpg",
+      "bathurst_5.jpg"
+    ]
   },
   {
     "id": "monza",
@@ -149,6 +191,438 @@
       "Der Tempel der Geschwindigkeit — hoechste Durchschnittsgeschwindigkeiten im Kalender",
       "Parabolica und Curva Grande verlangen maximales Vertrauen ins Setup"
     ],
-    "bilder": ["monza_1.jpg", "monza_2.jpg", "monza_3.jpg", "monza_4.jpg", "monza_5.jpg"]
+    "bilder": [
+      "monza_1.jpg",
+      "monza_2.jpg",
+      "monza_3.jpg",
+      "monza_4.jpg",
+      "monza_5.jpg"
+    ]
+  },
+  {
+    "id": "silverstone",
+    "name": "Silverstone Circuit",
+    "kurzname": "Silverstone",
+    "land": "Grossbritannien",
+    "flagge": "🇬🇧",
+    "lat": 52.0786,
+    "lng": -1.0169,
+    "bilderOrdner": "silverstone",
+    "laenge": "5.891 km",
+    "kurven": 18,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1948,
+    "besonderheiten": [
+      "Weltberuehmte Kurvenkombination Maggotts-Becketts-Chapel",
+      "Ehemaliger Flugplatz, seit 1950 durchgehend im F1-Kalender"
+    ],
+    "bilder": [
+      "silverstone_1.jpg",
+      "silverstone_2.jpg",
+      "silverstone_3.jpg",
+      "silverstone_4.jpg",
+      "silverstone_5.jpg"
+    ]
+  },
+  {
+    "id": "zolder",
+    "name": "Circuit Zolder",
+    "kurzname": "Zolder",
+    "land": "Belgien",
+    "flagge": "🇧🇪",
+    "lat": 50.9894,
+    "lng": 5.2561,
+    "bilderOrdner": "zolder",
+    "laenge": "4.011 km",
+    "kurven": 15,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1963,
+    "besonderheiten": [
+      "Technische, kompakte Strecke mit kurzen Geraden",
+      "Ehemaliger Austragungsort des Belgien-Grand-Prix (1973-1984)"
+    ],
+    "bilder": [
+      "zolder_1.jpg",
+      "zolder_2.jpg",
+      "zolder_3.jpg",
+      "zolder_4.jpg",
+      "zolder_5.jpg"
+    ]
+  },
+  {
+    "id": "brandshatch",
+    "name": "Brands Hatch (GP-Layout)",
+    "kurzname": "Brands Hatch",
+    "land": "Grossbritannien",
+    "flagge": "🇬🇧",
+    "lat": 51.3569,
+    "lng": 0.26,
+    "bilderOrdner": "brandshatch",
+    "laenge": "3.908 km",
+    "kurven": 9,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1950,
+    "besonderheiten": [
+      "Paddock Hill Bend: schneller Bergab-Rechtsknick direkt nach Start/Ziel",
+      "Natuerliches Amphitheater-Gelaende mit exzellenter Streckensicht"
+    ],
+    "bilder": [
+      "brandshatch_1.jpg",
+      "brandshatch_2.jpg",
+      "brandshatch_3.jpg",
+      "brandshatch_4.jpg",
+      "brandshatch_5.jpg"
+    ]
+  },
+  {
+    "id": "misano",
+    "name": "Misano World Circuit Marco Simoncelli",
+    "kurzname": "Misano",
+    "land": "Italien",
+    "flagge": "🇮🇹",
+    "lat": 43.9611,
+    "lng": 12.6853,
+    "bilderOrdner": "misano",
+    "laenge": "4.226 km",
+    "kurven": 16,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1972,
+    "besonderheiten": [
+      "Benannt nach dem 2011 verunglueckten MotoGP-Fahrer Marco Simoncelli",
+      "Direkt an der Adria-Kueste bei Rimini gelegen"
+    ],
+    "bilder": [
+      "misano_1.jpg",
+      "misano_2.jpg",
+      "misano_3.jpg",
+      "misano_4.jpg",
+      "misano_5.jpg"
+    ]
+  },
+  {
+    "id": "paulricard",
+    "name": "Circuit Paul Ricard",
+    "kurzname": "Paul Ricard",
+    "land": "Frankreich",
+    "flagge": "🇫🇷",
+    "lat": 43.2506,
+    "lng": 5.7914,
+    "bilderOrdner": "paulricard",
+    "laenge": "5.842 km",
+    "kurven": 15,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1970,
+    "besonderheiten": [
+      "Blau-rote Asphalt-Auslaufzonen statt klassischer Kiesbetten",
+      "Lange Mistral-Gerade, frueher durch eine Schikane unterteilt"
+    ],
+    "bilder": [
+      "paulricard_1.jpg",
+      "paulricard_2.jpg",
+      "paulricard_3.jpg",
+      "paulricard_4.jpg",
+      "paulricard_5.jpg"
+    ]
+  },
+  {
+    "id": "hungaroring",
+    "name": "Hungaroring",
+    "kurzname": "Hungaroring",
+    "land": "Ungarn",
+    "flagge": "🇭🇺",
+    "lat": 47.5789,
+    "lng": 19.2486,
+    "bilderOrdner": "hungaroring",
+    "laenge": "4.381 km",
+    "kurven": 14,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1986,
+    "besonderheiten": [
+      "Enge, kurvenreiche Strecke mit sehr wenig Ueberholmoeglichkeiten",
+      "Erster Grand Prix hinter dem ehemaligen Eisernen Vorhang"
+    ],
+    "bilder": [
+      "hungaroring_1.jpg",
+      "hungaroring_2.jpg",
+      "hungaroring_3.jpg",
+      "hungaroring_4.jpg",
+      "hungaroring_5.jpg"
+    ]
+  },
+  {
+    "id": "zandvoort",
+    "name": "Circuit Zandvoort",
+    "kurzname": "Zandvoort",
+    "land": "Niederlande",
+    "flagge": "🇳🇱",
+    "lat": 52.3888,
+    "lng": 4.5409,
+    "bilderOrdner": "zandvoort",
+    "laenge": "4.259 km",
+    "kurven": 14,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1948,
+    "besonderheiten": [
+      "Steil ueberhoehte Kurven Tarzanbocht und Arie Luyendyk-Bocht",
+      "Liegt eingebettet in den Duenen an der niederlaendischen Nordseekueste"
+    ],
+    "bilder": [
+      "zandvoort_1.jpg",
+      "zandvoort_2.jpg",
+      "zandvoort_3.jpg",
+      "zandvoort_4.jpg",
+      "zandvoort_5.jpg"
+    ]
+  },
+  {
+    "id": "spa",
+    "name": "Circuit de Spa-Francorchamps",
+    "kurzname": "Spa-Francorchamps",
+    "land": "Belgien",
+    "flagge": "🇧🇪",
+    "lat": 50.4372,
+    "lng": 5.9714,
+    "bilderOrdner": "spa",
+    "laenge": "7.004 km",
+    "kurven": 20,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1921,
+    "besonderheiten": [
+      "Eau Rouge/Raidillon: eine der ikonischsten Kurvenkombinationen im Motorsport",
+      "Mit gut 7 km die laengste Strecke im gesamten ACC-Streckenpool"
+    ],
+    "bilder": [
+      "spa_1.jpg",
+      "spa_2.jpg",
+      "spa_3.jpg",
+      "spa_4.jpg",
+      "spa_5.jpg"
+    ]
+  },
+  {
+    "id": "oultonpark",
+    "name": "Oulton Park",
+    "kurzname": "Oulton Park",
+    "land": "Grossbritannien",
+    "flagge": "🇬🇧",
+    "lat": 53.1789,
+    "lng": -2.6142,
+    "bilderOrdner": "oultonpark",
+    "laenge": "4.307 km",
+    "kurven": 13,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1953,
+    "besonderheiten": [
+      "Fuehrt durch den historischen Landschaftspark eines englischen Anwesens",
+      "Wellige Topografie mit schnellen Kuppen wie an Clay Hill"
+    ],
+    "bilder": [
+      "oultonpark_1.jpg",
+      "oultonpark_2.jpg",
+      "oultonpark_3.jpg",
+      "oultonpark_4.jpg",
+      "oultonpark_5.jpg"
+    ]
+  },
+  {
+    "id": "snetterton",
+    "name": "Snetterton Circuit (300-Layout)",
+    "kurzname": "Snetterton",
+    "land": "Grossbritannien",
+    "flagge": "🇬🇧",
+    "lat": 52.4569,
+    "lng": 0.9478,
+    "bilderOrdner": "snetterton",
+    "laenge": "4.778 km",
+    "kurven": 12,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1953,
+    "besonderheiten": [
+      "Ehemaliger Bomber-Flugplatz aus dem Zweiten Weltkrieg",
+      "Sehr schnelle, fliessende Streckenfuehrung mit langen Geraden"
+    ],
+    "bilder": [
+      "snetterton_1.jpg",
+      "snetterton_2.jpg",
+      "snetterton_3.jpg",
+      "snetterton_4.jpg",
+      "snetterton_5.jpg"
+    ]
+  },
+  {
+    "id": "suzuka",
+    "name": "Suzuka Circuit",
+    "kurzname": "Suzuka",
+    "land": "Japan",
+    "flagge": "🇯🇵",
+    "lat": 34.8431,
+    "lng": 136.541,
+    "bilderOrdner": "suzuka",
+    "laenge": "5.807 km",
+    "kurven": 18,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1962,
+    "besonderheiten": [
+      "Einzige Kreuzungsstrecke (Figure-8-Layout) im gesamten Motorsport-Kalender",
+      "Beruehmte S-Kurven direkt nach Start/Ziel"
+    ],
+    "bilder": [
+      "suzuka_1.jpg",
+      "suzuka_2.jpg",
+      "suzuka_3.jpg",
+      "suzuka_4.jpg",
+      "suzuka_5.jpg"
+    ]
+  },
+  {
+    "id": "kyalami",
+    "name": "Kyalami Grand Prix Circuit",
+    "kurzname": "Kyalami",
+    "land": "Suedafrika",
+    "flagge": "🇿🇦",
+    "lat": -25.9894,
+    "lng": 28.0731,
+    "bilderOrdner": "kyalami",
+    "laenge": "4.522 km",
+    "kurven": 15,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1961,
+    "besonderheiten": [
+      "Liegt auf rund 1.460 m Hoehe – duennere Luft beeinflusst die Motorleistung",
+      "Ehemaliger Austragungsort des Suedafrika-Grand-Prix"
+    ],
+    "bilder": [
+      "kyalami_1.jpg",
+      "kyalami_2.jpg",
+      "kyalami_3.jpg",
+      "kyalami_4.jpg",
+      "kyalami_5.jpg"
+    ]
+  },
+  {
+    "id": "cota",
+    "name": "Circuit of the Americas",
+    "kurzname": "COTA",
+    "land": "USA",
+    "flagge": "🇺🇸",
+    "lat": 30.1328,
+    "lng": -97.6411,
+    "bilderOrdner": "cota",
+    "laenge": "5.513 km",
+    "kurven": 20,
+    "richtung": "Gegen den Uhrzeigersinn",
+    "eroeffnung": 2012,
+    "besonderheiten": [
+      "Eine von weltweit nur einer Handvoll Strecken gegen den Uhrzeigersinn",
+      "Nachbildung von Kurve 8 aus Istanbul Park sowie der Maggotts-Becketts-Sektion von Silverstone"
+    ],
+    "bilder": [
+      "cota_1.jpg",
+      "cota_2.jpg",
+      "cota_3.jpg",
+      "cota_4.jpg",
+      "cota_5.jpg"
+    ]
+  },
+  {
+    "id": "indianapolis",
+    "name": "Indianapolis Motor Speedway (Roadcourse)",
+    "kurzname": "Indianapolis",
+    "land": "USA",
+    "flagge": "🇺🇸",
+    "lat": 39.795,
+    "lng": -86.2347,
+    "bilderOrdner": "indianapolis",
+    "laenge": "3.925 km",
+    "kurven": 14,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1909,
+    "besonderheiten": [
+      "Kombiniert ein Stueck der legendaeren Oval-Steilkurve mit einem technischen Infield",
+      "Aktuelles Roadcourse-Layout seit 2014, laeuft entgegengesetzt zum Oval-Kurs"
+    ],
+    "bilder": [
+      "indianapolis_1.jpg",
+      "indianapolis_2.jpg",
+      "indianapolis_3.jpg",
+      "indianapolis_4.jpg",
+      "indianapolis_5.jpg"
+    ]
+  },
+  {
+    "id": "watkinsglen",
+    "name": "Watkins Glen International",
+    "kurzname": "Watkins Glen",
+    "land": "USA",
+    "flagge": "🇺🇸",
+    "lat": 42.3369,
+    "lng": -76.9272,
+    "bilderOrdner": "watkinsglen",
+    "laenge": "5.552 km",
+    "kurven": 11,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1948,
+    "besonderheiten": [
+      "The Boot: einzigartige, stiefelfoermige Kurvenkombination",
+      "Eine der aeltesten durchgehend genutzten Rennstrecken der USA"
+    ],
+    "bilder": [
+      "watkinsglen_1.jpg",
+      "watkinsglen_2.jpg",
+      "watkinsglen_3.jpg",
+      "watkinsglen_4.jpg",
+      "watkinsglen_5.jpg"
+    ]
+  },
+  {
+    "id": "valencia",
+    "name": "Circuit Ricardo Tormo",
+    "kurzname": "Valencia",
+    "land": "Spanien",
+    "flagge": "🇪🇸",
+    "lat": 39.4859,
+    "lng": -0.6274,
+    "bilderOrdner": "valencia",
+    "laenge": "4.005 km",
+    "kurven": 14,
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1999,
+    "besonderheiten": [
+      "Enge, langsame Schlussschikane direkt vor Start/Ziel",
+      "Traditioneller Austragungsort des MotoGP-Saisonfinales"
+    ],
+    "bilder": [
+      "valencia_1.jpg",
+      "valencia_2.jpg",
+      "valencia_3.jpg",
+      "valencia_4.jpg",
+      "valencia_5.jpg"
+    ]
+  },
+  {
+    "id": "nordschleife",
+    "name": "Nuerburgring Nordschleife",
+    "kurzname": "Nordschleife",
+    "land": "Deutschland",
+    "flagge": "🇩🇪",
+    "lat": 50.3306,
+    "lng": 6.9475,
+    "bilderOrdner": "nordschleife",
+    "laenge": "20.832 km",
+    "kurven": "ueber 170",
+    "richtung": "Im Uhrzeigersinn",
+    "eroeffnung": 1927,
+    "besonderheiten": [
+      "Bekannt als \"Gruene Hoelle\" – eine der anspruchsvollsten Strecken der Welt",
+      "Enthaelt die legendaere Karussell-Kurve sowie den Flugplatz-Sprung",
+      "Baulich Teil desselben Nuerburgring-Komplexes wie die benachbarte GP-Strecke, aber komplett eigenes Layout"
+    ],
+    "bilder": [
+      "nordschleife_1.jpg",
+      "nordschleife_2.jpg",
+      "nordschleife_3.jpg",
+      "nordschleife_4.jpg",
+      "nordschleife_5.jpg"
+    ]
   }
 ]

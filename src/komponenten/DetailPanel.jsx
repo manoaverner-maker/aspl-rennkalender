@@ -20,6 +20,8 @@ const RENNFORMAT = [
 export default function DetailPanel({ rennen, onClose }) {
   const [lightboxIndex, setLightboxIndex] = useState(null)
   const strecke = rennen.strecke
+  // ACC-Strecken ohne Kalender-Rennen: keine Termin-/Wetter-/Anmelde-Infos
+  const istKalenderRennen = rennen.typ !== 'acc'
 
   const bildUrls = strecke.bilder.map(
     (b) => BASIS + 'images/strecken/' + strecke.bilderOrdner + '/' + b
@@ -45,7 +47,7 @@ export default function DetailPanel({ rennen, onClose }) {
 
         <div className="panel-hero" onClick={() => setLightboxIndex(0)}>
           <BildMitFallback src={bildUrls[0]} alt={strecke.name} fallbackText={strecke.kurzname} />
-          <span className="panel-runde">{rennen.runde}</span>
+          {rennen.runde && <span className="panel-runde">{rennen.runde}</span>}
         </div>
 
         <div className="panel-inhalt">
@@ -54,23 +56,33 @@ export default function DetailPanel({ rennen, onClose }) {
             {strecke.flagge} {strecke.land}
           </p>
 
-          <div className="panel-status-zeile">
-            <span className="panel-datum">📅 {formatiereDatum(rennen.datum)} · 20:30</span>
-            <span className={'badge badge-' + rennen.status}>
-              {STATUS_TEXT[rennen.status]}
-              {rennen.istNaechstes ? ' · NEXT' : ''}
-            </span>
-          </div>
+          {istKalenderRennen ? (
+            <div className="panel-status-zeile">
+              <span className="panel-datum">📅 {formatiereDatum(rennen.datum)} · 20:30</span>
+              <span className={'badge badge-' + rennen.status}>
+                {STATUS_TEXT[rennen.status]}
+                {rennen.istNaechstes ? ' · NEXT' : ''}
+              </span>
+            </div>
+          ) : (
+            <div className="panel-status-zeile">
+              <span className="badge badge-tbd">Nicht im aktuellen ASPL-Kalender</span>
+            </div>
+          )}
 
           {/* Anmeldung laeuft komplett ueber SimGrid */}
-          {rennen.status !== 'gefahren' && (
+          {istKalenderRennen && rennen.status !== 'gefahren' && (
             <a className="anmelde-button" href={SIMGRID_URL} target="_blank" rel="noreferrer">
               🏁 Zum Rennen anmelden — SimGrid
             </a>
           )}
 
-          <h3 className="panel-abschnitt">Wetter vor Ort</h3>
-          <WetterBox lat={strecke.lat} lng={strecke.lng} />
+          {istKalenderRennen && (
+            <>
+              <h3 className="panel-abschnitt">Wetter vor Ort</h3>
+              <WetterBox lat={strecke.lat} lng={strecke.lng} />
+            </>
+          )}
 
           {/* Galerie: restliche Bilder, per Klick in der Lightbox, per Swipe scrollbar */}
           {bildUrls.length > 1 && (
@@ -114,15 +126,19 @@ export default function DetailPanel({ rennen, onClose }) {
             ))}
           </ul>
 
-          <h3 className="panel-abschnitt">Rennformat</h3>
-          <ul className="rennformat">
-            {RENNFORMAT.map(([label, wert]) => (
-              <li key={label}>
-                <strong>{label}</strong>
-                <span>{wert}</span>
-              </li>
-            ))}
-          </ul>
+          {istKalenderRennen && (
+            <>
+              <h3 className="panel-abschnitt">Rennformat</h3>
+              <ul className="rennformat">
+                {RENNFORMAT.map(([label, wert]) => (
+                  <li key={label}>
+                    <strong>{label}</strong>
+                    <span>{wert}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </section>
 
