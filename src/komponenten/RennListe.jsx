@@ -21,6 +21,7 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
 
   const gefiltert = eintraege.filter((e) => {
     if (e.typ === 'pause') return suche === ''
+    if (e.typ === 'abgesagt') return suche === ''
     const strecke = streckenMap[e.streckeId]
     return strecke && passt(strecke)
   })
@@ -50,6 +51,21 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
                 <div>
                   <strong>{e.titel}</strong>
                   <span className="pause-text">{e.beschreibung}</span>
+                </div>
+              </li>
+            )
+          }
+          if (e.typ === 'abgesagt') {
+            const strecke = streckenMap[e.streckeId]
+            return (
+              <li key={'abgesagt-' + i} className="abgesagt-karte">
+                <span className="pause-symbol">❌</span>
+                <div>
+                  <strong>
+                    {e.runde}
+                    {strecke ? ' · ' + strecke.kurzname : ''} — Rennen abgesagt
+                  </strong>
+                  <span className="pause-text">{e.grund}</span>
                 </div>
               </li>
             )

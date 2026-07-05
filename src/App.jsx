@@ -5,6 +5,7 @@ import DetailPanel from './komponenten/DetailPanel.jsx'
 import SeriesAuswahl from './komponenten/SeriesAuswahl.jsx'
 import ComingSoon from './komponenten/ComingSoon.jsx'
 import Bildnachweise from './komponenten/Bildnachweise.jsx'
+import Leaderboard from './komponenten/Leaderboard.jsx'
 import streckenDaten from './data/strecken.json'
 import { annotiereEintraege } from './utils/status.js'
 import { SIMGRID_URL } from './utils/links.js'
@@ -15,6 +16,11 @@ const kalenderModule = import.meta.glob('./data/kalender/*.json', { eager: true 
 const alleKalender = Object.values(kalenderModule)
   .map((m) => m.default)
   .sort((a, b) => (a.sortierung ?? 99) - (b.sortierung ?? 99))
+
+// Rennergebnisse: pro Saison+Series eine JSON-Datei unter src/data/ergebnisse/ —
+// neue Rennen sind nur ein weiterer Strecken-Key, neue Saisons eine neue Datei
+const ergebnisModule = import.meta.glob('./data/ergebnisse/*.json', { eager: true })
+const alleErgebnisse = Object.values(ergebnisModule).map((m) => m.default)
 
 // Strecken-Stammdaten als Map fuer schnellen Zugriff per ID
 const streckenMap = Object.fromEntries(streckenDaten.map((s) => [s.id, s]))
@@ -30,6 +36,7 @@ export default function App() {
   const [seriesId, setSeriesId] = useState(alleKalender[0]?.seriesId)
   const [aktivesRennen, setAktivesRennen] = useState(null)
   const [flyZiel, setFlyZiel] = useState(null)
+  const [leaderboardOffen, setLeaderboardOffen] = useState(false)
   // Alle ACC-Strecken sind standardmaessig sichtbar und klickbar;
   // der Toggle blendet sie bei Bedarf aus (?alle=0 als Deep-Link)
   const [alleStrecken, setAlleStrecken] = useState(
@@ -78,6 +85,11 @@ export default function App() {
 
   const kalender = seriesInSaison.find((k) => k.seriesId === seriesId) ?? seriesInSaison[0]
 
+  // Ergebnisse der aktuell gewaehlten Saison+Series (kann fehlen)
+  const ergebnisse = alleErgebnisse.find(
+    (e) => e.saisonId === kalender?.saisonId && e.seriesId === kalender?.seriesId
+  )
+
   // Eintraege mit automatisch berechnetem Status anreichern
   const eintraege = useMemo(
     () => (kalender ? annotiereEintraege(kalender.eintraege) : []),
@@ -124,6 +136,7 @@ export default function App() {
   const waehleRennen = useCallback((eintrag) => {
     const strecke = streckenMap[eintrag.streckeId]
     if (!strecke) return
+    setLeaderboardOffen(false)
     setAktivesRennen({ ...eintrag, strecke })
     setFlyZiel({ lat: strecke.lat, lng: strecke.lng, key: Date.now() })
   }, [])
@@ -179,6 +192,17 @@ export default function App() {
               Alle ACC-Strecken
             </button>
           )}
+          <button
+            className="pokal-button"
+            aria-label="Meisterschaft anzeigen"
+            title="Meisterschaft / Leaderboard"
+            onClick={() => {
+              setAktivesRennen(null)
+              setLeaderboardOffen(true)
+            }}
+          >
+            🏆
+          </button>
           <a className="kopf-anmelden" href={SIMGRID_URL} target="_blank" rel="noreferrer">
             🏁 Anmelden
           </a>
@@ -228,7 +252,22 @@ export default function App() {
       )}
 
       {aktivesRennen && (
-        <DetailPanel rennen={aktivesRennen} zeiten={kalender?.zeiten} onClose={schliessePanel} />
+        <DetailPanel
+          rennen={aktivesRennen}
+          zeiten={kalender?.zeiten}
+          ergebnisse={ergebnisse?.strecken?.[aktivesRennen.streckeId]}
+          onClose={schliessePanel}
+        />
+      )}
+
+      {leaderboardOffen && (
+        <Leaderboard
+          saisonName={kalender?.saisonName}
+          seriesId={kalender?.seriesId}
+          seriesName={kalender?.seriesName}
+          ergebnisse={ergebnisse}
+          onClose={() => setLeaderboardOffen(false)}
+        />
       )}
 
       <footer className="fuss">

@@ -94,9 +94,29 @@ a {
   margin-top: 3px;
 }
 
+/* Pokal-Button (Meisterschaft) im Header */
+.pokal-button {
+  margin-left: auto;
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  flex: none;
+  transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+}
+
+.pokal-button:hover {
+  border-color: #d4af37;
+  transform: translateY(-1px);
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.35);
+}
+
 /* Anmelde-Button (SimGrid) im Header */
 .kopf-anmelden {
-  margin-left: auto;
   background: var(--rot);
   color: #fff;
   text-decoration: none;
@@ -589,6 +609,28 @@ a {
   font-size: 0.88rem;
 }
 
+/* Abgesagtes Rennen (nicht klickbar) — rote Schraffur statt Pause-Musterung */
+.abgesagt-karte {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: repeating-linear-gradient(
+    45deg,
+    #16090a 0 12px,
+    rgba(225, 6, 0, 0.08) 12px 24px
+  );
+  border: 1px dashed rgba(225, 6, 0, 0.45);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  color: var(--grau);
+}
+
+.abgesagt-karte strong {
+  display: block;
+  color: #ff8a86;
+  letter-spacing: 0.5px;
+}
+
 /* ===== Status-Badges ===== */
 .badge {
   font-family: var(--titel-font);
@@ -954,6 +996,193 @@ a {
 .rennformat strong {
   color: var(--rot);
   font-weight: 700;
+}
+
+/* ===== Ergebnisse & Meisterschaft ===== */
+.pole-zeile {
+  color: var(--grau);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.podium {
+  list-style: none;
+  margin: 0 0 0.6rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.podium-eintrag {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-left: 4px solid transparent;
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+}
+
+.podium-1 {
+  border-left-color: #d4af37;
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.12), var(--karte) 60%);
+}
+
+.podium-2 {
+  border-left-color: #b8bcc4;
+  background: linear-gradient(90deg, rgba(184, 188, 196, 0.1), var(--karte) 60%);
+}
+
+.podium-3 {
+  border-left-color: #b0703c;
+  background: linear-gradient(90deg, rgba(176, 112, 60, 0.12), var(--karte) 60%);
+}
+
+.podium-platz {
+  font-family: var(--titel-font);
+  font-weight: 900;
+  font-size: 1.05rem;
+  width: 2.2rem;
+  flex: none;
+}
+
+.podium-1 .podium-platz {
+  color: #d4af37;
+}
+
+.podium-2 .podium-platz {
+  color: #b8bcc4;
+}
+
+.podium-3 .podium-platz {
+  color: #b0703c;
+}
+
+.podium-fahrer {
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.podium-fahrer small {
+  color: var(--grau);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.podium-punkte {
+  margin-left: auto;
+  font-family: var(--titel-font);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--weiss);
+  flex: none;
+}
+
+.mehr-button {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--linie);
+  border-radius: 8px;
+  color: var(--grau);
+  font-family: var(--text-font);
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.mehr-button:hover {
+  color: var(--weiss);
+  border-color: var(--rot);
+}
+
+.wertung-tabelle {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.wertung-tabelle th {
+  text-align: left;
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--grau);
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--linie);
+}
+
+.wertung-tabelle td {
+  padding: 0.42rem 0.5rem;
+  border-bottom: 1px solid #202028;
+  vertical-align: top;
+}
+
+.platz-zelle {
+  font-family: var(--titel-font);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--grau);
+  white-space: nowrap;
+  width: 2.4rem;
+}
+
+.punkte-spalte {
+  text-align: right;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tabelle-sub {
+  display: block;
+  color: var(--grau);
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.wertung-tabelle .top-1 .platz-zelle {
+  color: #d4af37;
+}
+
+.wertung-tabelle .top-2 .platz-zelle {
+  color: #b8bcc4;
+}
+
+.wertung-tabelle .top-3 .platz-zelle {
+  color: #b0703c;
+}
+
+.wertung-tabelle .top-1 td {
+  background: rgba(212, 175, 55, 0.06);
+}
+
+.leaderboard-tabs {
+  margin-bottom: 0.8rem;
+  width: fit-content;
+}
+
+.leaderboard-leer {
+  text-align: center;
+  color: var(--grau);
+  padding: 1.6rem 1rem;
+  border: 1px dashed var(--linie);
+  border-radius: 10px;
+}
+
+.leaderboard-leer span {
+  font-size: 2rem;
+}
+
+.leaderboard-inhalt {
+  padding-top: 3rem;
 }
 
 /* ===== Lightbox ===== */

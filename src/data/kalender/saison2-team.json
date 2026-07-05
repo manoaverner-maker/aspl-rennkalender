@@ -11,7 +11,7 @@
     { "typ": "rennen", "runde": "R1", "streckeId": "imola", "datum": "2026-06-13" },
     { "typ": "rennen", "runde": "R2", "streckeId": "barcelona", "datum": "2026-06-20" },
     { "typ": "rennen", "runde": "R3", "streckeId": "redbullring", "datum": "2026-06-27", "verschobenAuf": "2026-08-22", "grund": "Server hat nicht funktioniert" },
-    { "typ": "rennen", "runde": "R4", "streckeId": "lagunaseca", "datum": "2026-07-04" },
+    { "typ": "abgesagt", "runde": "R4", "streckeId": "lagunaseca", "grund": "Nach Serverproblemen per Abstimmung abgesagt" },
     { "typ": "rennen", "runde": "R5", "streckeId": "nuerburgring", "datum": "2026-07-11" },
     { "typ": "pause", "titel": "Mid-Season-Pause", "beschreibung": "18. + 25.07.2026 — keine Rennen" },
     { "typ": "rennen", "runde": "R6", "streckeId": "donington", "datum": "2026-08-01" },

@@ -4,6 +4,61 @@ import Lightbox from './Lightbox.jsx'
 import WetterBox from './WetterBox.jsx'
 import { formatiereDatum, STATUS_TEXT } from '../utils/status.js'
 import { SIMGRID_URL } from '../utils/links.js'
+import { punkte } from '../utils/punkte.js'
+
+// Rennergebnis: Podium prominent, Rest aufklappbar (Panel nicht ueberladen)
+function ErgebnisAbschnitt({ ergebnisse }) {
+  const [zeigeAlle, setZeigeAlle] = useState(false)
+  useEffect(() => setZeigeAlle(false), [ergebnisse])
+
+  const pole = ergebnisse.find((e) => e.quali === 1)
+  const podium = ergebnisse.slice(0, 3)
+  const rest = ergebnisse.slice(3)
+
+  return (
+    <>
+      <h3 className="panel-abschnitt">Ergebnisse</h3>
+      {pole && <p className="pole-zeile">⏱️ Pole: {pole.fahrer}</p>}
+      <ol className="podium">
+        {podium.map((e) => (
+          <li key={e.platz} className={'podium-eintrag podium-' + e.platz}>
+            <span className="podium-platz">P{e.platz}</span>
+            <span className="podium-fahrer">
+              {e.fahrer}
+              <small>{e.team ? e.team + ' · ' : ''}{e.fahrzeug}</small>
+            </span>
+            <span className="podium-punkte">{punkte(e.platz, e.quali)} Pkt</span>
+          </li>
+        ))}
+      </ol>
+      {rest.length > 0 &&
+        (zeigeAlle ? (
+          <table className="wertung-tabelle ergebnis-tabelle">
+            <tbody>
+              {rest.map((e) => (
+                <tr key={e.platz}>
+                  <td className="platz-zelle">P{e.platz}</td>
+                  <td>
+                    {e.fahrer}
+                    <small className="tabelle-sub">
+                      {e.team ? e.team + ' · ' : ''}
+                      {e.fahrzeug}
+                      {e.nr != null ? ' · #' + e.nr : ''}
+                    </small>
+                  </td>
+                  <td className="punkte-spalte">{punkte(e.platz, e.quali)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <button className="mehr-button" onClick={() => setZeigeAlle(true)}>
+            Alle Ergebnisse anzeigen ({ergebnisse.length})
+          </button>
+        ))}
+    </>
+  )
+}
 
 const BASIS = import.meta.env.BASE_URL
 
@@ -27,7 +82,7 @@ function baueRennformat(rennen, zeiten) {
 }
 
 // Slide-in-Panel mit Hero-Bild, Galerie, Streckendaten und Rennformat
-export default function DetailPanel({ rennen, zeiten, onClose }) {
+export default function DetailPanel({ rennen, zeiten, ergebnisse, onClose }) {
   const [lightboxIndex, setLightboxIndex] = useState(null)
   const strecke = rennen.strecke
   // ACC-Strecken ohne Kalender-Rennen: keine Termin-/Wetter-/Anmelde-Infos
@@ -96,6 +151,11 @@ export default function DetailPanel({ rennen, zeiten, onClose }) {
             <a className="anmelde-button" href={SIMGRID_URL} target="_blank" rel="noreferrer">
               🏁 Zum Rennen anmelden — SimGrid
             </a>
+          )}
+
+          {/* Ergebnisse nur, wenn gefahren UND Daten vorhanden — sonst weglassen */}
+          {istKalenderRennen && rennen.status === 'gefahren' && ergebnisse?.length > 0 && (
+            <ErgebnisAbschnitt ergebnisse={ergebnisse} />
           )}
 
           {istKalenderRennen && (
