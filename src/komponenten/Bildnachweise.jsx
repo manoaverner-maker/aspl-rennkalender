@@ -89,6 +89,16 @@ export default function Bildnachweise() {
             </li>
             <li>
               <div>
+                <strong>Satellitenkacheln (Nahzoom)</strong> — „World Imagery"
+                <br />
+                Quelle: Esri, Maxar, Earthstar Geographics, and the GIS User Community ·{' '}
+                <a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" target="_blank" rel="noreferrer">
+                  Quelle (ArcGIS World Imagery)
+                </a>
+              </div>
+            </li>
+            <li>
+              <div>
                 <strong>Sternenhimmel</strong> — „night-sky.png"
                 <br />
                 Autor: three-globe (Vasco Asturiano) · Lizenz: MIT ·{' '}

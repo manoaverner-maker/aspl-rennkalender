@@ -42,6 +42,23 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
+  // Deep-Link ?rennen=<runde|streckeId>: fliegt nach dem Laden direkt zum Rennen
+  useEffect(() => {
+    const ziel = new URLSearchParams(window.location.search).get('rennen')
+    if (!ziel) return
+    const eintrag = eintraege.find(
+      (e) =>
+        e.typ === 'rennen' &&
+        (e.runde.toLowerCase() === ziel.toLowerCase() ||
+          e.streckeId.toLowerCase() === ziel.toLowerCase())
+    )
+    if (!eintrag) return
+    const timer = setTimeout(() => waehleRennen(eintrag), 700)
+    return () => clearTimeout(timer)
+    // bewusst nur einmal beim Start ausfuehren
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Auswahl-Listen fuer die Selektoren (rein datengetrieben)
   const saisons = useMemo(() => {
     const gesehen = new Map()

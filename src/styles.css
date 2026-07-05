@@ -249,6 +249,20 @@ a {
   box-shadow: 0 0 0 3px rgba(0, 230, 118, 0.35);
 }
 
+/* Pflicht-Quellenangabe der Satellitenkacheln (nur bei Nahzoom sichtbar) */
+.tile-attribution {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  z-index: 6;
+  font-size: 0.72rem;
+  color: var(--grau);
+  background: rgba(10, 10, 12, 0.65);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
 /* Marker auf dem Globus (HTML-Elemente, von globe.gl zentriert positioniert) */
 .globus-marker {
   position: relative;

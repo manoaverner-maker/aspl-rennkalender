@@ -24,6 +24,7 @@ const TAG_NACHT_SHADER = {
     uniform sampler2D nightTexture;
     uniform vec2 sunPosition;
     uniform vec2 globeRotation;
+    uniform float dayBoost;
     varying vec3 vNormal;
     varying vec2 vUv;
 
@@ -63,7 +64,8 @@ const TAG_NACHT_SHADER = {
       // Nachtseite: Stadtlichter + schwaches Mondlicht aus der Tag-Textur,
       // damit Land und Meer auch nachts erkennbar bleiben
       vec4 nachtSeite = nightColor + vec4(dayColor.rgb * vec3(0.10, 0.13, 0.20), 0.0);
-      float blendFactor = smoothstep(-0.1, 0.1, intensity);
+      // dayBoost blendet die Nacht beim Reinzoomen aus (wie bei Google Earth)
+      float blendFactor = max(smoothstep(-0.1, 0.1, intensity), dayBoost);
       gl_FragColor = mix(nachtSeite, dayColor, blendFactor);
     }
   `,
@@ -107,10 +109,45 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
         nightTexture: { value: nachtTextur },
         sunPosition: { value: new THREE.Vector2() },
         globeRotation: { value: new THREE.Vector2() },
+        dayBoost: { value: 0 },
       },
       vertexShader: TAG_NACHT_SHADER.vertexShader,
       fragmentShader: TAG_NACHT_SHADER.fragmentShader,
     })
+
+    // Satelliten-Kacheln (Esri World Imagery): werden nah am Boden nachgeladen,
+    // damit die Schaerfe beim Reinzoomen nicht mehr endet — wie bei Google Earth
+    const TILE_URL = (x, y, l) =>
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/' +
+      l + '/' + y + '/' + x
+    let tilesAktiv = false
+    let wolken = null
+    let wolkenRaf = 0
+    let attributionEl = null
+
+    // Reagiert auf die Zoom-Hoehe: Nacht und Wolken ausblenden, Kacheln umschalten
+    const setzeZoomStufe = (altitude) => {
+      // Nachtseite zwischen Hoehe 1.0 und 0.35 sanft ausblenden
+      material.uniforms.dayBoost.value =
+        1 - Math.min(1, Math.max(0, (altitude - 0.35) / 0.65))
+      // Wolken zwischen Hoehe 0.8 und 0.4 ausblenden
+      if (wolken) {
+        const deckkraft = Math.min(1, Math.max(0, (altitude - 0.4) / 0.4))
+        wolken.material.opacity = deckkraft
+        wolken.visible = deckkraft > 0.02
+      }
+      // Kacheln mit Hysterese schalten (an < 0.30, aus > 0.45), damit an der
+      // Schwelle kein staendiges Hin und Her entsteht
+      if (!tilesAktiv && altitude < 0.3) {
+        tilesAktiv = true
+        globus.globeTileEngineUrl(TILE_URL)
+        if (attributionEl) attributionEl.style.display = 'block'
+      } else if (tilesAktiv && altitude > 0.45) {
+        tilesAktiv = false
+        globus.globeTileEngineUrl(null)
+        if (attributionEl) attributionEl.style.display = 'none'
+      }
+    }
 
     // Debug-Schalter per URL: ?shader=0 (nur Tag-Textur) / ?atmo=0 (ohne Glow)
     const debugParams = new URLSearchParams(window.location.search)
@@ -130,8 +167,12 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       .width(container.clientWidth)
       .height(container.clientHeight)
       .onGlobeClick(() => callbacksRef.current.onHintergrundKlick?.())
-      // Kamerabewegung an den Shader melden (fuer die Sonnenrichtung)
-      .onZoom(({ lng, lat }) => material.uniforms.globeRotation.value.set(lng, lat))
+      .globeTileEngineMaxLevel(17)
+      // Kamerabewegung an den Shader melden + Zoom-Stufen aktualisieren
+      .onZoom(({ lng, lat, altitude }) => {
+        material.uniforms.globeRotation.value.set(lng, lat)
+        setzeZoomStufe(altitude)
+      })
 
     // Maximale Kantenglaettung der Texturen (schaerfer bei flachem Blickwinkel)
     const maxAniso = globus.renderer().capabilities.getMaxAnisotropy()
@@ -146,11 +187,16 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     setzeSonne()
     const sonnenTimer = setInterval(setzeSonne, 60000)
 
+    // Pflicht-Quellenangabe fuer die Satellitenkacheln (nur sichtbar, wenn aktiv)
+    attributionEl = document.createElement('div')
+    attributionEl.className = 'tile-attribution'
+    attributionEl.textContent = 'Satellitenbilder: Esri · Maxar · Earthstar Geographics'
+    attributionEl.style.display = 'none'
+    container.appendChild(attributionEl)
+
     // Halbtransparente Wolkenschicht, die langsam ueber dem Globus rotiert
     const WOLKEN_HOEHE = 0.006
     const WOLKEN_DREHUNG = -0.0015 // Grad pro Frame — bewusst traege, wirkt natuerlicher
-    let wolken = null
-    let wolkenRaf = 0
     lader.load(BASIS + 'textures/clouds.png', (wolkenTextur) => {
       wolkenTextur.anisotropy = maxAniso
       wolken = new THREE.Mesh(
@@ -181,10 +227,10 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       globus.pointOfView({ lat: 35, lng: 8, altitude: 2.2 }, 0)
     }
 
-    // Zoom-Grenzen: nah genug fuer Details, aber nicht so nah,
-    // dass die Textur unscharf wird (Globus-Radius = 100)
+    // Zoom-Grenzen: dank Satellitenkacheln darf man sehr nah ran
+    // (Globus-Radius = 100; Distanz 100.25 entspricht ca. 16 km Hoehe)
     const controls = globus.controls()
-    controls.minDistance = 115
+    controls.minDistance = 100.25
     controls.maxDistance = 480
     controls.autoRotate = true
     controls.autoRotateSpeed = 0.45
@@ -233,7 +279,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       .htmlElementsData(marker)
       .htmlLat((d) => d.strecke.lat)
       .htmlLng((d) => d.strecke.lng)
-      .htmlAltitude(0.01)
+      .htmlAltitude(0.002)
       .htmlElement((d) => {
         const el = document.createElement('div')
         el.className =
@@ -258,16 +304,17 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       })
   }, [marker])
 
-  // Zweistufiger Flug zur Strecke: erst hinfliegen, dann nah reinzoomen
+  // Zweistufiger Flug zur Strecke: erst hinfliegen, dann tief reinzoomen —
+  // die Satellitenkacheln schalten sich dabei automatisch dazu
   useEffect(() => {
     const globus = globusRef.current
     if (!globus || !flyZiel) return
     globus.controls().autoRotate = false
     clearTimeout(flugTimerRef.current)
-    globus.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: 1.4 }, 1100)
+    globus.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: 1.2 }, 1100)
     flugTimerRef.current = setTimeout(() => {
       const g = globusRef.current
-      if (g) g.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: 0.25 }, 900)
+      if (g) g.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: 0.0045 }, 1900)
     }, 1150)
     globus.__rotationSpaeterFortsetzen?.(25000)
   }, [flyZiel])
