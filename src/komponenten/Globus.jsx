@@ -99,7 +99,10 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
   // Globus einmalig initialisieren
   useEffect(() => {
     const container = containerRef.current
-    const globus = new Globe(container, { animateIn: true })
+    const globus = new Globe(container, {
+      animateIn: true,
+      rendererConfig: { antialias: true, alpha: true, powerPreference: 'high-performance' },
+    })
     globusRef.current = globus
 
     // Texturen laden (Tag: NASA Blue Marble, Nacht: 8K-Nachtkarte)
@@ -128,6 +131,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/' +
       l + '/' + y + '/' + x
     let tilesAktiv = false
+    let tileWechselTimer = 0
     let wolken = null
     let wolkenRaf = 0
     let attributionEl = null
@@ -143,16 +147,17 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
         wolken.material.opacity = deckkraft
         wolken.visible = deckkraft > 0.02
       }
-      // Kacheln mit Hysterese schalten (an < 0.30, aus > 0.45), damit an der
-      // Schwelle kein staendiges Hin und Her entsteht
-      if (!tilesAktiv && altitude < 0.3) {
-        tilesAktiv = true
-        globus.globeTileEngineUrl(TILE_URL)
-        if (attributionEl) attributionEl.style.display = 'block'
-      } else if (tilesAktiv && altitude > 0.45) {
-        tilesAktiv = false
-        globus.globeTileEngineUrl(null)
-        if (attributionEl) attributionEl.style.display = 'none'
+      // Kacheln mit Hysterese (an < 0.30, aus > 0.45) — aber NICHT mitten in
+      // der Zoom-Geste umschalten: der Umbau der Globus-Oberflaeche laesst den
+      // Zoom sonst haken. Darum erst, wenn die Geste kurz zur Ruhe kommt.
+      const sollTiles = tilesAktiv ? altitude < 0.45 : altitude < 0.3
+      clearTimeout(tileWechselTimer)
+      if (sollTiles !== tilesAktiv) {
+        tileWechselTimer = setTimeout(() => {
+          tilesAktiv = sollTiles
+          globus.globeTileEngineUrl(sollTiles ? TILE_URL : null)
+          if (attributionEl) attributionEl.style.display = sollTiles ? 'block' : 'none'
+        }, 280)
       }
     }
 
@@ -180,6 +185,10 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
         material.uniforms.globeRotation.value.set(lng, lat)
         setzeZoomStufe(altitude)
       })
+
+    // Pixel-Ratio deckeln: auf Handys (DPR 3) rendert das sonst 2.25x mehr
+    // Pixel als noetig — Hauptursache fuer ruckelndes Zoomen auf Mobilgeraeten
+    globus.renderer().setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
 
     // Maximale Kantenglaettung der Texturen (schaerfer bei flachem Blickwinkel)
     const maxAniso = globus.renderer().capabilities.getMaxAnisotropy()
@@ -268,6 +277,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     return () => {
       clearTimeout(idleTimerRef.current)
       clearTimeout(flugTimerRef.current)
+      clearTimeout(tileWechselTimer)
       clearInterval(sonnenTimer)
       cancelAnimationFrame(wolkenRaf)
       container.removeEventListener('pointerdown', stoppeRotation)

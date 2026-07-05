@@ -42,16 +42,21 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
-  // Deep-Link ?rennen=<runde|streckeId>: fliegt nach dem Laden direkt zum Rennen
+  // Deep-Link ?rennen=<runde|streckeId>: fliegt nach dem Laden direkt zum Rennen.
+  // Ist die Strecke kein Rennen im aktiven Kalender, oeffnet sie als ACC-Strecke.
   useEffect(() => {
     const ziel = new URLSearchParams(window.location.search).get('rennen')
     if (!ziel) return
-    const eintrag = eintraege.find(
-      (e) =>
-        e.typ === 'rennen' &&
-        (e.runde.toLowerCase() === ziel.toLowerCase() ||
-          e.streckeId.toLowerCase() === ziel.toLowerCase())
-    )
+    const gesucht = ziel.toLowerCase()
+    const eintrag =
+      eintraege.find(
+        (e) =>
+          e.typ === 'rennen' &&
+          (e.runde.toLowerCase() === gesucht || e.streckeId.toLowerCase() === gesucht)
+      ) ??
+      (streckenMap[gesucht]
+        ? { typ: 'acc', id: 'acc-' + gesucht, streckeId: gesucht, status: 'acc' }
+        : null)
     if (!eintrag) return
     const timer = setTimeout(() => waehleRennen(eintrag), 700)
     return () => clearTimeout(timer)
