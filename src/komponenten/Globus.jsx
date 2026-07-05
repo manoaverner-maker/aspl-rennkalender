@@ -89,6 +89,13 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
   const callbacksRef = useRef({ onMarkerKlick, onHintergrundKlick })
   callbacksRef.current = { onMarkerKlick, onHintergrundKlick }
 
+  // Finale Zoom-Hoehe des Rennen-Anflugs — per ?zoom= live einstellbar
+  // (kleiner = naeher). Standard 0.0015 ≈ ganze Strecke im Bild.
+  const zoomParam = parseFloat(new URLSearchParams(window.location.search).get('zoom'))
+  const anflugAltitude = Number.isFinite(zoomParam)
+    ? Math.min(0.02, Math.max(0.0008, zoomParam))
+    : 0.0015
+
   // Globus einmalig initialisieren
   useEffect(() => {
     const container = containerRef.current
@@ -167,7 +174,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       .width(container.clientWidth)
       .height(container.clientHeight)
       .onGlobeClick(() => callbacksRef.current.onHintergrundKlick?.())
-      .globeTileEngineMaxLevel(17)
+      .globeTileEngineMaxLevel(18)
       // Kamerabewegung an den Shader melden + Zoom-Stufen aktualisieren
       .onZoom(({ lng, lat, altitude }) => {
         material.uniforms.globeRotation.value.set(lng, lat)
@@ -228,9 +235,9 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     }
 
     // Zoom-Grenzen: dank Satellitenkacheln darf man sehr nah ran
-    // (Globus-Radius = 100; Distanz 100.25 entspricht ca. 16 km Hoehe)
+    // (Globus-Radius = 100; Distanz 100.10 entspricht ca. 6 km Hoehe)
     const controls = globus.controls()
-    controls.minDistance = 100.25
+    controls.minDistance = 100.1
     controls.maxDistance = 480
     controls.autoRotate = true
     controls.autoRotateSpeed = 0.45
@@ -314,9 +321,10 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     globus.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: 1.2 }, 1100)
     flugTimerRef.current = setTimeout(() => {
       const g = globusRef.current
-      if (g) g.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: 0.0045 }, 1900)
+      if (g) g.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: anflugAltitude }, 1900)
     }, 1150)
     globus.__rotationSpaeterFortsetzen?.(25000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flyZiel])
 
   return <div className="globus-container" ref={containerRef} />
