@@ -4,7 +4,14 @@
   "seriesId": "endurance",
   "seriesName": "Endurance-Series",
   "sortierung": 3,
-  "comingSoon": true,
-  "hinweis": "",
-  "eintraege": []
+  "comingSoon": false,
+  "hinweis": "Startzeit je nach Renndauer: 3 h → 18:00 · 4 h → 17:00 · 6 h → 15:00",
+  "eintraege": [
+    { "typ": "rennen", "runde": "E1", "streckeId": "indianapolis", "datum": "2026-07-26", "dauer": "3 Stunden", "startzeit": "18:00" },
+    { "typ": "rennen", "runde": "E2", "streckeId": "brandshatch", "datum": "2026-08-23", "dauer": "3 Stunden", "startzeit": "18:00" },
+    { "typ": "rennen", "runde": "E3", "streckeId": "spa", "datum": "2026-09-13", "dauer": "6 Stunden", "startzeit": "15:00" },
+    { "typ": "rennen", "runde": "E4", "streckeId": "zolder", "datum": "2026-10-04", "dauer": "4 Stunden", "startzeit": "17:00" },
+    { "typ": "rennen", "runde": "E5", "streckeId": "misano", "datum": "2026-10-25", "dauer": "4 Stunden", "startzeit": "17:00" },
+    { "typ": "rennen", "runde": "E6", "streckeId": "nordschleife", "datum": "2026-11-08", "dauer": "6 Stunden", "startzeit": "15:00" }
+  ]
 }

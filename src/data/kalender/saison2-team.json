@@ -5,15 +5,17 @@
   "seriesName": "Team-Series",
   "sortierung": 2,
   "comingSoon": false,
-  "hinweis": "Kalender folgt — Termine werden noch bekanntgegeben",
+  "hinweis": "Alle Rennen samstags — Quali 19:00",
+  "zeiten": { "training": "18:30", "quali": "19:00", "rennstart": "19:20" },
   "eintraege": [
-    { "typ": "rennen", "runde": "R1", "streckeId": "imola", "datum": "TBD" },
-    { "typ": "rennen", "runde": "R2", "streckeId": "barcelona", "datum": "TBD" },
-    { "typ": "rennen", "runde": "R3", "streckeId": "redbullring", "datum": "TBD" },
-    { "typ": "rennen", "runde": "R4", "streckeId": "lagunaseca", "datum": "TBD" },
-    { "typ": "rennen", "runde": "R5", "streckeId": "nuerburgring", "datum": "TBD" },
-    { "typ": "rennen", "runde": "R6", "streckeId": "donington", "datum": "TBD" },
-    { "typ": "rennen", "runde": "R7", "streckeId": "bathurst", "datum": "TBD" },
-    { "typ": "rennen", "runde": "R8", "streckeId": "monza", "datum": "TBD" }
+    { "typ": "rennen", "runde": "R1", "streckeId": "imola", "datum": "2026-06-13" },
+    { "typ": "rennen", "runde": "R2", "streckeId": "barcelona", "datum": "2026-06-20" },
+    { "typ": "rennen", "runde": "R3", "streckeId": "redbullring", "datum": "2026-06-27", "verschobenAuf": "2026-08-22", "grund": "Server hat nicht funktioniert" },
+    { "typ": "rennen", "runde": "R4", "streckeId": "lagunaseca", "datum": "2026-07-04" },
+    { "typ": "rennen", "runde": "R5", "streckeId": "nuerburgring", "datum": "2026-07-11" },
+    { "typ": "pause", "titel": "Mid-Season-Pause", "beschreibung": "18. + 25.07.2026 — keine Rennen" },
+    { "typ": "rennen", "runde": "R6", "streckeId": "donington", "datum": "2026-08-01" },
+    { "typ": "rennen", "runde": "R7", "streckeId": "bathurst", "datum": "2026-08-08" },
+    { "typ": "rennen", "runde": "R8", "streckeId": "monza", "datum": "2026-08-15" }
   ]
 }

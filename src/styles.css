@@ -10,6 +10,7 @@
   --rot: #e10600;
   --gruen: #00e676;
   --blau: #3b9dff;
+  --orange: #ff9800;
   --grau: #9a9aa5;
   --weiss: #f5f5f7;
   --titel-font: 'Orbitron', sans-serif;
@@ -275,6 +276,20 @@ a {
 .globus-marker.status-tbd .marker-punkt {
   background: #71717c;
   box-shadow: 0 0 8px rgba(150, 150, 160, 0.7);
+}
+
+/* Verschobene Rennen (z. B. Server-Ausfall) */
+.globus-marker.status-verschoben .marker-punkt {
+  background: var(--orange);
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.9);
+}
+
+.globus-marker.status-verschoben.naechstes::before {
+  border-color: var(--orange);
+}
+
+.legende-punkt.verschoben {
+  background: var(--orange);
 }
 
 /* Zusaetzliche ACC-Strecken (nicht im aktuellen Kalender) */
@@ -587,6 +602,23 @@ a {
   background: rgba(150, 150, 160, 0.12);
   color: var(--grau);
   border: 1px solid rgba(150, 150, 160, 0.45);
+}
+
+.badge-verschoben {
+  background: rgba(255, 152, 0, 0.14);
+  color: var(--orange);
+  border: 1px solid rgba(255, 152, 0, 0.55);
+}
+
+/* Hinweis im Detail-Panel bei verschobenen Rennen */
+.verschoben-hinweis {
+  background: rgba(255, 152, 0, 0.1);
+  border: 1px solid rgba(255, 152, 0, 0.45);
+  border-radius: 8px;
+  color: #ffb74d;
+  font-weight: 600;
+  padding: 0.5rem 0.7rem;
+  margin: 0 0 0.9rem;
 }
 
 /* ===== Bild-Platzhalter (Fallback bei fehlendem Bild) ===== */

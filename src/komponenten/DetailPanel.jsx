@@ -7,21 +7,34 @@ import { SIMGRID_URL } from '../utils/links.js'
 
 const BASIS = import.meta.env.BASE_URL
 
-// Rennformat gilt fuer alle Rennen der Liga
-const RENNFORMAT = [
-  ['Training', '30 Min — freies Joinen vor Renntag'],
-  ['Qualifying', '20 Min — Start um 20:30'],
-  ['Rennen', '60 Min'],
-  ['Boxenstopp', '1 Pflichtboxenstopp, fixe Tankzeit 25 s, kein Boxenfenster'],
-  ['Punkte', 'DTM-System P1–P15 + Quali-Bonus P1=3 / P2=2 / P3=1'],
-]
+// Rennformat: Zeiten kommen aus dem Kalender der gewaehlten Series;
+// Endurance-Rennen haben stattdessen Dauer + individuelle Startzeit
+function baueRennformat(rennen, zeiten) {
+  if (rennen.dauer) {
+    return [
+      ['Rennen', rennen.dauer],
+      ['Start', rennen.startzeit + ' Uhr'],
+      ['Boxenstopp', 'Pflichtboxenstopps gemaess Endurance-Reglement'],
+    ]
+  }
+  return [
+    ['Training', '30 Min — freies Joinen (ab ' + (zeiten?.training ?? '20:00') + ')'],
+    ['Qualifying', '20 Min — Start ' + (zeiten?.quali ?? '20:30')],
+    ['Rennen', '60 Min — Start ' + (zeiten?.rennstart ?? '20:50')],
+    ['Boxenstopp', '1 Pflichtboxenstopp, fixe Tankzeit 25 s, kein Boxenfenster'],
+    ['Punkte', 'DTM-System P1–P15 + Quali-Bonus P1=3 / P2=2 / P3=1'],
+  ]
+}
 
 // Slide-in-Panel mit Hero-Bild, Galerie, Streckendaten und Rennformat
-export default function DetailPanel({ rennen, onClose }) {
+export default function DetailPanel({ rennen, zeiten, onClose }) {
   const [lightboxIndex, setLightboxIndex] = useState(null)
   const strecke = rennen.strecke
   // ACC-Strecken ohne Kalender-Rennen: keine Termin-/Wetter-/Anmelde-Infos
   const istKalenderRennen = rennen.typ !== 'acc'
+  const effektiv = rennen.verschobenAuf || rennen.datum
+  const anzeigeZeit = rennen.startzeit || zeiten?.quali || '20:30'
+  const rennformat = baueRennformat(rennen, zeiten)
 
   const bildUrls = strecke.bilder.map(
     (b) => BASIS + 'images/strecken/' + strecke.bilderOrdner + '/' + b
@@ -58,7 +71,7 @@ export default function DetailPanel({ rennen, onClose }) {
 
           {istKalenderRennen ? (
             <div className="panel-status-zeile">
-              <span className="panel-datum">📅 {formatiereDatum(rennen.datum)} · 20:30</span>
+              <span className="panel-datum">📅 {formatiereDatum(effektiv)} · {anzeigeZeit}</span>
               <span className={'badge badge-' + rennen.status}>
                 {STATUS_TEXT[rennen.status]}
                 {rennen.istNaechstes ? ' · NEXT' : ''}
@@ -68,6 +81,14 @@ export default function DetailPanel({ rennen, onClose }) {
             <div className="panel-status-zeile">
               <span className="badge badge-tbd">Nicht im aktuellen ASPL-Kalender</span>
             </div>
+          )}
+
+          {/* Hinweis bei verschobenen Rennen (z. B. Server-Ausfall) */}
+          {rennen.verschobenAuf && (
+            <p className="verschoben-hinweis">
+              ⚠️ Verschoben — urspruenglich {formatiereDatum(rennen.datum)}
+              {rennen.grund ? ' (' + rennen.grund + ')' : ''}
+            </p>
           )}
 
           {/* Anmeldung laeuft komplett ueber SimGrid */}
@@ -130,7 +151,7 @@ export default function DetailPanel({ rennen, onClose }) {
             <>
               <h3 className="panel-abschnitt">Rennformat</h3>
               <ul className="rennformat">
-                {RENNFORMAT.map(([label, wert]) => (
+                {rennformat.map(([label, wert]) => (
                   <li key={label}>
                     <strong>{label}</strong>
                     <span>{wert}</span>

@@ -73,7 +73,10 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
                   <span className="karte-name">
                     {strecke.flagge} {strecke.kurzname}
                   </span>
-                  <span className="karte-datum">{formatiereDatum(e.datum)}</span>
+                  <span className="karte-datum">
+                    {formatiereDatum(e.verschobenAuf || e.datum)}
+                    {e.startzeit ? ' · ' + e.startzeit : ''}
+                  </span>
                   <span className={'badge badge-' + e.status}>
                     {STATUS_TEXT[e.status]}
                     {e.istNaechstes ? ' · NEXT' : ''}

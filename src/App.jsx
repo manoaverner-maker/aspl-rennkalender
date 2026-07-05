@@ -30,10 +30,10 @@ export default function App() {
   const [seriesId, setSeriesId] = useState(alleKalender[0]?.seriesId)
   const [aktivesRennen, setAktivesRennen] = useState(null)
   const [flyZiel, setFlyZiel] = useState(null)
-  // Toggle: nur Kalender-Rennen (Standard) oder alle ACC-Strecken anzeigen
-  // (per ?alle=1 auch direkt verlinkbar)
+  // Alle ACC-Strecken sind standardmaessig sichtbar und klickbar;
+  // der Toggle blendet sie bei Bedarf aus (?alle=0 als Deep-Link)
   const [alleStrecken, setAlleStrecken] = useState(
-    () => new URLSearchParams(window.location.search).get('alle') === '1'
+    () => new URLSearchParams(window.location.search).get('alle') !== '0'
   )
 
   useEffect(() => {
@@ -181,6 +181,11 @@ export default function App() {
             <div className="legende">
               <span className="legende-punkt gefahren" /> Gefahren
               <span className="legende-punkt ausstehend" /> Ausstehend
+              {kalenderMarker.some((m) => m.status === 'verschoben') && (
+                <>
+                  <span className="legende-punkt verschoben" /> Verschoben
+                </>
+              )}
               <span className="legende-punkt naechstes" /> Naechstes Rennen
               {alleStrecken && (
                 <>
@@ -200,7 +205,9 @@ export default function App() {
         </main>
       )}
 
-      {aktivesRennen && <DetailPanel rennen={aktivesRennen} onClose={schliessePanel} />}
+      {aktivesRennen && (
+        <DetailPanel rennen={aktivesRennen} zeiten={kalender?.zeiten} onClose={schliessePanel} />
+      )}
 
       <footer className="fuss">
         <span>ASPL GT3 Racing Series · PS5 &amp; Xbox Series · ACC · asplracing.com</span>
