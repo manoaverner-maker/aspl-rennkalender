@@ -139,9 +139,47 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       l + '/' + y + '/' + x
     let tilesAktiv = false
     let tileWechselTimer = 0
+    let tileWechselWartet = false
     let wolken = null
     let wolkenRaf = 0
     let attributionEl = null
+
+    // Kacheln vorwaermen: Bilder anstossen, damit sie im Browser-Cache liegen,
+    // wenn die Kachel-Engine sie kurz darauf wirklich anfragt
+    const vorgewaermt = new Set()
+    const waermeKachel = (x, y, z) => {
+      const n = 2 ** z
+      const url = TILE_URL(((x % n) + n) % n, y, z)
+      if (y < 0 || y >= n || vorgewaermt.has(url)) return
+      vorgewaermt.add(url)
+      const img = new Image()
+      img.src = url
+    }
+    // Ziel-Umfeld ueber alle Zoomstufen vorladen (laeuft waehrend des Anflugs)
+    const waermeZiel = (lat, lng) => {
+      const latR = (lat * Math.PI) / 180
+      for (let z = 5; z <= 13; z++) {
+        const n = 2 ** z
+        const x0 = Math.floor(((lng + 180) / 360) * n)
+        const y0 = Math.floor(
+          ((1 - Math.log(Math.tan(latR) + 1 / Math.cos(latR)) / Math.PI) / 2) * n
+        )
+        for (let dx = -1; dx <= 1; dx++) {
+          for (let dy = -1; dy <= 1; dy++) {
+            waermeKachel(x0 + dx, y0 + dy, z)
+          }
+        }
+      }
+    }
+    globus.__kachelnVorwaermen = waermeZiel
+    // Welt-Grundkacheln (Stufe 0–3, ~85 kleine Bilder) einmalig im Leerlauf
+    // vorladen — die erste Kachel-Aktivierung zeigt dann sofort Bilder
+    setTimeout(() => {
+      for (let z = 0; z <= 3; z++) {
+        const n = 2 ** z
+        for (let x = 0; x < n; x++) for (let y = 0; y < n; y++) waermeKachel(x, y, z)
+      }
+    }, 4000)
 
     // Reagiert auf die Zoom-Hoehe: Nacht und Wolken ausblenden, Kacheln umschalten
     const setzeZoomStufe = (altitude) => {
@@ -156,17 +194,27 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       }
       // Nahzoom: Marker-Pixel-Versatz aufheben (echte Distanz sichtbar)
       container.classList.toggle('nahzoom', altitude < 0.004)
-      // Kacheln mit Hysterese (an < 0.42, aus > 0.60) — aber NICHT mitten in
-      // der Zoom-Geste umschalten: der Umbau der Globus-Oberflaeche laesst den
-      // Zoom sonst haken. Darum erst, wenn die Geste kurz zur Ruhe kommt.
+      // Kacheln mit Hysterese (an < 0.42, aus > 0.60). Einschalten schnell
+      // (150 ms — auch mitten in Flug/Zoom, damit das Laden frueh beginnt),
+      // Ausschalten traege (450 ms), damit an der Schwelle nichts flackert.
+      // Wichtig: Timer laeuft weiter, auch wenn onZoom dauernd feuert —
+      // sonst wuerde die Umschaltung bis zum Bewegungsstopp verschleppt.
       const sollTiles = tilesAktiv ? altitude < 0.6 : altitude < 0.42
-      clearTimeout(tileWechselTimer)
-      if (sollTiles !== tilesAktiv) {
+      if (sollTiles === tilesAktiv) {
+        clearTimeout(tileWechselTimer)
+        tileWechselWartet = false
+      } else if (!tileWechselWartet) {
+        tileWechselWartet = true
         tileWechselTimer = setTimeout(() => {
-          tilesAktiv = sollTiles
-          globus.globeTileEngineUrl(sollTiles ? TILE_URL : null)
-          if (attributionEl) attributionEl.style.display = sollTiles ? 'block' : 'none'
-        }, 280)
+          tileWechselWartet = false
+          const alt = globus.pointOfView().altitude
+          const soll = tilesAktiv ? alt < 0.6 : alt < 0.42
+          if (soll !== tilesAktiv) {
+            tilesAktiv = soll
+            globus.globeTileEngineUrl(soll ? TILE_URL : null)
+            if (attributionEl) attributionEl.style.display = soll ? 'block' : 'none'
+          }
+        }, sollTiles ? 150 : 450)
       }
     }
 
@@ -410,6 +458,8 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     if (!globus || !flyZiel) return
     globus.controls().autoRotate = false
     clearTimeout(flugTimerRef.current)
+    // Ziel-Kacheln sofort vorladen — bis zur Landung liegen sie im Cache
+    globus.__kachelnVorwaermen?.(flyZiel.lat, flyZiel.lng)
     globus.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: 1.2 }, 1100)
     flugTimerRef.current = setTimeout(() => {
       const g = globusRef.current
