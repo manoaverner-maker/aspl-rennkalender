@@ -260,6 +260,25 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     controls.autoRotateSpeed = 0.45
     controls.enableDamping = true
 
+    // Zoom-Tempo an der HOEHE UEBER GRUND ausrichten (wie Google Earth).
+    // globe.gl skaliert es an der Distanz zum Erdmittelpunkt — damit kaeme
+    // man aus der Kachel-Nahansicht kaum mehr raus (Aussetzer-Gefuehl).
+    // Pro Mausrad-Stufe soll die Hoehe etwa um Faktor 1.5 wachsen/schrumpfen.
+    const ZOOM_FAKTOR = 1.5
+    const radius = globus.getGlobeRadius()
+    const passeZoomTempoAn = () => {
+      const d = globus.camera().position.length()
+      const boden = Math.max(d - radius, radius * 0.0008)
+      const zielRatio = (radius + boden * ZOOM_FAKTOR) / d
+      controls.zoomSpeed = Math.min(
+        8,
+        Math.max(0.05, Math.log(zielRatio) / Math.log(1 / 0.95))
+      )
+    }
+    // Nach dem globe.gl-eigenen change-Listener registriert — unser Wert gilt
+    controls.addEventListener('change', passeZoomTempoAn)
+    passeZoomTempoAn()
+
     // Bei Interaktion Rotation stoppen, nach Idle wieder aufnehmen —
     // aber nur, wenn weit genug rausgezoomt ist (sonst wirkt es rasend)
     const rotationSpaeterFortsetzen = (ms) => {
@@ -321,10 +340,23 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
           el.style.marginLeft = d.strecke.markerVersatz[0] + 'px'
           el.style.marginTop = d.strecke.markerVersatz[1] + 'px'
         }
-        el.addEventListener('click', (ev) => {
+        // Klick-Erkennung ueber die GESTE statt ueber das Element: waehrend
+        // Flug-Animationen wandern Marker unter dem Cursor weg, wodurch ein
+        // normaler click-Event zerfaellt und das Panel "manchmal" nicht kam
+        el.addEventListener('pointerdown', (ev) => {
           ev.stopPropagation()
-          callbacksRef.current.onMarkerKlick?.(d)
+          const start = { x: ev.clientX, y: ev.clientY, t: Date.now() }
+          const beiLoslassen = (up) => {
+            window.removeEventListener('pointerup', beiLoslassen)
+            const dx = up.clientX - start.x
+            const dy = up.clientY - start.y
+            if (Date.now() - start.t < 500 && dx * dx + dy * dy < 100) {
+              callbacksRef.current.onMarkerKlick?.(d)
+            }
+          }
+          window.addEventListener('pointerup', beiLoslassen)
         })
+        el.addEventListener('click', (ev) => ev.stopPropagation())
         return el
       })
   }, [marker])

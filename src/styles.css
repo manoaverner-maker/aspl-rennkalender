@@ -1532,6 +1532,13 @@ a {
 
 /* ===== Desktop-Layout (Globus links, Liste rechts) ===== */
 @media (min-width: 901px) {
+  /* Kein blockierendes Overlay: Marker/Buttons bleiben klickbar, das Panel
+     wechselt beim Klick auf eine andere Strecke direkt — schliessen geht
+     weiterhin per X, Escape oder Klick auf den Globus-Hintergrund */
+  .panel-overlay {
+    display: none;
+  }
+
   .app {
     height: 100dvh;
     overflow: hidden;
