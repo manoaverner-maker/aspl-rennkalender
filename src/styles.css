@@ -1494,6 +1494,36 @@ a {
   color: var(--weiss);
 }
 
+/* ===== Update-Hinweis (neue Version verfuegbar) ===== */
+.update-banner {
+  position: fixed;
+  bottom: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  background: var(--rot);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--titel-font);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.65rem 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(225, 6, 0, 0.55);
+  animation: sanftRein 0.35s ease-out;
+  white-space: nowrap;
+  max-width: calc(100vw - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.update-banner:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 30px rgba(225, 6, 0, 0.75);
+}
+
 /* Nutzer mit reduzierter Bewegung: grosse Animationen abschalten */
 @media (prefers-reduced-motion: reduce) {
   .detail-panel,

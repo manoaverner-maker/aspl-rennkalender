@@ -260,10 +260,13 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     controls.autoRotateSpeed = 0.45
     controls.enableDamping = true
 
-    // Zoom-Tempo an der HOEHE UEBER GRUND ausrichten (wie Google Earth).
-    // globe.gl skaliert es an der Distanz zum Erdmittelpunkt — damit kaeme
-    // man aus der Kachel-Nahansicht kaum mehr raus (Aussetzer-Gefuehl).
-    // Pro Mausrad-Stufe soll die Hoehe etwa um Faktor 1.5 wachsen/schrumpfen.
+    // zoomToCursor (globe.gl-Standard) verklemmt sich mit dem staendigen
+    // Zuruecksetzen des Orbit-Ziels auf den Erdmittelpunkt — genau das war
+    // das "Zoom geht manchmal nicht, bis man sich bewegt"
+    controls.zoomToCursor = false
+
+    // Pinch-Zoom (Touch) laeuft weiter ueber die Controls — Tempo an der
+    // HOEHE UEBER GRUND ausrichten, nicht an der Mittelpunkt-Distanz
     const ZOOM_FAKTOR = 1.5
     const radius = globus.getGlobeRadius()
     const passeZoomTempoAn = () => {
@@ -278,6 +281,38 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     // Nach dem globe.gl-eigenen change-Listener registriert — unser Wert gilt
     controls.addEventListener('change', passeZoomTempoAn)
     passeZoomTempoAn()
+
+    // Mausrad-Zoom komplett selbst: weich geglaettete Animation der Hoehe
+    // (Google-Earth-Gefuehl) statt ruckartiger OrbitControls-Stufen.
+    // Capture-Phase faengt das Event ab, bevor OrbitControls es sieht.
+    let zielHoehe = null
+    let zoomRaf = 0
+    const beiMausrad = (ev) => {
+      ev.preventDefault()
+      ev.stopPropagation()
+      const delta = ev.deltaMode === 1 ? ev.deltaY * 33 : ev.deltaY
+      const staerke = Math.max(0.35, Math.min(2, Math.abs(delta) / 100))
+      const faktor = Math.pow(1.32, (delta > 0 ? 1 : -1) * staerke)
+      const basis = zielHoehe ?? globus.pointOfView().altitude
+      zielHoehe = Math.min(3.8, Math.max(0.001, basis * faktor))
+      stoppeRotation()
+    }
+    const glaetteZoom = () => {
+      if (zielHoehe != null) {
+        const pov = globus.pointOfView()
+        const diff = zielHoehe - pov.altitude
+        if (Math.abs(diff) / Math.max(pov.altitude, 0.001) < 0.003) {
+          zielHoehe = null
+        } else {
+          // pointOfView mit Dauer 0 ersetzt auch laufende Fluganimationen —
+          // Rauszoomen direkt nach dem Strecken-Anflug greift sofort
+          globus.pointOfView({ altitude: pov.altitude + diff * 0.17 }, 0)
+        }
+      }
+      zoomRaf = requestAnimationFrame(glaetteZoom)
+    }
+    container.addEventListener('wheel', beiMausrad, { capture: true, passive: false })
+    glaetteZoom()
 
     // Bei Interaktion Rotation stoppen, nach Idle wieder aufnehmen —
     // aber nur, wenn weit genug rausgezoomt ist (sonst wirkt es rasend)
@@ -307,7 +342,9 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       clearTimeout(tileWechselTimer)
       clearInterval(sonnenTimer)
       cancelAnimationFrame(wolkenRaf)
+      cancelAnimationFrame(zoomRaf)
       container.removeEventListener('pointerdown', stoppeRotation)
+      container.removeEventListener('wheel', beiMausrad, { capture: true })
       ro.disconnect()
       globus._destructor?.()
       container.innerHTML = ''

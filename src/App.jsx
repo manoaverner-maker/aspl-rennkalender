@@ -37,6 +37,7 @@ export default function App() {
   const [aktivesRennen, setAktivesRennen] = useState(null)
   const [flyZiel, setFlyZiel] = useState(null)
   const [leaderboardOffen, setLeaderboardOffen] = useState(false)
+  const [neueVersion, setNeueVersion] = useState(false)
   // Alle ACC-Strecken sind standardmaessig sichtbar und klickbar;
   // der Toggle blendet sie bei Bedarf aus (?alle=0 als Deep-Link)
   const [alleStrecken, setAlleStrecken] = useState(
@@ -47,6 +48,36 @@ export default function App() {
     const onHash = () => setRoute(aktuelleRoute())
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
+  // Update-Erkennung: vergleicht periodisch den Skript-Hash der Live-Seite
+  // mit dem gerade laufenden Build — bei Abweichung erscheint der
+  // "Aktualisieren"-Knopf (wichtig fuer installierte PWA/Handy-Nutzer)
+  useEffect(() => {
+    const laufendesSkript = document
+      .querySelector('script[src*="assets/index-"]')
+      ?.getAttribute('src')
+    if (!laufendesSkript) return // Dev-Modus
+    const pruefe = async () => {
+      try {
+        const antwort = await fetch(import.meta.env.BASE_URL + 'index.html', { cache: 'no-store' })
+        if (!antwort.ok) return
+        const html = await antwort.text()
+        const neu = html.match(/assets\/index-[\w-]+\.js/)
+        if (neu && !laufendesSkript.includes(neu[0])) setNeueVersion(true)
+      } catch {
+        /* offline o. ae. — beim naechsten Versuch */
+      }
+    }
+    const timer = setInterval(pruefe, 5 * 60 * 1000)
+    const beiSichtbar = () => {
+      if (document.visibilityState === 'visible') pruefe()
+    }
+    document.addEventListener('visibilitychange', beiSichtbar)
+    return () => {
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', beiSichtbar)
+    }
   }, [])
 
   // Deep-Link ?rennen=<runde|streckeId>: fliegt nach dem Laden direkt zum Rennen.
@@ -290,6 +321,12 @@ export default function App() {
           ergebnisse={ergebnisse}
           onClose={() => setLeaderboardOffen(false)}
         />
+      )}
+
+      {neueVersion && (
+        <button className="update-banner" onClick={() => window.location.reload()}>
+          🔄 Neue Version verfuegbar — jetzt aktualisieren
+        </button>
       )}
 
       <footer className="fuss">
