@@ -121,6 +121,11 @@ export default function App() {
     (e) => e.saisonId === kalender?.saisonId && e.seriesId === kalender?.seriesId
   )
 
+  // Punktesystem der Series: Endurance nutzt FIA-Endurance, sonst DTM.
+  // Kann pro Ergebnis-Datei via "punkteSystem" ueberschrieben werden.
+  const punkteSystem =
+    ergebnisse?.punkteSystem ?? (kalender?.seriesId === 'endurance' ? 'endurance' : 'dtm')
+
   // Sieger pro Strecke — fuer die Einblendung auf gefahrenen Rennkarten
   const siegerMap = useMemo(() => {
     const m = {}
@@ -300,6 +305,7 @@ export default function App() {
             accStrecken={alleStrecken ? accStrecken : []}
             siegerMap={siegerMap}
             seriesId={kalender?.seriesId}
+            zeiten={kalender?.zeiten}
           />
         </main>
       )}
@@ -309,6 +315,7 @@ export default function App() {
           rennen={aktivesRennen}
           zeiten={kalender?.zeiten}
           ergebnisse={ergebnisse?.strecken?.[aktivesRennen.streckeId]}
+          punkteSystem={punkteSystem}
           onClose={schliessePanel}
         />
       )}
@@ -319,6 +326,11 @@ export default function App() {
           seriesId={kalender?.seriesId}
           seriesName={kalender?.seriesName}
           ergebnisse={ergebnisse}
+          streckenMap={streckenMap}
+          rundenMap={Object.fromEntries(
+            eintraege.filter((e) => e.typ === 'rennen').map((e) => [e.streckeId, e.runde])
+          )}
+          punkteSystem={punkteSystem}
           onClose={() => setLeaderboardOffen(false)}
         />
       )}

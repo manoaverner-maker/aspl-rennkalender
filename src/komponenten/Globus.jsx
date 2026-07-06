@@ -154,6 +154,8 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
         wolken.material.opacity = deckkraft
         wolken.visible = deckkraft > 0.02
       }
+      // Nahzoom: Marker-Pixel-Versatz aufheben (echte Distanz sichtbar)
+      container.classList.toggle('nahzoom', altitude < 0.004)
       // Kacheln mit Hysterese (an < 0.42, aus > 0.60) — aber NICHT mitten in
       // der Zoom-Geste umschalten: der Umbau der Globus-Oberflaeche laesst den
       // Zoom sonst haken. Darum erst, wenn die Geste kurz zur Ruhe kommt.
@@ -372,10 +374,13 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
         el.style.pointerEvents = 'auto'
         el.style.cursor = 'pointer'
         // Optionaler Pixel-Versatz, damit fast identische Standorte
-        // (z. B. Nuerburgring GP und Nordschleife) nicht uebereinanderliegen
+        // (z. B. Nuerburgring GP und Nordschleife) nicht uebereinanderliegen.
+        // Wird per CSS-Klasse "nahzoom" entfernt, sobald man so nah dran ist,
+        // dass die echte Distanz auf dem Bildschirm sichtbar wird.
         if (d.strecke.markerVersatz) {
-          el.style.marginLeft = d.strecke.markerVersatz[0] + 'px'
-          el.style.marginTop = d.strecke.markerVersatz[1] + 'px'
+          el.classList.add('mit-versatz')
+          el.style.setProperty('--versatz-x', d.strecke.markerVersatz[0] + 'px')
+          el.style.setProperty('--versatz-y', d.strecke.markerVersatz[1] + 'px')
         }
         // Klick-Erkennung ueber die GESTE statt ueber das Element: waehrend
         // Flug-Animationen wandern Marker unter dem Cursor weg, wodurch ein

@@ -7,7 +7,7 @@ import { SIMGRID_URL } from '../utils/links.js'
 import { punkte } from '../utils/punkte.js'
 
 // Rennergebnis: Podium prominent, Rest aufklappbar (Panel nicht ueberladen)
-function ErgebnisAbschnitt({ ergebnisse }) {
+function ErgebnisAbschnitt({ ergebnisse, punkteSystem }) {
   const [zeigeAlle, setZeigeAlle] = useState(false)
   useEffect(() => setZeigeAlle(false), [ergebnisse])
 
@@ -27,7 +27,7 @@ function ErgebnisAbschnitt({ ergebnisse }) {
               {e.fahrer}
               <small>{e.team ? e.team + ' · ' : ''}{e.fahrzeug}</small>
             </span>
-            <span className="podium-punkte">{punkte(e.platz, e.quali)} Pkt</span>
+            <span className="podium-punkte">{punkte(e.platz, e.quali, punkteSystem)} Pkt</span>
           </li>
         ))}
       </ol>
@@ -46,7 +46,7 @@ function ErgebnisAbschnitt({ ergebnisse }) {
                       {e.nr != null ? ' · #' + e.nr : ''}
                     </small>
                   </td>
-                  <td className="punkte-spalte">{punkte(e.platz, e.quali)}</td>
+                  <td className="punkte-spalte">{punkte(e.platz, e.quali, punkteSystem)}</td>
                 </tr>
               ))}
             </tbody>
@@ -66,10 +66,14 @@ const BASIS = import.meta.env.BASE_URL
 // Endurance-Rennen haben stattdessen Dauer + individuelle Startzeit
 function baueRennformat(rennen, zeiten) {
   if (rennen.dauer) {
+    // Endurance-Format gemaess ASPL Endurance Rulebook
     return [
-      ['Rennen', rennen.dauer],
-      ['Start', rennen.startzeit + ' Uhr'],
-      ['Boxenstopp', 'Pflichtboxenstopps gemaess Endurance-Reglement'],
+      ['Rennen', rennen.dauer + ' — Start ' + rennen.startzeit + ' Uhr'],
+      ['Teams', '2–4 Fahrer pro Team; Solofahrer nur im 3-Stunden-Rennen'],
+      ['Fahrzeuge', 'Bei 3h/4h/6h darf ein Team beide Autos einsetzen'],
+      ['Fahrerwechsel', 'Mind. 1 Pflichtstopp mit Fahrerwechsel (Solofahrer: Pflichtstopp ohne Wechsel)'],
+      ['Stints', 'Ab 6 h gelten Maximal-Fahr- und Stintzeiten — Details vor dem Rennen im Discord'],
+      ['Punkte', 'FIA-Endurance-System: 38-27-23-18-15-12-9-6-3-2 · jedes weitere gewertete Auto 1 Punkt'],
     ]
   }
   return [
@@ -81,8 +85,29 @@ function baueRennformat(rennen, zeiten) {
   ]
 }
 
+// Teilen-Button: kopiert den Deep-Link zur Strecke (fuers Posten im Discord)
+function TeilenButton({ streckeId }) {
+  const [kopiert, setKopiert] = useState(false)
+  const teile = async () => {
+    const url =
+      window.location.origin + import.meta.env.BASE_URL + '?rennen=' + streckeId
+    try {
+      await navigator.clipboard.writeText(url)
+      setKopiert(true)
+      setTimeout(() => setKopiert(false), 2000)
+    } catch {
+      window.prompt('Link zum Kopieren:', url)
+    }
+  }
+  return (
+    <button className={'teilen-button' + (kopiert ? ' kopiert' : '')} onClick={teile}>
+      {kopiert ? '✓ Link kopiert' : '🔗 Teilen'}
+    </button>
+  )
+}
+
 // Slide-in-Panel mit Hero-Bild, Galerie, Streckendaten und Rennformat
-export default function DetailPanel({ rennen, zeiten, ergebnisse, onClose }) {
+export default function DetailPanel({ rennen, zeiten, ergebnisse, punkteSystem = 'dtm', onClose }) {
   const [lightboxIndex, setLightboxIndex] = useState(null)
   const strecke = rennen.strecke
   // ACC-Strecken ohne Kalender-Rennen: keine Termin-/Wetter-/Anmelde-Infos
@@ -131,10 +156,12 @@ export default function DetailPanel({ rennen, zeiten, ergebnisse, onClose }) {
                 {STATUS_TEXT[rennen.status]}
                 {rennen.istNaechstes ? ' · NEXT' : ''}
               </span>
+              <TeilenButton streckeId={strecke.id} />
             </div>
           ) : (
             <div className="panel-status-zeile">
               <span className="badge badge-tbd">Nicht im aktuellen ASPL-Kalender</span>
+              <TeilenButton streckeId={strecke.id} />
             </div>
           )}
 
@@ -155,7 +182,7 @@ export default function DetailPanel({ rennen, zeiten, ergebnisse, onClose }) {
 
           {/* Ergebnisse nur, wenn gefahren UND Daten vorhanden — sonst weglassen */}
           {istKalenderRennen && rennen.status === 'gefahren' && ergebnisse?.length > 0 && (
-            <ErgebnisAbschnitt ergebnisse={ergebnisse} />
+            <ErgebnisAbschnitt ergebnisse={ergebnisse} punkteSystem={punkteSystem} />
           )}
 
           {istKalenderRennen && (

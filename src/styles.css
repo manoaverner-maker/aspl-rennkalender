@@ -1494,6 +1494,233 @@ a {
   color: var(--weiss);
 }
 
+/* ===== Countdown zum naechsten Rennen ===== */
+.countdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  background: linear-gradient(135deg, rgba(0, 230, 118, 0.1), var(--karte) 55%);
+  border: 1px solid rgba(0, 230, 118, 0.45);
+  border-left: 4px solid var(--gruen);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.15s;
+}
+
+.countdown:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px rgba(0, 230, 118, 0.25);
+}
+
+.countdown.live {
+  background: linear-gradient(135deg, rgba(225, 6, 0, 0.16), var(--karte) 55%);
+  border-color: rgba(225, 6, 0, 0.6);
+  border-left-color: var(--rot);
+  animation: glowPuls 1.8s ease-in-out infinite;
+}
+
+.countdown-label {
+  font-family: var(--titel-font);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gruen);
+}
+
+.countdown.live .countdown-label {
+  color: #ff5a55;
+}
+
+.countdown-rennen {
+  font-weight: 700;
+  font-size: 1.08rem;
+}
+
+.countdown-zeit {
+  font-family: var(--titel-font);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--weiss);
+}
+
+/* ===== Teilen-Button im Detail-Panel ===== */
+.teilen-button {
+  margin-left: auto;
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  color: var(--grau);
+  font-family: var(--text-font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.teilen-button:hover {
+  color: var(--weiss);
+  border-color: var(--rot);
+}
+
+.teilen-button.kopiert {
+  color: var(--gruen);
+  border-color: rgba(0, 230, 118, 0.5);
+}
+
+/* ===== Fahrer-Saisonverlauf im Leaderboard ===== */
+.wertung-tabelle tr.klickbar {
+  cursor: pointer;
+}
+
+.wertung-tabelle tr.klickbar:hover td {
+  background: #22222a;
+}
+
+.leaderboard-tipp {
+  color: var(--grau);
+  font-size: 0.82rem;
+  text-align: center;
+  margin: 0.7rem 0 0;
+}
+
+.zurueck-button {
+  background: transparent;
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  color: var(--grau);
+  font-family: var(--text-font);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.32rem 0.7rem;
+  cursor: pointer;
+  margin-bottom: 0.7rem;
+}
+
+.zurueck-button:hover {
+  color: var(--weiss);
+  border-color: var(--rot);
+}
+
+.fahrer-name {
+  font-family: var(--titel-font);
+  font-size: 1.15rem;
+  margin: 0 0 0.15rem;
+}
+
+.fahrer-kennzahlen {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.6rem 0 0.9rem;
+}
+
+.fahrer-kennzahlen span {
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  color: var(--grau);
+}
+
+.fahrer-kennzahlen strong {
+  color: var(--weiss);
+  font-family: var(--titel-font);
+  font-size: 0.95rem;
+  margin-right: 2px;
+}
+
+.fahrer-rennen {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.fahrer-rennen li {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) 2.4rem minmax(0, 1fr) 3.4rem;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  padding: 0.42rem 0.65rem;
+  font-size: 0.92rem;
+}
+
+.fahrer-rennen-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fahrer-platz {
+  font-family: var(--titel-font);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--grau);
+}
+
+.fahrer-platz.top-1 {
+  color: #d4af37;
+}
+
+.fahrer-platz.top-2 {
+  color: #b8bcc4;
+}
+
+.fahrer-platz.top-3 {
+  color: #b0703c;
+}
+
+.fahrer-balken {
+  height: 8px;
+  background: #101016;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.fahrer-balken-wert {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--rot), #ff6b47);
+  border-radius: 4px;
+}
+
+.fahrer-punkte {
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.fahrer-punkte small {
+  color: var(--gruen);
+  font-weight: 600;
+}
+
+/* Marker-Versatz (z. B. Nordschleife) — im Nahzoom aufgehoben */
+.globus-marker.mit-versatz {
+  margin-left: var(--versatz-x, 0);
+  margin-top: var(--versatz-y, 0);
+  transition: margin 0.4s ease;
+}
+
+.globus-container.nahzoom .globus-marker.mit-versatz {
+  margin-left: 0;
+  margin-top: 0;
+}
+
 /* ===== Update-Hinweis (neue Version verfuegbar) ===== */
 .update-banner {
   position: fixed;

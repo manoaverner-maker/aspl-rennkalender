@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import BildMitFallback from './BildMitFallback.jsx'
+import Countdown from './Countdown.jsx'
 import { formatiereDatum, STATUS_TEXT } from '../utils/status.js'
 
 const BASIS = import.meta.env.BASE_URL
@@ -10,8 +11,9 @@ function heroBildUrl(strecke) {
 
 // Seitenleiste mit allen Rennen der gewaehlten Series (auf Mobile unter dem Globus).
 // Optional darunter: alle weiteren ACC-Strecken (Toggle "Alle ACC-Strecken").
-export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hinweis, accStrecken = [], siegerMap = {}, seriesId }) {
+export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hinweis, accStrecken = [], siegerMap = {}, seriesId, zeiten }) {
   const [suche, setSuche] = useState('')
+  const naechstes = eintraege.find((e) => e.typ === 'rennen' && e.istNaechstes)
 
   const passt = (strecke) =>
     !suche ||
@@ -33,6 +35,14 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
 
   return (
     <aside className="rennliste" aria-label="Rennliste">
+      {naechstes && !suche && (
+        <Countdown
+          eintrag={naechstes}
+          strecke={streckenMap[naechstes.streckeId]}
+          zeiten={zeiten}
+          onWahl={onWahl}
+        />
+      )}
       <input
         className="strecken-suche"
         type="search"
