@@ -322,6 +322,9 @@ a {
   height: 16px;
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.85);
+  /* Entzerrt den Cluster: weit rausgezoomt schrumpft der Punkt (Var vom
+     Globus je Zoomstufe gesetzt), die 16px-Tap-Flaeche bleibt aber gleich */
+  transform: scale(var(--marker-skala, 1));
 }
 
 .globus-marker.status-gefahren .marker-punkt {
@@ -803,6 +806,11 @@ a {
 
 .panel-schliessen:hover {
   background: var(--rot);
+}
+
+/* Griff-Leiste (Wisch-Hinweis) — nur als Bottom-Sheet auf dem Handy sichtbar */
+.panel-griff {
+  display: none;
 }
 
 .panel-hero {
@@ -1931,6 +1939,11 @@ a {
     border-top: 3px solid var(--rot);
     border-radius: 18px 18px 0 0;
     animation: panelHoch 0.28s ease-out;
+    /* Vom Wisch-Handler gesetzte translateY-Transforms weich abfedern und
+       den Ueberrollbereich (iOS-Bounce) am Sheet-Rand ruhig halten */
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+    will-change: transform;
   }
 
   @keyframes panelHoch {
@@ -1942,8 +1955,27 @@ a {
     }
   }
 
+  /* Griff-Leiste oben mittig — signalisiert "nach unten wischbar".
+     Liegt als schwebende Pille ueber dem oberen Rand des Hero-Bilds. */
+  .panel-griff {
+    display: block;
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    width: 42px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.55);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+  }
+
+  /* Erd-Ausschnitt ueber dem Sheet bleibt gut sichtbar (nur leichter Schleier),
+     faengt aber Tap/Wisch ab, damit die Erde nicht versehentlich verdreht wird */
   .panel-overlay {
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(0, 0, 0, 0.18);
   }
 
   .panel-hero {

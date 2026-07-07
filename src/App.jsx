@@ -273,6 +273,7 @@ export default function App() {
               flyZiel={flyZiel}
               onMarkerKlick={waehleRennen}
               onHintergrundKlick={schliessePanel}
+              panelOffen={!!aktivesRennen}
             />
           </section>
           {/* Desktop: Overlay unten links am Globus — Mobile: eigene Zeile darunter */}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import BildMitFallback from './BildMitFallback.jsx'
 import Lightbox from './Lightbox.jsx'
 import WetterBox from './WetterBox.jsx'
@@ -109,6 +109,8 @@ function TeilenButton({ streckeId }) {
 // Slide-in-Panel mit Hero-Bild, Galerie, Streckendaten und Rennformat
 export default function DetailPanel({ rennen, zeiten, ergebnisse, punkteSystem = 'dtm', onClose }) {
   const [lightboxIndex, setLightboxIndex] = useState(null)
+  const panelRef = useRef(null)
+  const overlayRef = useRef(null)
   const strecke = rennen.strecke
   // ACC-Strecken ohne Kalender-Rennen: keine Termin-/Wetter-/Anmelde-Infos
   const istKalenderRennen = rennen.typ !== 'acc'
@@ -129,11 +131,89 @@ export default function DetailPanel({ rennen, zeiten, ergebnisse, punkteSystem =
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose, lightboxIndex])
 
+  // Handy: Bottom-Sheet nach unten wischen zum Schliessen. Nur wenn der Inhalt
+  // ganz oben steht — sonst scrollt man normal im Panel. Der Hintergrund
+  // (Erd-Ausschnitt) blendet beim Ziehen sanft mit aus.
+  useEffect(() => {
+    const panel = panelRef.current
+    if (!panel) return
+    const istSheet = () => window.matchMedia('(max-width: 900px)').matches
+    const setOverlay = (o) => {
+      if (overlayRef.current) overlayRef.current.style.opacity = String(o)
+    }
+
+    let startY = null
+    let dy = 0
+    let ziehend = false
+    let startZeit = 0
+
+    const onStart = (e) => {
+      if (!istSheet() || e.touches.length !== 1) {
+        startY = null
+        return
+      }
+      startY = e.touches[0].clientY
+      startZeit = Date.now()
+      dy = 0
+      ziehend = false
+    }
+    const onMove = (e) => {
+      if (startY === null) return
+      dy = e.touches[0].clientY - startY
+      if (!ziehend) {
+        // Zieh-Geste nur starten, wenn oben und nach unten gezogen wird
+        if (dy > 6 && panel.scrollTop <= 0) ziehend = true
+        else if (dy < 0 || panel.scrollTop > 0) {
+          startY = null // normales Scrollen zulassen
+          return
+        } else return
+      }
+      e.preventDefault() // natives Scrollen/Bounce waehrend des Ziehens stoppen
+      const t = Math.max(0, dy)
+      panel.style.transition = 'none'
+      panel.style.transform = `translateY(${t}px)`
+      setOverlay(Math.max(0, 1 - t / 380))
+    }
+    const onEnd = () => {
+      if (startY === null) return
+      const schnellerFlick = dy > 45 && Date.now() - startZeit < 260
+      const weitGenug = dy > panel.offsetHeight * 0.28
+      if (ziehend && (weitGenug || schnellerFlick)) {
+        navigator.vibrate?.(6) // kurzes Haptik-Feedback beim Zuschieben
+        panel.style.transition = 'transform 0.2s ease-in'
+        panel.style.transform = 'translateY(100%)'
+        setOverlay(0)
+        setTimeout(onClose, 190)
+      } else if (ziehend) {
+        panel.style.transition = 'transform 0.25s ease'
+        panel.style.transform = 'translateY(0)'
+        setOverlay(1)
+      }
+      startY = null
+      ziehend = false
+      dy = 0
+    }
+
+    panel.addEventListener('touchstart', onStart, { passive: true })
+    panel.addEventListener('touchmove', onMove, { passive: false })
+    panel.addEventListener('touchend', onEnd)
+    panel.addEventListener('touchcancel', onEnd)
+    return () => {
+      panel.removeEventListener('touchstart', onStart)
+      panel.removeEventListener('touchmove', onMove)
+      panel.removeEventListener('touchend', onEnd)
+      panel.removeEventListener('touchcancel', onEnd)
+    }
+  }, [onClose])
+
   return (
     <>
-      {/* Klick ausserhalb schliesst das Panel */}
-      <div className="panel-overlay" onClick={onClose} />
-      <section className="detail-panel" aria-label={'Details ' + strecke.kurzname}>
+      {/* Klick auf den frei sichtbaren Erd-Ausschnitt (oder Desktop-Hintergrund)
+          schliesst das Panel; auf dem Handy blendet er beim Wischen mit aus */}
+      <div className="panel-overlay" ref={overlayRef} onClick={onClose} />
+      <section className="detail-panel" ref={panelRef} aria-label={'Details ' + strecke.kurzname}>
+        {/* Griff-Leiste als Wisch-Hinweis (nur Handy sichtbar) */}
+        <div className="panel-griff" aria-hidden="true" />
         <button className="panel-schliessen" onClick={onClose} aria-label="Schliessen">
           ✕
         </button>

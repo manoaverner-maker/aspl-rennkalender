@@ -87,13 +87,20 @@ function sonnenPosition(dt) {
 
 // Drehbarer 3D-Globus (globe.gl / Three.js) mit den Rennstrecken als Marker.
 // Rot = gefahren, Gruen = ausstehend, das naechste Rennen pulsiert.
-export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKlick }) {
+export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKlick, panelOffen }) {
   const containerRef = useRef(null)
   const globusRef = useRef(null)
   const idleTimerRef = useRef(null)
   const flugTimerRef = useRef(null)
   const callbacksRef = useRef({ onMarkerKlick, onHintergrundKlick })
   callbacksRef.current = { onMarkerKlick, onHintergrundKlick }
+  // Ob gerade ein Detail-Panel offen ist — die Auto-Rotation soll dann nicht
+  // hinter dem Sheet weiterlaufen (Erde wirkt sonst "beweglich")
+  const panelOffenRef = useRef(panelOffen)
+  panelOffenRef.current = panelOffen
+  // Merkt sich, ob der Render-Loop von uns pausiert wurde, damit wir ihn nur
+  // dann wieder fortsetzen (kein doppelter rAF-Loop beim Mount)
+  const pausiertRef = useRef(false)
 
   // Finale Zoom-Hoehe des Rennen-Anflugs — per ?zoom= live einstellbar
   // (kleiner = naeher). Standard 0.0015 ≈ ganze Strecke im Bild.
@@ -105,9 +112,14 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
   // Globus einmalig initialisieren
   useEffect(() => {
     const container = containerRef.current
+    // Touch-Geraet? Danach richten sich Antialiasing, Zoom-/Dreh-Tempo und
+    // das Einfrieren hinter dem Panel.
+    const istTouch = window.matchMedia('(pointer: coarse)').matches
     const globus = new Globe(container, {
       animateIn: true,
-      rendererConfig: { antialias: true, alpha: true, powerPreference: 'high-performance' },
+      // Antialiasing auf Handys aus: MSAA kostet auf mobilen GPUs spuerbar FPS,
+      // die glatten Kugel-Texturen brauchen es kaum — fluessigeres Drehen
+      rendererConfig: { antialias: !istTouch, alpha: true, powerPreference: 'high-performance' },
     })
     globusRef.current = globus
 
@@ -198,6 +210,11 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       // bei Weltansicht geografisch hunderte km daneben (Nordschleife "in England")
       const versatzSkala = Math.min(1, Math.max(0, (0.7 - altitude) / 0.4))
       container.style.setProperty('--versatz-skala', versatzSkala.toFixed(3))
+      // Cluster entzerren: Marker-Punkte weit draussen kleiner rendern, damit
+      // der dichte Europa-Haufen weniger zu einem Blob verklebt (Tap-Flaeche
+      // bleibt gleich — nur der farbige Punkt schrumpft optisch)
+      const markerSkala = Math.max(0.65, Math.min(1, 1 - ((altitude - 0.5) / 1.1) * 0.35))
+      container.style.setProperty('--marker-skala', markerSkala.toFixed(3))
       // Kacheln mit Hysterese (an < 0.42, aus > 0.60). Einschalten schnell
       // (150 ms — auch mitten in Flug/Zoom, damit das Laden frueh beginnt),
       // Ausschalten traege (450 ms), damit an der Schwelle nichts flackert.
@@ -313,6 +330,22 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     controls.autoRotateSpeed = 0.45
     controls.enableDamping = true
 
+    // Traegheit/Momentum: nach dem Loslassen dreht die Erde sanft aus.
+    // dampingFactor = Abklingrate pro Frame — kleiner = laengeres Nachlaufen.
+    // Auf dem Handy laengeres Ausrollen (Momentum), an der Maus straffer.
+    // Handy: kleinerer dampingFactor = laengeres, sanftes Ausrollen (Momentum).
+    // Desktop bleibt beim three.js-Standard (0.05), damit die Maus sich nicht
+    // anders anfuehlt als bisher.
+    controls.dampingFactor = istTouch ? 0.04 : 0.05
+    // Dreh-Tempo am Handy leicht gedrosselt: der Flick gibt weniger Wucht,
+    // damit es trotz laengerem Ausrollen "nicht zu empfindlich" wird.
+    controls.rotateSpeed = istTouch ? 0.8 : 1.0
+    // Zwei Finger: gleichzeitig zoomen UND die Erde drehen (wie Google Earth).
+    // Standard waere DOLLY_PAN — Pan verschiebt bei einer Kugel aber den
+    // Mittelpunkt ins Leere, deshalb DOLLY_ROTATE.
+    controls.touches.ONE = THREE.TOUCH.ROTATE
+    controls.touches.TWO = THREE.TOUCH.DOLLY_ROTATE
+
     // zoomToCursor (globe.gl-Standard) verklemmt sich mit dem staendigen
     // Zuruecksetzen des Orbit-Ziels auf den Erdmittelpunkt — genau das war
     // das "Zoom geht manchmal nicht, bis man sich bewegt"
@@ -323,7 +356,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     // Auf Touch-Geraeten stark drosseln: zoomSpeed ist bei OrbitControls der
     // EXPONENT der Pinch-Ratio — Werte um 8 machen die Geste unkontrollierbar
     const ZOOM_FAKTOR = 1.5
-    const TOUCH_ZOOM_FAKTOR = window.matchMedia('(pointer: coarse)').matches ? 0.35 : 1
+    const TOUCH_ZOOM_FAKTOR = istTouch ? 0.35 : 1
     const radius = globus.getGlobeRadius()
     const passeZoomTempoAn = () => {
       const d = globus.camera().position.length()
@@ -375,7 +408,9 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       clearTimeout(idleTimerRef.current)
       idleTimerRef.current = setTimeout(() => {
         const g = globusRef.current
-        if (g && g.pointOfView().altitude > 0.8) g.controls().autoRotate = true
+        if (g && !panelOffenRef.current && g.pointOfView().altitude > 0.8) {
+          g.controls().autoRotate = true
+        }
       }, ms)
     }
     const stoppeRotation = () => {
@@ -385,9 +420,27 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     container.addEventListener('pointerdown', stoppeRotation)
     globus.__rotationSpaeterFortsetzen = rotationSpaeterFortsetzen
 
+    // Doppeltipp/-klick: sanft auf den getippten Punkt reinzoomen (Maps-Geste).
+    // toGlobeCoords liefert die Geo-Koordinaten unter dem Bildschirmpunkt —
+    // null, wenn ins All getippt wurde.
+    const zoomAufPunkt = (x, y) => {
+      const coords = globus.toGlobeCoords(x, y)
+      if (!coords) return
+      const pov = globus.pointOfView()
+      const ziel = Math.max(0.03, pov.altitude * 0.4)
+      globus.__kachelnVorwaermen?.(coords.lat, coords.lng)
+      globus.pointOfView({ lat: coords.lat, lng: coords.lng, altitude: ziel }, 650)
+      stoppeRotation()
+      navigator.vibrate?.(5)
+    }
+
     // Kurzer Klick/Tap ins Leere (Globus ODER Weltraum) schliesst das offene
     // Panel — Marker fangen ihr pointerdown selbst ab (stopPropagation),
-    // Drehen/Ziehen zaehlt durch die Bewegungs-Schwelle nicht als Klick
+    // Drehen/Ziehen zaehlt durch die Bewegungs-Schwelle nicht als Klick.
+    // Zwei schnelle Taps hintereinander = Doppeltipp -> reinzoomen.
+    let letzterTapZeit = 0
+    let letzterTapX = 0
+    let letzterTapY = 0
     const beiHintergrundKlick = (ev) => {
       if (!ev.isPrimary) return
       const start = { x: ev.clientX, y: ev.clientY, t: Date.now() }
@@ -397,6 +450,17 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
         const dy = up.clientY - start.y
         if (Date.now() - start.t < 400 && dx * dx + dy * dy < 64) {
           callbacksRef.current.onHintergrundKlick?.()
+          const jetzt = Date.now()
+          const nahBeimLetzten =
+            (up.clientX - letzterTapX) ** 2 + (up.clientY - letzterTapY) ** 2 < 900
+          if (jetzt - letzterTapZeit < 320 && nahBeimLetzten) {
+            letzterTapZeit = 0
+            zoomAufPunkt(up.clientX, up.clientY)
+          } else {
+            letzterTapZeit = jetzt
+            letzterTapX = up.clientX
+            letzterTapY = up.clientY
+          }
         }
       }
       window.addEventListener('pointerup', beiLoslassen)
@@ -465,6 +529,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
             const dx = up.clientX - start.x
             const dy = up.clientY - start.y
             if (Date.now() - start.t < 500 && dx * dx + dy * dy < 100) {
+              navigator.vibrate?.(8) // kurzes Haptik-Feedback beim Andocken (wo unterstuetzt)
               callbacksRef.current.onMarkerKlick?.(d)
             }
           }
@@ -474,6 +539,32 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
         return el
       })
   }, [marker])
+
+  // Solange ein Detail-Panel offen ist: Auto-Rotation stoppen und auf dem
+  // Handy die Erde ganz einfrieren — man sieht sie hinter dem Sheet, kann sie
+  // aber nicht versehentlich verdrehen (auf Desktop bleibt sie neben dem
+  // Panel bedienbar). Beim Schliessen wird die Interaktion wieder freigegeben.
+  useEffect(() => {
+    const globus = globusRef.current
+    if (!globus) return
+    const controls = globus.controls()
+    if (panelOffen) {
+      controls.autoRotate = false
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        controls.enabled = false
+        // Render-Loop anhalten: Erde ist ohnehin eingefroren und vom Sheet
+        // fast verdeckt — spart Akku/Hitze und haelt das Sheet fluessig
+        globus.pauseAnimation?.()
+        pausiertRef.current = true
+      }
+    } else {
+      controls.enabled = true
+      if (pausiertRef.current) {
+        globus.resumeAnimation?.()
+        pausiertRef.current = false
+      }
+    }
+  }, [panelOffen])
 
   // Zweistufiger Flug zur Strecke: erst hinfliegen, dann tief reinzoomen —
   // die Satellitenkacheln schalten sich dabei automatisch dazu
