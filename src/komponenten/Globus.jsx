@@ -360,12 +360,22 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     const passeZoomTempoAn = () => {
       const d = globus.camera().position.length()
       const boden = Math.max(d - radius, radius * 0.0008)
-      const zielRatio = (radius + boden * ZOOM_FAKTOR) / d
-      const roh = Math.min(8, Math.max(0.05, Math.log(zielRatio) / Math.log(1 / 0.95)))
-      // Touch: sanftes, eng gedeckeltes Tempo (0.4–0.75). Vorher schoss roh weit
-      // draussen auf ~8 hoch → der erste Pinch fuehlte sich wie ein Ruck/Sprung
-      // an. Das schmale Band macht den Zoom-Start weich und gleichmaessig.
-      controls.zoomSpeed = istTouch ? Math.min(0.75, Math.max(0.4, roh * 0.15)) : roh
+      if (istTouch) {
+        // OrbitControls-Pinch skaliert die KAMERA-DISTANZ (inkl. Erdradius)
+        // multiplikativ. Nah an der Oberflaeche ist die Hoehe ueber Grund winzig
+        // gegenueber der Distanz -> ein kleiner Pinch aendert einen riesigen
+        // Bruchteil der Resthoehe (fuehlt sich "exponentiell empfindlicher" an,
+        // je naeher man kommt). Gegenmittel: zoomSpeed proportional zur
+        // Hoehenfraktion boden/d -> ueber den ganzen Bereich gleich empfindlich.
+        // Weit weg bleibt ~0.75 (war "perfekt"), nah geht es sanft gegen 0.
+        const hoehenFraktion = boden / d
+        controls.zoomSpeed = Math.min(0.75, Math.max(0.02, 0.95 * hoehenFraktion))
+      } else {
+        // Desktop nutzt eigenes Wheel-Zoom; zoomSpeed hier nur fuer Trackpad-
+        // Pinch — altitudenabhaengig wie gehabt.
+        const zielRatio = (radius + boden * ZOOM_FAKTOR) / d
+        controls.zoomSpeed = Math.min(8, Math.max(0.05, Math.log(zielRatio) / Math.log(1 / 0.95)))
+      }
     }
     // Nach dem globe.gl-eigenen change-Listener registriert — unser Wert gilt
     controls.addEventListener('change', passeZoomTempoAn)
