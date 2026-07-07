@@ -268,24 +268,6 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     // Pixel als noetig — Hauptursache fuer ruckelndes Zoomen auf Mobilgeraeten
     globus.renderer().setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
 
-    // FPS-Deckel auf Touch-Geraeten: 120-Hz-Displays (z. B. iPhone Pro Max via
-    // ProMotion) rendern den Globus sonst mit 120 fps = doppelte GPU-Last und
-    // Hitze. ~60 fps sieht identisch fluessig aus, halbiert aber die Arbeit.
-    // Umsetzung: den echten GPU-Draw ueberspringen, wenn seit dem letzten Bild
-    // zu wenig Zeit verging (controls.update/Tweens laufen im Loop weiter).
-    if (istTouch) {
-      const renderer = globus.renderer()
-      const echtesRender = renderer.render.bind(renderer)
-      const MIN_FRAME_MS = 14 // ~60 fps-Ziel; 60-Hz-Geraete bleiben unberuehrt
-      let letzterFrame = -1
-      renderer.render = (scene, camera) => {
-        const jetzt = performance.now()
-        if (letzterFrame >= 0 && jetzt - letzterFrame < MIN_FRAME_MS) return
-        letzterFrame = jetzt
-        echtesRender(scene, camera)
-      }
-    }
-
     // Maximale Kantenglaettung der Texturen (schaerfer bei flachem Blickwinkel)
     const maxAniso = globus.renderer().capabilities.getMaxAnisotropy()
     tagTextur.anisotropy = maxAniso
