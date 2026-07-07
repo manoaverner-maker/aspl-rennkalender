@@ -268,6 +268,24 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     // Pixel als noetig — Hauptursache fuer ruckelndes Zoomen auf Mobilgeraeten
     globus.renderer().setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
 
+    // FPS-Deckel auf Touch-Geraeten: 120-Hz-Displays (z. B. iPhone Pro Max via
+    // ProMotion) rendern den Globus sonst mit 120 fps = doppelte GPU-Last und
+    // Hitze. ~60 fps sieht identisch fluessig aus, halbiert aber die Arbeit.
+    // Umsetzung: den echten GPU-Draw ueberspringen, wenn seit dem letzten Bild
+    // zu wenig Zeit verging (controls.update/Tweens laufen im Loop weiter).
+    if (istTouch) {
+      const renderer = globus.renderer()
+      const echtesRender = renderer.render.bind(renderer)
+      const MIN_FRAME_MS = 14 // ~60 fps-Ziel; 60-Hz-Geraete bleiben unberuehrt
+      let letzterFrame = -1
+      renderer.render = (scene, camera) => {
+        const jetzt = performance.now()
+        if (letzterFrame >= 0 && jetzt - letzterFrame < MIN_FRAME_MS) return
+        letzterFrame = jetzt
+        echtesRender(scene, camera)
+      }
+    }
+
     // Maximale Kantenglaettung der Texturen (schaerfer bei flachem Blickwinkel)
     const maxAniso = globus.renderer().capabilities.getMaxAnisotropy()
     tagTextur.anisotropy = maxAniso
@@ -356,15 +374,16 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     // Auf Touch-Geraeten stark drosseln: zoomSpeed ist bei OrbitControls der
     // EXPONENT der Pinch-Ratio — Werte um 8 machen die Geste unkontrollierbar
     const ZOOM_FAKTOR = 1.5
-    const TOUCH_ZOOM_FAKTOR = istTouch ? 0.35 : 1
     const radius = globus.getGlobeRadius()
     const passeZoomTempoAn = () => {
       const d = globus.camera().position.length()
       const boden = Math.max(d - radius, radius * 0.0008)
       const zielRatio = (radius + boden * ZOOM_FAKTOR) / d
-      controls.zoomSpeed =
-        Math.min(8, Math.max(0.05, Math.log(zielRatio) / Math.log(1 / 0.95))) *
-        TOUCH_ZOOM_FAKTOR
+      const roh = Math.min(8, Math.max(0.05, Math.log(zielRatio) / Math.log(1 / 0.95)))
+      // Touch: sanftes, eng gedeckeltes Tempo (0.4–0.75). Vorher schoss roh weit
+      // draussen auf ~8 hoch → der erste Pinch fuehlte sich wie ein Ruck/Sprung
+      // an. Das schmale Band macht den Zoom-Start weich und gleichmaessig.
+      controls.zoomSpeed = istTouch ? Math.min(0.75, Math.max(0.4, roh * 0.15)) : roh
     }
     // Nach dem globe.gl-eigenen change-Listener registriert — unser Wert gilt
     controls.addEventListener('change', passeZoomTempoAn)
@@ -467,6 +486,21 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     }
     container.addEventListener('pointerdown', beiHintergrundKlick)
 
+    // Seite im Hintergrund (Tab-Wechsel, Bildschirm aus, PWA minimiert):
+    // Render-Loop anhalten — spart Akku/Hitze. Beim Zurueckkommen fortsetzen,
+    // ausser ein Panel haelt die Erde auf dem Handy bewusst eingefroren.
+    const beiSichtbarkeit = () => {
+      const g = globusRef.current
+      if (!g) return
+      if (document.hidden) {
+        g.pauseAnimation?.()
+      } else {
+        const mobil = window.matchMedia('(max-width: 900px)').matches
+        if (!(panelOffenRef.current && mobil)) g.resumeAnimation?.()
+      }
+    }
+    document.addEventListener('visibilitychange', beiSichtbarkeit)
+
     // Groesse an den Container koppeln (responsive)
     const ro = new ResizeObserver(() => {
       globus.width(container.clientWidth).height(container.clientHeight)
@@ -483,6 +517,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       container.removeEventListener('pointerdown', stoppeRotation)
       container.removeEventListener('pointerdown', beiHintergrundKlick)
       container.removeEventListener('wheel', beiMausrad, { capture: true })
+      document.removeEventListener('visibilitychange', beiSichtbarkeit)
       ro.disconnect()
       globus._destructor?.()
       container.innerHTML = ''

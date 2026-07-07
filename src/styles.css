@@ -29,6 +29,20 @@ body {
   color: var(--weiss);
   font-family: var(--text-font);
   font-size: 17px;
+  /* Kiosk-artige App: kein versehentliches Text-Markieren (blaue Auswahl) und
+     kein iOS-Long-Press-Callout ("Kopieren/Teilen") beim Wischen/Drehen —
+     genau das war auf dem iPhone stoerend. Tap-Highlight ebenfalls aus. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Eingabefelder duerfen selbstverstaendlich weiter markiert/bearbeitet werden */
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 button {
