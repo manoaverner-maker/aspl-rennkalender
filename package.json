@@ -5,8 +5,9 @@
   "type": "module",
   "description": "ASPL GT3 Racing Series - 3D-Globus Rennkalender (ACC, PS5 & Xbox Series)",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "export-daten": "node scripts/export-daten.mjs",
+    "dev": "node scripts/export-daten.mjs && vite",
+    "build": "node scripts/export-daten.mjs && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

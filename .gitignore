@@ -3,3 +3,6 @@ dist
 *.local
 .DS_Store
 Thumbs.db
+
+# Generierte Daten-Exporte (werden bei dev/build automatisch neu erzeugt)
+public/data/
