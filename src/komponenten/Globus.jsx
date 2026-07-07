@@ -194,6 +194,10 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       }
       // Nahzoom: Marker-Pixel-Versatz aufheben (echte Distanz sichtbar)
       container.classList.toggle('nahzoom', altitude < 0.004)
+      // Versatz beim Rauszoomen ausblenden: ein fester Pixel-Abstand waere
+      // bei Weltansicht geografisch hunderte km daneben (Nordschleife "in England")
+      const versatzSkala = Math.min(1, Math.max(0, (0.7 - altitude) / 0.4))
+      container.style.setProperty('--versatz-skala', versatzSkala.toFixed(3))
       // Kacheln mit Hysterese (an < 0.42, aus > 0.60). Einschalten schnell
       // (150 ms — auch mitten in Flug/Zoom, damit das Laden frueh beginnt),
       // Ausschalten traege (450 ms), damit an der Schwelle nichts flackert.
@@ -235,7 +239,6 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       .atmosphereAltitude(0.18)
       .width(container.clientWidth)
       .height(container.clientHeight)
-      .onGlobeClick(() => callbacksRef.current.onHintergrundKlick?.())
       .onGlobeReady(() => container.classList.add('bereit'))
       .globeTileEngineMaxLevel(18)
       // Kamerabewegung an den Shader melden + Zoom-Stufen aktualisieren
@@ -316,17 +319,19 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     controls.zoomToCursor = false
 
     // Pinch-Zoom (Touch) laeuft weiter ueber die Controls — Tempo an der
-    // HOEHE UEBER GRUND ausrichten, nicht an der Mittelpunkt-Distanz
+    // HOEHE UEBER GRUND ausrichten, nicht an der Mittelpunkt-Distanz.
+    // Auf Touch-Geraeten stark drosseln: zoomSpeed ist bei OrbitControls der
+    // EXPONENT der Pinch-Ratio — Werte um 8 machen die Geste unkontrollierbar
     const ZOOM_FAKTOR = 1.5
+    const TOUCH_ZOOM_FAKTOR = window.matchMedia('(pointer: coarse)').matches ? 0.35 : 1
     const radius = globus.getGlobeRadius()
     const passeZoomTempoAn = () => {
       const d = globus.camera().position.length()
       const boden = Math.max(d - radius, radius * 0.0008)
       const zielRatio = (radius + boden * ZOOM_FAKTOR) / d
-      controls.zoomSpeed = Math.min(
-        8,
-        Math.max(0.05, Math.log(zielRatio) / Math.log(1 / 0.95))
-      )
+      controls.zoomSpeed =
+        Math.min(8, Math.max(0.05, Math.log(zielRatio) / Math.log(1 / 0.95))) *
+        TOUCH_ZOOM_FAKTOR
     }
     // Nach dem globe.gl-eigenen change-Listener registriert — unser Wert gilt
     controls.addEventListener('change', passeZoomTempoAn)
@@ -380,6 +385,24 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     container.addEventListener('pointerdown', stoppeRotation)
     globus.__rotationSpaeterFortsetzen = rotationSpaeterFortsetzen
 
+    // Kurzer Klick/Tap ins Leere (Globus ODER Weltraum) schliesst das offene
+    // Panel — Marker fangen ihr pointerdown selbst ab (stopPropagation),
+    // Drehen/Ziehen zaehlt durch die Bewegungs-Schwelle nicht als Klick
+    const beiHintergrundKlick = (ev) => {
+      if (!ev.isPrimary) return
+      const start = { x: ev.clientX, y: ev.clientY, t: Date.now() }
+      const beiLoslassen = (up) => {
+        window.removeEventListener('pointerup', beiLoslassen)
+        const dx = up.clientX - start.x
+        const dy = up.clientY - start.y
+        if (Date.now() - start.t < 400 && dx * dx + dy * dy < 64) {
+          callbacksRef.current.onHintergrundKlick?.()
+        }
+      }
+      window.addEventListener('pointerup', beiLoslassen)
+    }
+    container.addEventListener('pointerdown', beiHintergrundKlick)
+
     // Groesse an den Container koppeln (responsive)
     const ro = new ResizeObserver(() => {
       globus.width(container.clientWidth).height(container.clientHeight)
@@ -394,6 +417,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       cancelAnimationFrame(wolkenRaf)
       cancelAnimationFrame(zoomRaf)
       container.removeEventListener('pointerdown', stoppeRotation)
+      container.removeEventListener('pointerdown', beiHintergrundKlick)
       container.removeEventListener('wheel', beiMausrad, { capture: true })
       ro.disconnect()
       globus._destructor?.()

@@ -6,6 +6,7 @@ import SeriesAuswahl from './komponenten/SeriesAuswahl.jsx'
 import ComingSoon from './komponenten/ComingSoon.jsx'
 import Bildnachweise from './komponenten/Bildnachweise.jsx'
 import Leaderboard from './komponenten/Leaderboard.jsx'
+import BesucherZaehler from './komponenten/BesucherZaehler.jsx'
 import streckenDaten from './data/strecken.json'
 import { annotiereEintraege } from './utils/status.js'
 import { SIMGRID_URL } from './utils/links.js'
@@ -343,6 +344,7 @@ export default function App() {
 
       <footer className="fuss">
         <span>ASPL GT3 Racing Series · PS5 &amp; Xbox Series · ACC · asplracing.com</span>
+        <BesucherZaehler />
         <a href="#/bildnachweise">Bildnachweise</a>
       </footer>
     </div>

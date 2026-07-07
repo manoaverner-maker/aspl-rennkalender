@@ -1494,6 +1494,11 @@ a {
   color: var(--weiss);
 }
 
+.besucher-zaehler {
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
 /* ===== Countdown zum naechsten Rennen ===== */
 .countdown {
   display: flex;
@@ -1709,11 +1714,13 @@ a {
   font-weight: 600;
 }
 
-/* Marker-Versatz (z. B. Nordschleife) — im Nahzoom aufgehoben */
+/* Marker-Versatz (z. B. Nordschleife) — skaliert mit der Zoomhoehe
+   (--versatz-skala, vom Globus gesetzt): voller Abstand nur nah dran,
+   beim Rauszoomen auf 0, sonst laege der Marker hunderte km daneben.
+   Im Nahzoom komplett aufgehoben (echte Distanz sichtbar). */
 .globus-marker.mit-versatz {
-  margin-left: var(--versatz-x, 0);
-  margin-top: var(--versatz-y, 0);
-  transition: margin 0.4s ease;
+  margin-left: calc(var(--versatz-x, 0px) * var(--versatz-skala, 0));
+  margin-top: calc(var(--versatz-y, 0px) * var(--versatz-skala, 0));
 }
 
 .globus-container.nahzoom .globus-marker.mit-versatz {
