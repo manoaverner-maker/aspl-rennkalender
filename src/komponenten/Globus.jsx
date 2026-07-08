@@ -98,9 +98,9 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
   // hinter dem Sheet weiterlaufen (Erde wirkt sonst "beweglich")
   const panelOffenRef = useRef(panelOffen)
   panelOffenRef.current = panelOffen
-  // Merkt sich, ob der Render-Loop von uns pausiert wurde, damit wir ihn nur
-  // dann wieder fortsetzen (kein doppelter rAF-Loop beim Mount)
-  const pausiertRef = useRef(false)
+  // Ob der Render-Loop gerade laeuft — verhindert doppeltes Pausieren/Fortsetzen
+  // aus den verschiedenen Quellen (Idle-Freeze, Panel, Tab im Hintergrund)
+  const animLaeuftRef = useRef(true)
 
   // Finale Zoom-Hoehe des Rennen-Anflugs — per ?zoom= live einstellbar
   // (kleiner = naeher). Standard 0.0015 ≈ ganze Strecke im Bild.
@@ -265,8 +265,10 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       })
 
     // Pixel-Ratio deckeln: auf Handys (DPR 3) rendert das sonst 2.25x mehr
-    // Pixel als noetig — Hauptursache fuer ruckelndes Zoomen auf Mobilgeraeten
-    globus.renderer().setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
+    // Pixel als noetig. Auf Touch zusaetzlich auf 1.5 statt 2 begrenzt — das
+    // ist der groesste Hebel gegen Hitze (ca. 44 % weniger Fragment-Arbeit),
+    // auf Retina-Displays kaum sichtbar.
+    globus.renderer().setPixelRatio(Math.min(window.devicePixelRatio || 1, istTouch ? 1.5 : 2))
 
     // Maximale Kantenglaettung der Texturen (schaerfer bei flachem Blickwinkel)
     const maxAniso = globus.renderer().capabilities.getMaxAnisotropy()
@@ -368,8 +370,11 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
         // je naeher man kommt). Gegenmittel: zoomSpeed proportional zur
         // Hoehenfraktion boden/d -> ueber den ganzen Bereich gleich empfindlich.
         // Weit weg bleibt ~0.75 (war "perfekt"), nah geht es sanft gegen 0.
+        // Boden bewusst sehr klein (0.005): er greift nur ganz nah an der
+        // Oberflaeche und haelt es dort sanft — vorher war er mit 0.02 zu hoch
+        // und machte den letzten Zoom-Bereich zu empfindlich.
         const hoehenFraktion = boden / d
-        controls.zoomSpeed = Math.min(0.75, Math.max(0.02, 0.95 * hoehenFraktion))
+        controls.zoomSpeed = Math.min(0.75, Math.max(0.005, 0.95 * hoehenFraktion))
       } else {
         // Desktop nutzt eigenes Wheel-Zoom; zoomSpeed hier nur fuer Trackpad-
         // Pinch — altitudenabhaengig wie gehabt.
@@ -413,23 +418,53 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     container.addEventListener('wheel', beiMausrad, { capture: true, passive: false })
     glaetteZoom()
 
-    // Bei Interaktion Rotation stoppen, nach Idle wieder aufnehmen —
-    // aber nur, wenn weit genug rausgezoomt ist (sonst wirkt es rasend)
-    const rotationSpaeterFortsetzen = (ms) => {
+    // ===== Energie sparen (gegen Hitze): den Render-Loop nur laufen lassen,
+    // wenn wirklich etwas passiert. Nach kurzer Ruhe (keine Interaktion, keine
+    // Bewegung, kein Flug) friert der Globus ein -> GPU im Leerlauf -> Handy
+    // bleibt kuehl. Jede Beruehrung/Bewegung weckt ihn wieder auf. Das ersetzt
+    // das fruehere *dauerhafte* Auto-Drehen, das ununterbrochen gerendert hat.
+    const IDLE_MS = 4000
+    const pausiere = () => {
+      const g = globusRef.current
+      if (g && animLaeuftRef.current) {
+        g.pauseAnimation?.()
+        animLaeuftRef.current = false
+      }
+    }
+    const setzeFort = () => {
+      const g = globusRef.current
+      if (g && !animLaeuftRef.current) {
+        g.resumeAnimation?.()
+        animLaeuftRef.current = true
+      }
+    }
+    const einschlafen = () => {
+      if (panelOffenRef.current) return // Panel steuert den Zustand selbst
+      controls.autoRotate = false
+      pausiere()
+    }
+    const haltWach = () => {
       clearTimeout(idleTimerRef.current)
-      idleTimerRef.current = setTimeout(() => {
-        const g = globusRef.current
-        if (g && !panelOffenRef.current && g.pointOfView().altitude > 0.8) {
-          g.controls().autoRotate = true
-        }
-      }, ms)
+      idleTimerRef.current = setTimeout(einschlafen, IDLE_MS)
+    }
+    // Aufwecken: Loop fortsetzen + Idle-Timer neu setzen
+    const aufwecken = () => {
+      setzeFort()
+      haltWach()
     }
     const stoppeRotation = () => {
       controls.autoRotate = false
-      rotationSpaeterFortsetzen(15000)
+      aufwecken()
     }
+    // Wichtig: NICHT an controls 'change' haengen — autoRotate wuerde sonst
+    // jeden Frame neu wecken und nie einschlafen. Nur echte Nutzer-Aktionen
+    // (Tippen, Ziehen, Mausrad) und Fluege wecken auf.
     container.addEventListener('pointerdown', stoppeRotation)
-    globus.__rotationSpaeterFortsetzen = rotationSpaeterFortsetzen
+    container.addEventListener('pointermove', aufwecken, { passive: true })
+    globus.__aufwecken = aufwecken
+    globus.__pausiere = pausiere
+    // Intro kurz drehen lassen, dann einschlafen (autoRotate ist beim Init an)
+    haltWach()
 
     // Doppeltipp/-klick: sanft auf den getippten Punkt reinzoomen (Maps-Geste).
     // toGlobeCoords liefert die Geo-Koordinaten unter dem Bildschirmpunkt —
@@ -482,13 +517,11 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     // Render-Loop anhalten — spart Akku/Hitze. Beim Zurueckkommen fortsetzen,
     // ausser ein Panel haelt die Erde auf dem Handy bewusst eingefroren.
     const beiSichtbarkeit = () => {
-      const g = globusRef.current
-      if (!g) return
       if (document.hidden) {
-        g.pauseAnimation?.()
+        pausiere()
       } else {
         const mobil = window.matchMedia('(max-width: 900px)').matches
-        if (!(panelOffenRef.current && mobil)) g.resumeAnimation?.()
+        if (!(panelOffenRef.current && mobil)) aufwecken()
       }
     }
     document.addEventListener('visibilitychange', beiSichtbarkeit)
@@ -507,6 +540,7 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
       cancelAnimationFrame(wolkenRaf)
       cancelAnimationFrame(zoomRaf)
       container.removeEventListener('pointerdown', stoppeRotation)
+      container.removeEventListener('pointermove', aufwecken)
       container.removeEventListener('pointerdown', beiHintergrundKlick)
       container.removeEventListener('wheel', beiMausrad, { capture: true })
       document.removeEventListener('visibilitychange', beiSichtbarkeit)
@@ -581,15 +615,11 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
         controls.enabled = false
         // Render-Loop anhalten: Erde ist ohnehin eingefroren und vom Sheet
         // fast verdeckt — spart Akku/Hitze und haelt das Sheet fluessig
-        globus.pauseAnimation?.()
-        pausiertRef.current = true
+        globus.__pausiere?.()
       }
     } else {
       controls.enabled = true
-      if (pausiertRef.current) {
-        globus.resumeAnimation?.()
-        pausiertRef.current = false
-      }
+      globus.__aufwecken?.() // wieder aufwachen + Idle-Timer neu setzen
     }
   }, [panelOffen])
 
@@ -598,6 +628,11 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
   useEffect(() => {
     const globus = globusRef.current
     if (!globus || !flyZiel) return
+    // Flug nur sichtbar rendern, wenn die Erde NICHT hinter einem Sheet
+    // eingefroren ist (auf dem Handy verdeckt das Panel den Globus ohnehin —
+    // dann bleibt er bewusst pausiert, spart Akku/Hitze).
+    const flugSichtbar = !(panelOffenRef.current && window.matchMedia('(max-width: 900px)').matches)
+    if (flugSichtbar) globus.__aufwecken?.()
     globus.controls().autoRotate = false
     clearTimeout(flugTimerRef.current)
     // Ziel-Kacheln sofort vorladen — bis zur Landung liegen sie im Cache
@@ -605,9 +640,11 @@ export default function Globus({ marker, flyZiel, onMarkerKlick, onHintergrundKl
     globus.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: 1.2 }, 1100)
     flugTimerRef.current = setTimeout(() => {
       const g = globusRef.current
-      if (g) g.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: anflugAltitude }, 1900)
+      if (g) {
+        g.pointOfView({ lat: flyZiel.lat, lng: flyZiel.lng, altitude: anflugAltitude }, 1900)
+        if (flugSichtbar) g.__aufwecken?.() // Idle-Timer ueber die 2. Flugphase halten
+      }
     }, 1150)
-    globus.__rotationSpaeterFortsetzen?.(25000)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flyZiel])
 
