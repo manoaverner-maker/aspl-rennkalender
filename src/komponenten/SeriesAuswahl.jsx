@@ -1,20 +1,23 @@
+import { useSprache } from '../i18n.jsx'
+
 // Selektoren fuer Saison (Dropdown) und Series (Segment-Buttons)
 export default function SeriesAuswahl({ saisons, saisonId, series, seriesId, onSaison, onSeries }) {
+  const { t, saison } = useSprache()
   return (
     <div className="auswahl">
       <select
         className="saison-select"
         value={saisonId}
         onChange={(e) => onSaison(e.target.value)}
-        aria-label="Saison waehlen"
+        aria-label={t('saisonWaehlen')}
       >
         {saisons.map((s) => (
           <option key={s.id} value={s.id}>
-            {s.name}
+            {saison(s.name)}
           </option>
         ))}
       </select>
-      <div className="series-buttons" role="tablist" aria-label="Series waehlen">
+      <div className="series-buttons" role="tablist" aria-label={t('seriesWaehlen')}>
         {series.map((s) => (
           <button
             key={s.id}

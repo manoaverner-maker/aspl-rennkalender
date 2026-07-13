@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSprache } from '../i18n.jsx'
 
 // Countdown zum naechsten Rennen — tickt alle 30 s, klickbar (fliegt zur Strecke).
 // Zielzeit ist der Quali-Start (bzw. bei Endurance die individuelle Startzeit).
@@ -8,19 +9,20 @@ function zielZeit(eintrag, zeiten) {
   return new Date((eintrag.verschobenAuf || eintrag.datum) + 'T' + uhr + ':00')
 }
 
-function formatiereRest(ms) {
+function formatiereRest(ms, t) {
   const min = Math.floor(ms / 60000)
   const tage = Math.floor(min / 1440)
   const std = Math.floor((min % 1440) / 60)
   const m = min % 60
-  if (tage >= 2) return 'in ' + tage + ' Tagen' + (std > 0 ? ' ' + std + ' Std' : '')
-  if (tage >= 1) return 'in 1 Tag ' + std + ' Std'
-  if (std >= 1) return 'in ' + std + ' Std ' + m + ' Min'
-  if (min >= 1) return 'in ' + min + ' Min'
-  return 'gleich!'
+  if (tage >= 2) return t('in') + tage + ' ' + t('tage') + (std > 0 ? ' ' + std + ' ' + t('std') : '')
+  if (tage >= 1) return t('in') + '1 ' + t('tag') + ' ' + std + ' ' + t('std')
+  if (std >= 1) return t('in') + std + ' ' + t('std') + ' ' + m + ' ' + t('min')
+  if (min >= 1) return t('in') + min + ' ' + t('min')
+  return t('gleich')
 }
 
 export default function Countdown({ eintrag, strecke, zeiten, onWahl }) {
+  const { t } = useSprache()
   const [, setTick] = useState(0)
 
   useEffect(() => {
@@ -39,12 +41,12 @@ export default function Countdown({ eintrag, strecke, zeiten, onWahl }) {
 
   return (
     <button className={'countdown' + (live ? ' live' : '')} onClick={() => onWahl(eintrag)}>
-      <span className="countdown-label">{live ? '🔴 Jetzt live' : 'Naechstes Rennen'}</span>
+      <span className="countdown-label">{live ? t('jetztLive') : t('naechstesRennen')}</span>
       <span className="countdown-rennen">
         {eintrag.runde} · {strecke.flagge} {strecke.kurzname}
       </span>
       <span className="countdown-zeit">
-        {live ? 'Rennabend laeuft — viel Erfolg!' : formatiereRest(diff) + ' · ' + uhr + ' Uhr'}
+        {live ? t('rennabendLaeuft') : formatiereRest(diff, t) + ' · ' + uhr + t('uhr')}
       </span>
     </button>
   )

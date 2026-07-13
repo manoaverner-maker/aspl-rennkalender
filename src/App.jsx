@@ -10,6 +10,7 @@ import BesucherZaehler from './komponenten/BesucherZaehler.jsx'
 import streckenDaten from './data/strecken.json'
 import { annotiereEintraege } from './utils/status.js'
 import { SIMGRID_URL } from './utils/links.js'
+import { useSprache } from './i18n.jsx'
 
 // Alle Kalender-Dateien automatisch einlesen: eine neue Saison/Series ist nur
 // eine neue JSON-Datei unter src/data/kalender/ — ohne Code-Aenderung.
@@ -32,6 +33,7 @@ function aktuelleRoute() {
 }
 
 export default function App() {
+  const { t, feld, sprache, umschalten } = useSprache()
   const [route, setRoute] = useState(aktuelleRoute)
   const [saisonId, setSaisonId] = useState(alleKalender[0]?.saisonId)
   const [seriesId, setSeriesId] = useState(alleKalender[0]?.seriesId)
@@ -231,21 +233,17 @@ export default function App() {
             <button
               className={'strecken-toggle' + (alleStrecken ? ' aktiv' : '')}
               aria-pressed={alleStrecken}
-              title={
-                alleStrecken
-                  ? 'Zeigt alle 25 ACC-Strecken — klicken fuer nur Kalender-Rennen'
-                  : 'Zeigt nur Kalender-Rennen — klicken fuer alle 25 ACC-Strecken'
-              }
+              title={alleStrecken ? t('alleAccTitelAn') : t('alleAccTitelAus')}
               onClick={() => setAlleStrecken(!alleStrecken)}
             >
               <span className="toggle-punkt" aria-hidden="true" />
-              Alle ACC-Strecken
+              {t('alleAcc')}
             </button>
           )}
           <button
             className="pokal-button"
-            aria-label="Meisterschaft anzeigen"
-            title="Meisterschaft / Leaderboard"
+            aria-label={t('meisterschaftAria')}
+            title={t('meisterschaftTitel')}
             onClick={() => {
               setAktivesRennen(null)
               setLeaderboardOffen(true)
@@ -253,8 +251,16 @@ export default function App() {
           >
             🏆
           </button>
+          <button
+            className="sprache-button"
+            onClick={umschalten}
+            title={t('spracheTitel')}
+            aria-label={t('spracheTitel')}
+          >
+            {sprache === 'de' ? 'EN' : 'DE'}
+          </button>
           <a className="kopf-anmelden" href={SIMGRID_URL} target="_blank" rel="noreferrer">
-            🏁 Anmelden
+            🏁 {t('anmelden')}
           </a>
           <a className="kopf-domain" href="https://asplracing.com" target="_blank" rel="noreferrer">
             asplracing.com
@@ -267,7 +273,7 @@ export default function App() {
         <ComingSoon seriesName={kalender.seriesName} />
       ) : (
         <main className="haupt">
-          <section className="globus-bereich" aria-label="3D-Globus mit Rennstrecken">
+          <section className="globus-bereich" aria-label={t('globusAria')}>
             <Globus
               marker={marker}
               flyZiel={flyZiel}
@@ -279,22 +285,22 @@ export default function App() {
           {/* Desktop: Overlay unten links am Globus — Mobile: eigene Zeile darunter */}
           <div className="legende">
               <span className="legende-item">
-                <span className="legende-punkt gefahren" /> Gefahren
+                <span className="legende-punkt gefahren" /> {t('legGefahren')}
               </span>
               <span className="legende-item">
-                <span className="legende-punkt ausstehend" /> Ausstehend
+                <span className="legende-punkt ausstehend" /> {t('legAusstehend')}
               </span>
               {kalenderMarker.some((m) => m.status === 'verschoben') && (
                 <span className="legende-item">
-                  <span className="legende-punkt verschoben" /> Verschoben
+                  <span className="legende-punkt verschoben" /> {t('legVerschoben')}
                 </span>
               )}
               <span className="legende-item">
-                <span className="legende-punkt naechstes" /> Next
+                <span className="legende-punkt naechstes" /> {t('legNext')}
               </span>
               {alleStrecken && (
                 <span className="legende-item">
-                  <span className="legende-punkt acc" /> ACC
+                  <span className="legende-punkt acc" /> {t('legAcc')}
                 </span>
               )}
           </div>
@@ -303,7 +309,7 @@ export default function App() {
             streckenMap={streckenMap}
             aktivId={aktivesRennen?.id}
             onWahl={waehleRennen}
-            hinweis={kalender?.hinweis}
+            hinweis={kalender ? feld(kalender, 'hinweis') : undefined}
             accStrecken={alleStrecken ? accStrecken : []}
             siegerMap={siegerMap}
             seriesId={kalender?.seriesId}
@@ -339,14 +345,14 @@ export default function App() {
 
       {neueVersion && (
         <button className="update-banner" onClick={() => window.location.reload()}>
-          🔄 Neue Version verfuegbar — jetzt aktualisieren
+          {t('updateBanner')}
         </button>
       )}
 
       <footer className="fuss">
         <span>ASPL GT3 Racing Series · PS5 &amp; Xbox Series · ACC · asplracing.com</span>
         <BesucherZaehler />
-        <a href="#/bildnachweise">Bildnachweise</a>
+        <a href="#/bildnachweise">{t('bildnachweise')}</a>
       </footer>
     </div>
   )

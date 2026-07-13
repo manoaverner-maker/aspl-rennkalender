@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { berechneFahrerwertung, berechneTeamwertung, punkte, maxPunkteProRennen, QUALI_BONUS } from '../utils/punkte.js'
+import { useSprache } from '../i18n.jsx'
 
 // Saisonverlauf eines Fahrers: Ergebnis + Punkte pro Rennen (klick im Leaderboard)
 function FahrerDetail({ name, strecken, streckenMap, rundenMap, punkteSystem, zurueck }) {
+  const { t } = useSprache()
   const rennen = Object.entries(strecken)
     .map(([streckeId, liste]) => {
       const e = liste.find((x) => x.fahrer === name)
@@ -20,15 +22,15 @@ function FahrerDetail({ name, strecken, streckenMap, rundenMap, punkteSystem, zu
   return (
     <div className="fahrer-detail">
       <button className="zurueck-button" onClick={zurueck}>
-        ← Zur Wertung
+        {t('zurWertung')}
       </button>
       <h3 className="fahrer-name">{name}</h3>
       {team && <p className="panel-land">{team}</p>}
       <div className="fahrer-kennzahlen">
-        <span><strong>{gesamt}</strong> Punkte</span>
-        <span><strong>{siege}</strong> {siege === 1 ? 'Sieg' : 'Siege'}</span>
-        <span><strong>{podien}</strong> Podien</span>
-        <span><strong>{poles}</strong> {poles === 1 ? 'Pole' : 'Poles'}</span>
+        <span><strong>{gesamt}</strong> {t('punkte')}</span>
+        <span><strong>{siege}</strong> {siege === 1 ? t('sieg') : t('siege')}</span>
+        <span><strong>{podien}</strong> {t('podien')}</span>
+        <span><strong>{poles}</strong> {poles === 1 ? t('poleEinz') : t('poles')}</span>
       </div>
       <ol className="fahrer-rennen">
         {rennen.map((e) => {
@@ -52,7 +54,7 @@ function FahrerDetail({ name, strecken, streckenMap, rundenMap, punkteSystem, zu
               <span className="fahrer-punkte">
                 {pkt}
                 {punkteSystem !== 'endurance' && e.quali && QUALI_BONUS[e.quali] ? (
-                  <small title={'inkl. Quali-Bonus P' + e.quali}> Q+{QUALI_BONUS[e.quali]}</small>
+                  <small title={t('qualiBonus').replace('{n}', e.quali)}> Q+{QUALI_BONUS[e.quali]}</small>
                 ) : null}
               </span>
             </li>
@@ -66,6 +68,7 @@ function FahrerDetail({ name, strecken, streckenMap, rundenMap, punkteSystem, zu
 // Meisterschafts-Panel (🏆): Fahrer- und ggf. Teamwertung der gewaehlten Series.
 // Fahrer sind anklickbar und zeigen ihren Saisonverlauf.
 export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnisse, streckenMap, rundenMap, punkteSystem = 'dtm', onClose }) {
+  const { t, saison } = useSprache()
   const [tab, setTab] = useState('fahrer')
   const [fahrerDetail, setFahrerDetail] = useState(null)
 
@@ -92,25 +95,23 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
   return (
     <>
       <div className="panel-overlay" onClick={onClose} />
-      <section className="detail-panel" aria-label={'Meisterschaft ' + seriesName}>
-        <button className="panel-schliessen" onClick={onClose} aria-label="Schliessen">
+      <section className="detail-panel" aria-label={t('meisterschaft') + ' ' + seriesName}>
+        <button className="panel-schliessen" onClick={onClose} aria-label={t('schliessen')}>
           ✕
         </button>
         <div className="panel-inhalt leaderboard-inhalt">
-          <h2 className="panel-titel">🏆 Meisterschaft</h2>
+          <h2 className="panel-titel">{t('meisterschaft')}</h2>
           <p className="panel-land">
-            {saisonName} · {seriesName}
-            {anzahlRennen > 0 && <> · {anzahlRennen} Rennen gewertet</>}
+            {saison(saisonName)} · {seriesName}
+            {anzahlRennen > 0 && <> · {anzahlRennen} {t('rennenGewertet')}</>}
           </p>
 
           {keineDaten ? (
             <div className="leaderboard-leer">
               <span aria-hidden="true">🏁</span>
               <p>
-                Noch keine Ergebnisse —{' '}
-                {seriesId === 'endurance'
-                  ? 'die Endurance-Series startet erst.'
-                  : 'die ersten Resultate folgen nach dem naechsten Rennen.'}
+                {t('nochKeineErgebnisse')}
+                {seriesId === 'endurance' ? t('enduranceStartet') : t('resultateFolgen')}
               </p>
             </div>
           ) : fahrerDetail ? (
@@ -132,7 +133,7 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
                     className={'series-button' + (tab === 'fahrer' ? ' aktiv' : '')}
                     onClick={() => setTab('fahrer')}
                   >
-                    Fahrer
+                    {t('fahrer')}
                   </button>
                   <button
                     role="tab"
@@ -140,7 +141,7 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
                     className={'series-button' + (tab === 'teams' ? ' aktiv' : '')}
                     onClick={() => setTab('teams')}
                   >
-                    Teams
+                    {t('teams')}
                   </button>
                 </div>
               )}
@@ -150,8 +151,8 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Team</th>
-                      <th className="punkte-spalte">Punkte</th>
+                      <th>{t('team')}</th>
+                      <th className="punkte-spalte">{t('punkte')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -170,8 +171,8 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>Fahrer</th>
-                        <th className="punkte-spalte">Punkte</th>
+                        <th>{t('fahrer')}</th>
+                        <th className="punkte-spalte">{t('punkte')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -191,7 +192,7 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
                       ))}
                     </tbody>
                   </table>
-                  <p className="leaderboard-tipp">Fahrer antippen fuer den Saisonverlauf</p>
+                  <p className="leaderboard-tipp">{t('fahrerAntippen')}</p>
                 </>
               )}
             </>

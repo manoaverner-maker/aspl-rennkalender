@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import BildMitFallback from './BildMitFallback.jsx'
 import Countdown from './Countdown.jsx'
-import { formatiereDatum, STATUS_TEXT } from '../utils/status.js'
+import { useSprache } from '../i18n.jsx'
 
 const BASIS = import.meta.env.BASE_URL
 
@@ -12,12 +12,13 @@ function heroBildUrl(strecke) {
 // Seitenleiste mit allen Rennen der gewaehlten Series (auf Mobile unter dem Globus).
 // Optional darunter: alle weiteren ACC-Strecken (Toggle "Alle ACC-Strecken").
 export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hinweis, accStrecken = [], siegerMap = {}, seriesId, zeiten }) {
+  const { t, feld, land, statusText, datum } = useSprache()
   const [suche, setSuche] = useState('')
   const naechstes = eintraege.find((e) => e.typ === 'rennen' && e.istNaechstes)
 
   const passt = (strecke) =>
     !suche ||
-    (strecke.kurzname + ' ' + strecke.name + ' ' + strecke.land)
+    (strecke.kurzname + ' ' + strecke.name + ' ' + strecke.land + ' ' + land(strecke.land))
       .toLowerCase()
       .includes(suche.toLowerCase().trim())
 
@@ -34,7 +35,7 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
     eintraege.some((e) => e.typ === 'rennen')
 
   return (
-    <aside className="rennliste" aria-label="Rennliste">
+    <aside className="rennliste" aria-label={t('rennlisteAria')}>
       {naechstes && !suche && (
         <Countdown
           eintrag={naechstes}
@@ -46,10 +47,10 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
       <input
         className="strecken-suche"
         type="search"
-        placeholder="🔍 Strecke oder Land suchen …"
+        placeholder={t('suchePlaceholder')}
         value={suche}
         onChange={(e) => setSuche(e.target.value)}
-        aria-label="Strecke oder Land suchen"
+        aria-label={t('sucheAria')}
       />
       {hinweis && !suche && <div className={'liste-hinweis' + (alleTbd ? ' tbd' : '')}>{hinweis}</div>}
       {/* key = Serieswechsel loest sanftes Einblenden der Liste aus */}
@@ -60,8 +61,8 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
               <li key={'pause-' + i} className="pause-karte">
                 <span className="pause-symbol">⏸</span>
                 <div>
-                  <strong>{e.titel}</strong>
-                  <span className="pause-text">{e.beschreibung}</span>
+                  <strong>{feld(e, 'titel')}</strong>
+                  <span className="pause-text">{feld(e, 'beschreibung')}</span>
                 </div>
               </li>
             )
@@ -74,9 +75,9 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
                 <div>
                   <strong>
                     {e.runde}
-                    {strecke ? ' · ' + strecke.kurzname : ''} — Rennen abgesagt
+                    {strecke ? ' · ' + strecke.kurzname : ''} — {t('rennenAbgesagt')}
                   </strong>
-                  <span className="pause-text">{e.grund}</span>
+                  <span className="pause-text">{feld(e, 'grund')}</span>
                 </div>
               </li>
             )
@@ -101,13 +102,13 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
                     {strecke.flagge} {strecke.kurzname}
                   </span>
                   <span className="karte-datum">
-                    {formatiereDatum(e.verschobenAuf || e.datum)}
+                    {datum(e.verschobenAuf || e.datum)}
                     {e.startzeit ? ' · ' + e.startzeit : ''}
                   </span>
                   <span className="karte-status-zeile">
                     <span className={'badge badge-' + e.status}>
-                      {STATUS_TEXT[e.status]}
-                      {e.istNaechstes ? ' · NEXT' : ''}
+                      {statusText(e.status)}
+                      {e.istNaechstes ? ' · ' + t('next') : ''}
                     </span>
                     {e.status === 'gefahren' && siegerMap[e.streckeId] && (
                       <span className="karte-sieger">🥇 {siegerMap[e.streckeId]}</span>
@@ -119,13 +120,13 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
           )
         })}
         {suche !== '' && gefiltert.length === 0 && accGefiltert.length === 0 && (
-          <li className="liste-hinweis">Keine Strecke gefunden</li>
+          <li className="liste-hinweis">{t('keineStrecke')}</li>
         )}
       </ol>
 
       {accGefiltert.length > 0 && (
         <>
-          <h3 className="acc-titel">Weitere ACC-Strecken</h3>
+          <h3 className="acc-titel">{t('weitereAcc')}</h3>
           <ol className="rennkarten">
             {accGefiltert.map((s) => {
               const id = 'acc-' + s.id
@@ -142,8 +143,8 @@ export default function RennListe({ eintraege, streckenMap, aktivId, onWahl, hin
                       <span className="karte-name">
                         {s.flagge} {s.kurzname}
                       </span>
-                      <span className="karte-datum">{s.land}</span>
-                      <span className="badge badge-acc">ACC-Strecke</span>
+                      <span className="karte-datum">{land(s.land)}</span>
+                      <span className="badge badge-acc">{t('accStrecke')}</span>
                     </div>
                   </button>
                 </li>

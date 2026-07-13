@@ -1,10 +1,12 @@
 import nachweise from '../data/bildnachweise.json'
+import { useSprache } from '../i18n.jsx'
 
 const BASIS = import.meta.env.BASE_URL
 
 // Pflichtseite fuer die CC-BY-/CC-BY-SA-Lizenzen der Streckenfotos.
 // Public-Domain-/CC0-Bilder werden der Vollstaendigkeit halber mitgelistet.
 export default function Bildnachweise() {
+  const { t } = useSprache()
   return (
     <div className="app">
       <header className="kopf">
@@ -13,11 +15,11 @@ export default function Bildnachweise() {
             <img className="logo-icon" src={BASIS + 'logo.svg'} alt="" />
             <span className="logo-text">
               <span className="logo-aspl">ASPL</span>
-              <span className="logo-sub">BILDNACHWEISE</span>
+              <span className="logo-sub">{t('bildnachweiseSub')}</span>
             </span>
           </a>
           <a className="zurueck-link" href="#/">
-            ← Zurueck zum Kalender
+            {t('zurueckKalender')}
           </a>
         </div>
         <div className="racing-streifen" />
@@ -25,11 +27,11 @@ export default function Bildnachweise() {
 
       <main className="nachweise">
         <p className="nachweise-intro">
-          Alle Streckenfotos stammen von{' '}
+          {t('nachweiseIntro1')}
           <a href="https://commons.wikimedia.org" target="_blank" rel="noreferrer">
             Wikimedia Commons
           </a>
-          . Nachfolgend die Urheber- und Lizenzangaben zu jedem verwendeten Bild.
+          {t('nachweiseIntro2')}
         </p>
         {nachweise.map((gruppe) => (
           <section key={gruppe.strecke} className="nachweis-gruppe">
@@ -46,9 +48,9 @@ export default function Bildnachweise() {
                   <div>
                     <strong>{e.datei}</strong> — „{e.titel}"
                     <br />
-                    Autor: {e.autor} · Lizenz: {e.lizenz} ·{' '}
+                    {t('autor')}: {e.autor} · {t('lizenz')}: {e.lizenz} ·{' '}
                     <a href={e.quelle} target="_blank" rel="noreferrer">
-                      Quelle (Wikimedia Commons)
+                      {t('quelle')} (Wikimedia Commons)
                     </a>
                   </div>
                 </li>
@@ -58,55 +60,55 @@ export default function Bildnachweise() {
         ))}
 
         <section className="nachweis-gruppe">
-          <h2>Erd-Texturen (3D-Globus)</h2>
+          <h2>{t('erdTexturen')}</h2>
           <ul>
             <li>
               <div>
-                <strong>Tag-Textur</strong> — „Blue Marble Next Generation (Juni)"
+                <strong>{t('tagTextur')}</strong> — „Blue Marble Next Generation (Juni)"
                 <br />
-                Autor: NASA Earth Observatory (Reto Stoeckli) · Lizenz: Public domain ·{' '}
+                {t('autor')}: NASA Earth Observatory (Reto Stoeckli) · {t('lizenz')}: Public domain ·{' '}
                 <a href="https://visibleearth.nasa.gov/collection/1484/blue-marble" target="_blank" rel="noreferrer">
-                  Quelle (NASA Visible Earth)
+                  {t('quelle')} (NASA Visible Earth)
                 </a>
               </div>
             </li>
             <li>
               <div>
-                <strong>Wolken-Textur</strong> — „clouds.png"
+                <strong>{t('wolkenTextur')}</strong> — „clouds.png"
                 <br />
-                Autor: globe.gl-Beispieldaten (Vasco Asturiano) · Lizenz: MIT ·{' '}
+                {t('autor')}: globe.gl-Beispieldaten (Vasco Asturiano) · {t('lizenz')}: MIT ·{' '}
                 <a href="https://github.com/vasturiano/globe.gl" target="_blank" rel="noreferrer">
-                  Quelle (GitHub)
+                  {t('quelle')} (GitHub)
                 </a>
               </div>
             </li>
             <li>
               <div>
-                <strong>Nacht-Textur</strong> — „8K Earth Night Map"
+                <strong>{t('nachtTextur')}</strong> — „8K Earth Night Map"
                 <br />
-                Autor: Solar System Scope · Lizenz: CC BY 4.0 ·{' '}
+                {t('autor')}: Solar System Scope · {t('lizenz')}: CC BY 4.0 ·{' '}
                 <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noreferrer">
-                  Quelle (solarsystemscope.com)
+                  {t('quelle')} (solarsystemscope.com)
                 </a>
               </div>
             </li>
             <li>
               <div>
-                <strong>Satellitenkacheln (Nahzoom)</strong> — „World Imagery"
+                <strong>{t('satellitenkacheln')}</strong> — „World Imagery"
                 <br />
-                Quelle: Esri, Maxar, Earthstar Geographics, and the GIS User Community ·{' '}
+                {t('quelle')}: Esri, Maxar, Earthstar Geographics, and the GIS User Community ·{' '}
                 <a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" target="_blank" rel="noreferrer">
-                  Quelle (ArcGIS World Imagery)
+                  {t('quelle')} (ArcGIS World Imagery)
                 </a>
               </div>
             </li>
             <li>
               <div>
-                <strong>Sternenhimmel</strong> — „The Milky Way panorama"
+                <strong>{t('sternenhimmel')}</strong> — „The Milky Way panorama"
                 <br />
-                Autor: ESO / S. Brunier · Lizenz: CC BY 4.0 (Helligkeit angepasst) ·{' '}
+                {t('autor')}: ESO / S. Brunier · {t('lizenz')}: CC BY 4.0 (Helligkeit angepasst) ·{' '}
                 <a href="https://www.eso.org/public/images/eso0932a/" target="_blank" rel="noreferrer">
-                  Quelle (ESO)
+                  {t('quelle')} (ESO)
                 </a>
               </div>
             </li>
@@ -116,7 +118,7 @@ export default function Bildnachweise() {
 
       <footer className="fuss">
         <span>ASPL GT3 Racing Series · PS5 &amp; Xbox Series · ACC · asplracing.com</span>
-        <a href="#/">Zum Kalender</a>
+        <a href="#/">{t('zumKalender')}</a>
       </footer>
     </div>
   )

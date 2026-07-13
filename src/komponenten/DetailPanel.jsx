@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import BildMitFallback from './BildMitFallback.jsx'
 import Lightbox from './Lightbox.jsx'
 import WetterBox from './WetterBox.jsx'
-import { formatiereDatum, STATUS_TEXT } from '../utils/status.js'
 import { SIMGRID_URL } from '../utils/links.js'
 import { punkte } from '../utils/punkte.js'
+import { useSprache } from '../i18n.jsx'
 
 // Rennergebnis: Podium prominent, Rest aufklappbar (Panel nicht ueberladen)
 function ErgebnisAbschnitt({ ergebnisse, punkteSystem }) {
+  const { t } = useSprache()
   const [zeigeAlle, setZeigeAlle] = useState(false)
   useEffect(() => setZeigeAlle(false), [ergebnisse])
 
@@ -17,8 +18,8 @@ function ErgebnisAbschnitt({ ergebnisse, punkteSystem }) {
 
   return (
     <>
-      <h3 className="panel-abschnitt">Ergebnisse</h3>
-      {pole && <p className="pole-zeile">⏱️ Pole: {pole.fahrer}</p>}
+      <h3 className="panel-abschnitt">{t('ergebnisse')}</h3>
+      {pole && <p className="pole-zeile">⏱️ {t('pole')}: {pole.fahrer}</p>}
       <ol className="podium">
         {podium.map((e) => (
           <li key={e.platz} className={'podium-eintrag podium-' + e.platz}>
@@ -27,7 +28,7 @@ function ErgebnisAbschnitt({ ergebnisse, punkteSystem }) {
               {e.fahrer}
               <small>{e.team ? e.team + ' · ' : ''}{e.fahrzeug}</small>
             </span>
-            <span className="podium-punkte">{punkte(e.platz, e.quali, punkteSystem)} Pkt</span>
+            <span className="podium-punkte">{punkte(e.platz, e.quali, punkteSystem)} {t('pkt')}</span>
           </li>
         ))}
       </ol>
@@ -53,7 +54,7 @@ function ErgebnisAbschnitt({ ergebnisse, punkteSystem }) {
           </table>
         ) : (
           <button className="mehr-button" onClick={() => setZeigeAlle(true)}>
-            Alle Ergebnisse anzeigen ({ergebnisse.length})
+            {t('alleErgebnisse')} ({ergebnisse.length})
           </button>
         ))}
     </>
@@ -64,29 +65,35 @@ const BASIS = import.meta.env.BASE_URL
 
 // Rennformat: Zeiten kommen aus dem Kalender der gewaehlten Series;
 // Endurance-Rennen haben stattdessen Dauer + individuelle Startzeit
-function baueRennformat(rennen, zeiten) {
-  if (rennen.dauer) {
+function baueRennformat({ dauer, startzeit, zeiten, t }) {
+  const f = (key, ersetze) => {
+    let s = t(key)
+    for (const [k, v] of Object.entries(ersetze ?? {})) s = s.replace('{' + k + '}', v)
+    return s
+  }
+  if (dauer) {
     // Endurance-Format gemaess ASPL Endurance Rulebook
     return [
-      ['Rennen', rennen.dauer + ' — Start ' + rennen.startzeit + ' Uhr'],
-      ['Teams', '2–4 Fahrer pro Team; Solofahrer nur im 3-Stunden-Rennen'],
-      ['Fahrzeuge', 'Bei 3h/4h/6h darf ein Team beide Autos einsetzen'],
-      ['Fahrerwechsel', 'Mind. 1 Pflichtstopp mit Fahrerwechsel (Solofahrer: Pflichtstopp ohne Wechsel)'],
-      ['Stints', 'Ab 6 h gelten Maximal-Fahr- und Stintzeiten — Details vor dem Rennen im Discord'],
-      ['Punkte', 'FIA-Endurance-System: 38-27-23-18-15-12-9-6-3-2 · jedes weitere gewertete Auto 1 Punkt'],
+      [t('rfRennen'), f('rfEnRennenWert', { dauer, startzeit })],
+      [t('rfEnTeams'), t('rfEnTeamsWert')],
+      [t('rfEnFahrzeuge'), t('rfEnFahrzeugeWert')],
+      [t('rfEnWechsel'), t('rfEnWechselWert')],
+      [t('rfEnStints'), t('rfEnStintsWert')],
+      [t('rfPunkte'), t('rfEnPunkteWert')],
     ]
   }
   return [
-    ['Training', '30 Min — freies Joinen (ab ' + (zeiten?.training ?? '20:00') + ')'],
-    ['Qualifying', '20 Min — Start ' + (zeiten?.quali ?? '20:30')],
-    ['Rennen', '60 Min — Start ' + (zeiten?.rennstart ?? '20:50')],
-    ['Boxenstopp', '1 Pflichtboxenstopp, fixe Tankzeit 25 s, kein Boxenfenster'],
-    ['Punkte', 'DTM-System P1–P15 + Quali-Bonus P1=3 / P2=2 / P3=1'],
+    [t('rfTraining'), f('rfTrainingWert', { training: zeiten?.training ?? '20:00' })],
+    [t('rfQualifying'), f('rfQualifyingWert', { quali: zeiten?.quali ?? '20:30' })],
+    [t('rfRennen'), f('rfRennenWert', { rennstart: zeiten?.rennstart ?? '20:50' })],
+    [t('rfBoxenstopp'), t('rfBoxenstoppWert')],
+    [t('rfPunkte'), t('rfPunkteWert')],
   ]
 }
 
 // Teilen-Button: kopiert den Deep-Link zur Strecke (fuers Posten im Discord)
 function TeilenButton({ streckeId }) {
+  const { t } = useSprache()
   const [kopiert, setKopiert] = useState(false)
   const teile = async () => {
     const url =
@@ -96,18 +103,19 @@ function TeilenButton({ streckeId }) {
       setKopiert(true)
       setTimeout(() => setKopiert(false), 2000)
     } catch {
-      window.prompt('Link zum Kopieren:', url)
+      window.prompt(t('linkPrompt'), url)
     }
   }
   return (
     <button className={'teilen-button' + (kopiert ? ' kopiert' : '')} onClick={teile}>
-      {kopiert ? '✓ Link kopiert' : '🔗 Teilen'}
+      {kopiert ? t('linkKopiert') : t('teilen')}
     </button>
   )
 }
 
 // Slide-in-Panel mit Hero-Bild, Galerie, Streckendaten und Rennformat
 export default function DetailPanel({ rennen, zeiten, ergebnisse, punkteSystem = 'dtm', onClose }) {
+  const { t, feld, land, richtung, statusText, datum } = useSprache()
   const [lightboxIndex, setLightboxIndex] = useState(null)
   const panelRef = useRef(null)
   const overlayRef = useRef(null)
@@ -116,7 +124,7 @@ export default function DetailPanel({ rennen, zeiten, ergebnisse, punkteSystem =
   const istKalenderRennen = rennen.typ !== 'acc'
   const effektiv = rennen.verschobenAuf || rennen.datum
   const anzeigeZeit = rennen.startzeit || zeiten?.quali || '20:30'
-  const rennformat = baueRennformat(rennen, zeiten)
+  const rennformat = baueRennformat({ dauer: feld(rennen, 'dauer'), startzeit: rennen.startzeit, zeiten, t })
 
   const bildUrls = strecke.bilder.map(
     (b) => BASIS + 'images/strecken/' + strecke.bilderOrdner + '/' + b
@@ -214,7 +222,7 @@ export default function DetailPanel({ rennen, zeiten, ergebnisse, punkteSystem =
       <section className="detail-panel" ref={panelRef} aria-label={'Details ' + strecke.kurzname}>
         {/* Griff-Leiste als Wisch-Hinweis (nur Handy sichtbar) */}
         <div className="panel-griff" aria-hidden="true" />
-        <button className="panel-schliessen" onClick={onClose} aria-label="Schliessen">
+        <button className="panel-schliessen" onClick={onClose} aria-label={t('schliessen')}>
           ✕
         </button>
 
@@ -226,21 +234,21 @@ export default function DetailPanel({ rennen, zeiten, ergebnisse, punkteSystem =
         <div className="panel-inhalt">
           <h2 className="panel-titel">{strecke.name}</h2>
           <p className="panel-land">
-            {strecke.flagge} {strecke.land}
+            {strecke.flagge} {land(strecke.land)}
           </p>
 
           {istKalenderRennen ? (
             <div className="panel-status-zeile">
-              <span className="panel-datum">📅 {formatiereDatum(effektiv)} · {anzeigeZeit}</span>
+              <span className="panel-datum">📅 {datum(effektiv)} · {anzeigeZeit}</span>
               <span className={'badge badge-' + rennen.status}>
-                {STATUS_TEXT[rennen.status]}
-                {rennen.istNaechstes ? ' · NEXT' : ''}
+                {statusText(rennen.status)}
+                {rennen.istNaechstes ? ' · ' + t('next') : ''}
               </span>
               <TeilenButton streckeId={strecke.id} />
             </div>
           ) : (
             <div className="panel-status-zeile">
-              <span className="badge badge-tbd">Nicht im aktuellen ASPL-Kalender</span>
+              <span className="badge badge-tbd">{t('nichtImKalender')}</span>
               <TeilenButton streckeId={strecke.id} />
             </div>
           )}
@@ -248,15 +256,15 @@ export default function DetailPanel({ rennen, zeiten, ergebnisse, punkteSystem =
           {/* Hinweis bei verschobenen Rennen (z. B. Server-Ausfall) */}
           {rennen.verschobenAuf && (
             <p className="verschoben-hinweis">
-              ⚠️ Verschoben — urspruenglich {formatiereDatum(rennen.datum)}
-              {rennen.grund ? ' (' + rennen.grund + ')' : ''}
+              {t('verschobenUrspruenglich')} {datum(rennen.datum)}
+              {feld(rennen, 'grund') ? ' (' + feld(rennen, 'grund') + ')' : ''}
             </p>
           )}
 
           {/* Anmeldung laeuft komplett ueber SimGrid */}
           {istKalenderRennen && rennen.status !== 'gefahren' && (
             <a className="anmelde-button" href={SIMGRID_URL} target="_blank" rel="noreferrer">
-              🏁 Zum Rennen anmelden — SimGrid
+              {t('zumRennenAnmelden')}
             </a>
           )}
 
@@ -267,7 +275,7 @@ export default function DetailPanel({ rennen, zeiten, ergebnisse, punkteSystem =
 
           {istKalenderRennen && (
             <>
-              <h3 className="panel-abschnitt">Wetter vor Ort</h3>
+              <h3 className="panel-abschnitt">{t('wetterVorOrt')}</h3>
               <WetterBox lat={strecke.lat} lng={strecke.lng} />
             </>
           )}
@@ -288,35 +296,35 @@ export default function DetailPanel({ rennen, zeiten, ergebnisse, punkteSystem =
             </div>
           )}
 
-          <h3 className="panel-abschnitt">Streckendaten</h3>
+          <h3 className="panel-abschnitt">{t('streckendaten')}</h3>
           <dl className="daten-raster">
             <div>
-              <dt>Laenge</dt>
+              <dt>{t('laenge')}</dt>
               <dd>{strecke.laenge}</dd>
             </div>
             <div>
-              <dt>Kurven</dt>
+              <dt>{t('kurven')}</dt>
               <dd>{strecke.kurven}</dd>
             </div>
             <div>
-              <dt>Richtung</dt>
-              <dd>{strecke.richtung}</dd>
+              <dt>{t('richtung')}</dt>
+              <dd>{richtung(strecke.richtung)}</dd>
             </div>
             <div>
-              <dt>Eroeffnung</dt>
+              <dt>{t('eroeffnung')}</dt>
               <dd>{strecke.eroeffnung}</dd>
             </div>
           </dl>
 
           <ul className="besonderheiten">
-            {strecke.besonderheiten.map((b) => (
+            {feld(strecke, 'besonderheiten').map((b) => (
               <li key={b}>{b}</li>
             ))}
           </ul>
 
           {istKalenderRennen && (
             <>
-              <h3 className="panel-abschnitt">Rennformat</h3>
+              <h3 className="panel-abschnitt">{t('rennformat')}</h3>
               <ul className="rennformat">
                 {rennformat.map(([label, wert]) => (
                   <li key={label}>

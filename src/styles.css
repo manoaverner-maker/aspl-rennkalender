@@ -143,6 +143,30 @@ a {
   box-shadow: 0 0 14px rgba(212, 175, 55, 0.35);
 }
 
+/* Sprach-Umschalter (DE/EN) — zeigt die Sprache, in die man wechselt */
+.sprache-button {
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0 0.6rem;
+  font-family: var(--titel-font);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--weiss);
+  cursor: pointer;
+  flex: none;
+  transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+}
+
+.sprache-button:hover {
+  border-color: var(--rot);
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px rgba(225, 6, 0, 0.3);
+}
+
 /* Anmelde-Button (SimGrid) im Header */
 .kopf-anmelden {
   background: var(--rot);
@@ -1863,6 +1887,14 @@ a {
     width: 36px;
     height: 36px;
     font-size: 1rem;
+  }
+
+  .sprache-button {
+    order: 2;
+    height: 36px;
+    min-width: 36px;
+    padding: 0 0.5rem;
+    font-size: 0.78rem;
   }
 
   .kopf-anmelden {

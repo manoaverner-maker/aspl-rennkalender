@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSprache } from '../i18n.jsx'
 
 // Zaehlt Website-Besuche global (ueber alle Nutzer) via Abacus — freier,
 // offener CountAPI-Nachfolger, kein eigenes Backend noetig. Erhoeht den
@@ -11,6 +12,7 @@ const CACHE_KEY = 'aspl_besucherzahl_v1'
 const SESSION_KEY = 'aspl_besuch_gezaehlt_v1'
 
 export default function BesucherZaehler() {
+  const { t, locale } = useSprache()
   const [anzahl, setAnzahl] = useState(() => {
     const cached = localStorage.getItem(CACHE_KEY)
     return cached ? Number(cached) : null
@@ -39,8 +41,8 @@ export default function BesucherZaehler() {
   if (anzahl === null) return null
 
   return (
-    <span className="besucher-zaehler" title="Website-Besuche gesamt">
-      👁 {anzahl.toLocaleString('de-CH')} Besuche
+    <span className="besucher-zaehler">
+      👁 {anzahl.toLocaleString(locale)} {t('besuche')}
     </span>
   )
 }

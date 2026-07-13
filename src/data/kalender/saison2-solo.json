@@ -6,16 +6,70 @@
   "sortierung": 1,
   "comingSoon": false,
   "hinweis": "Alle Rennen mittwochs — Quali 20:30",
-  "zeiten": { "training": "20:00", "quali": "20:30", "rennstart": "20:50" },
+  "zeiten": {
+    "training": "20:00",
+    "quali": "20:30",
+    "rennstart": "20:50"
+  },
   "eintraege": [
-    { "typ": "rennen", "runde": "R1", "streckeId": "imola", "datum": "2026-06-10", "verschobenAuf": "2026-08-19", "grund": "Server-Absturz" },
-    { "typ": "rennen", "runde": "R2", "streckeId": "barcelona", "datum": "2026-06-17" },
-    { "typ": "rennen", "runde": "R3", "streckeId": "redbullring", "datum": "2026-06-24" },
-    { "typ": "rennen", "runde": "R4", "streckeId": "lagunaseca", "datum": "2026-07-01" },
-    { "typ": "rennen", "runde": "R5", "streckeId": "nuerburgring", "datum": "2026-07-08" },
-    { "typ": "pause", "titel": "Mid-Season-Pause", "beschreibung": "15. + 22.07.2026 — keine Rennen" },
-    { "typ": "rennen", "runde": "R6", "streckeId": "donington", "datum": "2026-07-29" },
-    { "typ": "rennen", "runde": "R7", "streckeId": "bathurst", "datum": "2026-08-05" },
-    { "typ": "rennen", "runde": "R8", "streckeId": "monza", "datum": "2026-08-12" }
-  ]
+    {
+      "typ": "rennen",
+      "runde": "R1",
+      "streckeId": "imola",
+      "datum": "2026-06-10",
+      "verschobenAuf": "2026-08-19",
+      "grund": "Server-Absturz",
+      "grund_en": "Server crash"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R2",
+      "streckeId": "barcelona",
+      "datum": "2026-06-17"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R3",
+      "streckeId": "redbullring",
+      "datum": "2026-06-24"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R4",
+      "streckeId": "lagunaseca",
+      "datum": "2026-07-01"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R5",
+      "streckeId": "nuerburgring",
+      "datum": "2026-07-08"
+    },
+    {
+      "typ": "pause",
+      "titel": "Mid-Season-Pause",
+      "beschreibung": "15. + 22.07.2026 — keine Rennen",
+      "titel_en": "Mid-season break",
+      "beschreibung_en": "15 + 22 Jul 2026 — no races"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R6",
+      "streckeId": "donington",
+      "datum": "2026-07-29"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R7",
+      "streckeId": "bathurst",
+      "datum": "2026-08-05"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R8",
+      "streckeId": "monza",
+      "datum": "2026-08-12"
+    }
+  ],
+  "hinweis_en": "All races on Wednesdays — quali 20:30"
 }
