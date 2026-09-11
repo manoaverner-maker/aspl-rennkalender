@@ -1306,6 +1306,122 @@ a {
   padding-top: 3rem;
 }
 
+/* ===== Champion-Banner (abgeschlossene Saison) ===== */
+.champion-banner {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 12px;
+  background:
+    linear-gradient(120deg, rgba(212, 175, 55, 0.16), rgba(212, 175, 55, 0.03) 55%),
+    var(--karte);
+  animation: championRein 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Lichtschein, der einmal ueber die Karte wandert */
+.champion-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  animation: championSchein 1.5s ease-out 0.25s both;
+}
+
+@keyframes championRein {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes championSchein {
+  from { transform: translateX(-120%); }
+  to   { transform: translateX(330%); }
+}
+
+.champion-pokal {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  animation: championPokal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+@keyframes championPokal {
+  from { opacity: 0; transform: scale(0.4) rotate(-18deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+.champion-text { min-width: 0; }
+
+.champion-label {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #d4af37;
+}
+
+.champion-name {
+  margin: 0.15rem 0 0;
+  font-family: var(--titel-font);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--weiss);
+  word-break: break-word;
+  animation: championRein 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+}
+
+.champion-punkte {
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+  color: var(--grau);
+  animation: championRein 0.4s ease-out 0.42s both;
+}
+
+.champion-punkte strong { color: #d4af37; }
+
+/* Konfetti steigt aus dem Pokal auf */
+.champion-konfetti {
+  position: absolute;
+  left: 2rem;
+  top: 1.6rem;
+  pointer-events: none;
+}
+
+.champion-schnipsel {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  opacity: 0;
+  animation: championKonfetti 1.5s ease-out both;
+}
+
+.champion-schnipsel.breit { width: 7px; height: 3px; }
+.champion-schnipsel.farbe-0 { background: #d4af37; }
+.champion-schnipsel.farbe-1 { background: var(--gruen); }
+.champion-schnipsel.farbe-2 { background: var(--blau); }
+
+@keyframes championKonfetti {
+  0%   { opacity: 0; transform: translate(0, 0) rotate(0); }
+  15%  { opacity: 1; }
+  60%  { opacity: 1; transform: translate(var(--x), var(--y)) rotate(var(--dreh)); }
+  100% { opacity: 0; transform: translate(var(--x), calc(var(--y) + 70px)) rotate(var(--dreh)); }
+}
+
+/* Herkunft einer hinterlegten Tabelle */
+.wertung-quelle {
+  margin: 0.6rem 0 0;
+  font-size: 0.75rem;
+  color: var(--grau);
+}
+
 /* ===== Lightbox ===== */
 .lightbox {
   position: fixed;
@@ -1812,8 +1928,18 @@ a {
   .podium-eintrag,
   .globus-marker.naechstes::before,
   .cs-streifen,
-  .cs-text {
+  .cs-text,
+  .champion-banner,
+  .champion-pokal,
+  .champion-name,
+  .champion-punkte {
     animation: none !important;
+  }
+
+  /* Konfetti und Lichtschein ganz weglassen statt nur anhalten */
+  .champion-konfetti,
+  .champion-banner::after {
+    display: none;
   }
 
   .globus-container canvas {

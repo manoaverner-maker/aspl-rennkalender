@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { berechneFahrerwertung, berechneTeamwertung, punkte, maxPunkteProRennen, QUALI_BONUS } from '../utils/punkte.js'
 import { useSprache } from '../i18n.jsx'
+import ChampionBanner from './ChampionBanner.jsx'
 
 // Saisonverlauf eines Fahrers: Ergebnis + Punkte pro Rennen (klick im Leaderboard)
-function FahrerDetail({ name, strecken, streckenMap, rundenMap, punkteSystem, zurueck }) {
+function FahrerDetail({ name, strecken, streckenMap, rundenMap, punkteSystem, zurueck, teilstand }) {
   const { t } = useSprache()
   const rennen = Object.entries(strecken)
     .map(([streckeId, liste]) => {
@@ -11,6 +12,20 @@ function FahrerDetail({ name, strecken, streckenMap, rundenMap, punkteSystem, zu
       return e ? { streckeId, ...e } : null
     })
     .filter(Boolean)
+
+  // Bei hinterlegten Tabellen stehen Fahrer drin, zu denen (noch) keine
+  // Einzelergebnisse vorliegen — dann gibt es keinen Saisonverlauf zu zeigen.
+  if (rennen.length === 0) {
+    return (
+      <div className="fahrer-detail">
+        <button className="zurueck-button" onClick={zurueck}>
+          {t('zurWertung')}
+        </button>
+        <h3 className="fahrer-name">{name}</h3>
+        <p className="panel-land">{t('keinVerlauf')}</p>
+      </div>
+    )
+  }
 
   const gesamt = rennen.reduce((n, e) => n + punkte(e.platz, e.quali, punkteSystem), 0)
   const siege = rennen.filter((e) => e.platz === 1).length
@@ -32,6 +47,11 @@ function FahrerDetail({ name, strecken, streckenMap, rundenMap, punkteSystem, zu
         <span><strong>{podien}</strong> {t('podien')}</span>
         <span><strong>{poles}</strong> {poles === 1 ? t('poleEinz') : t('poles')}</span>
       </div>
+      {/* Bei hinterlegter Tabelle liegen nicht zu jedem Rennen Einzelergebnisse vor —
+          sonst wirkt die Summe hier wie ein Widerspruch zur Tabelle daneben. */}
+      {teilstand && (
+        <p className="wertung-quelle">{t('nurTeilrennen').replace('{n}', rennen.length)}</p>
+      )}
       <ol className="fahrer-rennen">
         {rennen.map((e) => {
           const pkt = punkte(e.platz, e.quali, punkteSystem)
@@ -68,7 +88,7 @@ function FahrerDetail({ name, strecken, streckenMap, rundenMap, punkteSystem, zu
 // Meisterschafts-Panel (🏆): Fahrer- und ggf. Teamwertung der gewaehlten Series.
 // Fahrer sind anklickbar und zeigen ihren Saisonverlauf.
 export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnisse, streckenMap, rundenMap, punkteSystem = 'dtm', onClose }) {
-  const { t, saison } = useSprache()
+  const { t, saison, feld } = useSprache()
   const [tab, setTab] = useState('fahrer')
   const [fahrerDetail, setFahrerDetail] = useState(null)
 
@@ -88,9 +108,30 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
 
   const strecken = ergebnisse?.strecken ?? {}
   const anzahlRennen = Object.keys(strecken).length
-  const fahrer = berechneFahrerwertung(strecken, punkteSystem)
-  const teams = seriesId === 'team' ? berechneTeamwertung(strecken, punkteSystem) : []
-  const keineDaten = fahrer.length === 0
+
+  // Die Liga veroeffentlicht Tabellen, aber nicht zu jedem Rennen die Einzelergebnisse.
+  // Liegt in der Ergebnisdatei eine "wertung" vor, gilt sie — sonst wird wie bisher
+  // aus den vorhandenen Rennen gerechnet.
+  const wertung = ergebnisse?.wertung
+  const fahrerTabelle = wertung?.fahrer
+  const teamTabelle = wertung?.teams
+
+  const fahrer = fahrerTabelle
+    ? fahrerTabelle.eintraege.map((e) => ({ fahrer: e.fahrer, team: e.team ?? null, punkte: e.punkte }))
+    : berechneFahrerwertung(strecken, punkteSystem)
+  const teams = seriesId !== 'team'
+    ? []
+    : teamTabelle
+      ? teamTabelle.eintraege.map((e) => ({ team: e.team, punkte: e.punkte }))
+      : berechneTeamwertung(strecken, punkteSystem)
+  const keineDaten = fahrer.length === 0 && teams.length === 0
+
+  // Der Meister der gewaehlten Serie: in der Team-Series zaehlt die Teamwertung.
+  const meisterTabelle = seriesId === 'team' ? teamTabelle : fahrerTabelle
+  const meister = meisterTabelle?.final ? meisterTabelle.eintraege[0] : null
+
+  // Fusszeile der jeweils angezeigten Tabelle (Stand + Herkunft).
+  const aktiveTabelle = tab === 'teams' && seriesId === 'team' ? teamTabelle : fahrerTabelle
 
   return (
     <>
@@ -103,8 +144,21 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
           <h2 className="panel-titel">{t('meisterschaft')}</h2>
           <p className="panel-land">
             {saison(saisonName)} · {seriesName}
-            {anzahlRennen > 0 && <> · {anzahlRennen} {t('rennenGewertet')}</>}
+            {aktiveTabelle
+              ? <> · {feld(aktiveTabelle, 'stand')}</>
+              : anzahlRennen > 0 && <> · {anzahlRennen} {t('rennenGewertet')}</>}
           </p>
+
+          {/* Bei abgeschlossener Wertung faehrt der Meister animiert ein. Der key
+              sorgt dafuer, dass das bei jedem Serienwechsel neu passiert. */}
+          {meister && !fahrerDetail && (
+            <ChampionBanner
+              key={seriesId}
+              name={meister.team ?? meister.fahrer}
+              punkte={meister.punkte}
+              istTeam={seriesId === 'team'}
+            />
+          )}
 
           {keineDaten ? (
             <div className="leaderboard-leer">
@@ -122,6 +176,7 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
               rundenMap={rundenMap}
               punkteSystem={punkteSystem}
               zurueck={() => setFahrerDetail(null)}
+              teilstand={!!fahrerTabelle}
             />
           ) : (
             <>
@@ -147,7 +202,8 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
               )}
 
               {tab === 'teams' && seriesId === 'team' ? (
-                <table className="wertung-tabelle">
+                <>
+                  <table className="wertung-tabelle">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -164,7 +220,11 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                  </table>
+                  {teamTabelle && wertung?.quelle && (
+                    <p className="wertung-quelle">{t('quelle')}: {wertung.quelle}</p>
+                  )}
+                </>
               ) : (
                 <>
                   <table className="wertung-tabelle">
@@ -193,6 +253,9 @@ export default function Leaderboard({ saisonName, seriesId, seriesName, ergebnis
                     </tbody>
                   </table>
                   <p className="leaderboard-tipp">{t('fahrerAntippen')}</p>
+                  {fahrerTabelle && wertung?.quelle && (
+                    <p className="wertung-quelle">{t('quelle')}: {wertung.quelle}</p>
+                  )}
                 </>
               )}
             </>
