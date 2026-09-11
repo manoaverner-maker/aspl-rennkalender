@@ -129,6 +129,12 @@ const T = {
     team: 'Team',
     fahrerAntippen: 'Fahrer antippen fuer den Saisonverlauf',
     qualiBonus: 'inkl. Quali-Bonus P{n}',
+    // Hinterlegte Tabelle (statt aus Rennergebnissen gerechnet) — 'quelle' steht
+    // schon weiter unten bei den Bildnachweisen und wird mitbenutzt.
+    champion: 'Champion',
+    teammeister: 'Teammeister',
+    keinVerlauf: 'Zu diesem Fahrer liegen noch keine Einzelergebnisse vor.',
+    nurTeilrennen: 'Zahlen nur aus den {n} Rennen mit hinterlegtem Einzelergebnis — die Tabelle zeigt den vollen Punktestand.',
     // WetterBox
     wetterLaden: 'Wetter wird geladen …',
     wetterFehler: 'Wetter zurzeit nicht verfuegbar',
@@ -260,6 +266,11 @@ const T = {
     team: 'Team',
     fahrerAntippen: 'Tap a driver for their season',
     qualiBonus: 'incl. quali bonus P{n}',
+    // Published table (instead of computed from race results)
+    champion: 'Champion',
+    teammeister: 'Teams champion',
+    keinVerlauf: 'No individual results on record for this driver yet.',
+    nurTeilrennen: 'Figures cover only the {n} races with individual results on record — the table shows the full points total.',
     // WeatherBox
     wetterLaden: 'Loading weather …',
     wetterFehler: 'Weather currently unavailable',

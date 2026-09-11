@@ -1,73 +1,597 @@
 {
   "saisonId": "saison2",
   "seriesId": "solo",
+  "wertung": {
+    "quelle": "ASPL Liga-Tabelle",
+    "fahrer": {
+      "stand": "Endstand",
+      "stand_en": "Final standings",
+      "final": true,
+      "eintraege": [
+        {
+          "platz": 1,
+          "fahrer": "Eric Sprott",
+          "punkte": 164
+        },
+        {
+          "platz": 2,
+          "fahrer": "Yann Guillaume",
+          "punkte": 110
+        },
+        {
+          "platz": 3,
+          "fahrer": "Lennard Petrov",
+          "punkte": 89
+        },
+        {
+          "platz": 4,
+          "fahrer": "Chad Wilmott",
+          "punkte": 87
+        },
+        {
+          "platz": 5,
+          "fahrer": "Leon Nierhaus",
+          "punkte": 84
+        },
+        {
+          "platz": 6,
+          "fahrer": "Noel Pfeiffer",
+          "punkte": 79
+        },
+        {
+          "platz": 7,
+          "fahrer": "Alex Fox",
+          "punkte": 60
+        },
+        {
+          "platz": 8,
+          "fahrer": "Lukas Knips",
+          "punkte": 52
+        },
+        {
+          "platz": 9,
+          "fahrer": "F. Hübner",
+          "punkte": 40
+        },
+        {
+          "platz": 10,
+          "fahrer": "Elias Schneider",
+          "punkte": 37
+        },
+        {
+          "platz": 11,
+          "fahrer": "T. Hoffmann",
+          "punkte": 29
+        },
+        {
+          "platz": 12,
+          "fahrer": "Manoa Verner",
+          "punkte": 26
+        },
+        {
+          "platz": 13,
+          "fahrer": "M. Liebisch",
+          "punkte": 26
+        },
+        {
+          "platz": 14,
+          "fahrer": "Tom Engemann",
+          "punkte": 26
+        },
+        {
+          "platz": 15,
+          "fahrer": "Matthias Drißen",
+          "punkte": 25
+        },
+        {
+          "platz": 16,
+          "fahrer": "Mika Ackermann",
+          "punkte": 25
+        },
+        {
+          "platz": 17,
+          "fahrer": "Kevin Böhm",
+          "punkte": 24
+        },
+        {
+          "platz": 18,
+          "fahrer": "Mike Dohnt",
+          "punkte": 24
+        },
+        {
+          "platz": 19,
+          "fahrer": "Alexander Friedl",
+          "punkte": 24
+        },
+        {
+          "platz": 20,
+          "fahrer": "Sebastian Röber",
+          "punkte": 18
+        },
+        {
+          "platz": 21,
+          "fahrer": "Valentino Böhm",
+          "punkte": 17
+        },
+        {
+          "platz": 22,
+          "fahrer": "L. Pelaj",
+          "punkte": 16
+        },
+        {
+          "platz": 23,
+          "fahrer": "L. Moser",
+          "punkte": 11
+        },
+        {
+          "platz": 24,
+          "fahrer": "David Suess",
+          "punkte": 11
+        },
+        {
+          "platz": 25,
+          "fahrer": "T. Lüthke",
+          "punkte": 8
+        },
+        {
+          "platz": 26,
+          "fahrer": "Ferrix",
+          "punkte": 8
+        },
+        {
+          "platz": 27,
+          "fahrer": "C. Eilmes",
+          "punkte": 7
+        },
+        {
+          "platz": 28,
+          "fahrer": "Leo Verner",
+          "punkte": 6
+        },
+        {
+          "platz": 29,
+          "fahrer": "M. Corvin",
+          "punkte": 5
+        },
+        {
+          "platz": 30,
+          "fahrer": "D. Dridiger",
+          "punkte": 3
+        },
+        {
+          "platz": 31,
+          "fahrer": "Jens Krauser",
+          "punkte": 3
+        },
+        {
+          "platz": 32,
+          "fahrer": "L. Fradl",
+          "punkte": 3
+        },
+        {
+          "platz": 33,
+          "fahrer": "C. Hölper",
+          "punkte": 3
+        },
+        {
+          "platz": 34,
+          "fahrer": "M. Maurer",
+          "punkte": 3
+        },
+        {
+          "platz": 35,
+          "fahrer": "Klerx",
+          "punkte": 3
+        },
+        {
+          "platz": 36,
+          "fahrer": "Michel Friedli",
+          "punkte": 2
+        },
+        {
+          "platz": 37,
+          "fahrer": "E. Uchuev",
+          "punkte": 2
+        },
+        {
+          "platz": 38,
+          "fahrer": "C. Deller",
+          "punkte": 2
+        },
+        {
+          "platz": 39,
+          "fahrer": "A. Chillo",
+          "punkte": 2
+        },
+        {
+          "platz": 40,
+          "fahrer": "Axel Foulie",
+          "punkte": 2
+        }
+      ]
+    }
+  },
   "strecken": {
     "barcelona": [
-      { "platz": 1, "fahrer": "Chad Wilmott", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 199, "quali": 1 },
-      { "platz": 2, "fahrer": "Noel Pfeiffer", "fahrzeug": "Ferrari 296 GT3", "nr": 53 },
-      { "platz": 3, "fahrer": "Yann Guillaume", "fahrzeug": "Ferrari 296 GT3", "nr": 55 },
-      { "platz": 4, "fahrer": "Eric Sprott", "fahrzeug": "BMW M4 GT3", "nr": 1 },
-      { "platz": 5, "fahrer": "Leon Nierhaus", "fahrzeug": "AMR V8 Vantage", "nr": 4 },
-      { "platz": 6, "fahrer": "Lukas Knips", "fahrzeug": "BMW M4 GT3", "nr": 98, "quali": 2 },
-      { "platz": 7, "fahrer": "Mika Ackermann", "fahrzeug": "Ferrari 296 GT3", "nr": 510 },
-      { "platz": 8, "fahrer": "Manoa Verner", "fahrzeug": "Ferrari 296 GT3", "nr": 26 },
-      { "platz": 9, "fahrer": "Alex Fox", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 71 },
-      { "platz": 10, "fahrer": "Leo Verner", "fahrzeug": "GT3", "nr": null },
-      { "platz": 11, "fahrer": "Kevin Böhm", "fahrzeug": "BMW M4 GT3", "nr": 94, "quali": 3 },
-      { "platz": 12, "fahrer": "Matthias Drißen", "fahrzeug": "BMW M4 GT3", "nr": 180 },
-      { "platz": 13, "fahrer": "Alexander Friedl", "fahrzeug": "Ford Mustang GT3", "nr": 15 },
-      { "platz": 14, "fahrer": "Michel Friedli", "fahrzeug": "Ferrari 296 GT3", "nr": 5 },
-      { "platz": 15, "fahrer": "Elias Schneider", "fahrzeug": "Ferrari 296 GT3", "nr": 3 }
+      {
+        "platz": 1,
+        "fahrer": "Chad Wilmott",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 199,
+        "quali": 1
+      },
+      {
+        "platz": 2,
+        "fahrer": "Noel Pfeiffer",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 53
+      },
+      {
+        "platz": 3,
+        "fahrer": "Yann Guillaume",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 55
+      },
+      {
+        "platz": 4,
+        "fahrer": "Eric Sprott",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 1
+      },
+      {
+        "platz": 5,
+        "fahrer": "Leon Nierhaus",
+        "fahrzeug": "AMR V8 Vantage",
+        "nr": 4
+      },
+      {
+        "platz": 6,
+        "fahrer": "Lukas Knips",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 98,
+        "quali": 2
+      },
+      {
+        "platz": 7,
+        "fahrer": "Mika Ackermann",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 510
+      },
+      {
+        "platz": 8,
+        "fahrer": "Manoa Verner",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 26
+      },
+      {
+        "platz": 9,
+        "fahrer": "Alex Fox",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 71
+      },
+      {
+        "platz": 10,
+        "fahrer": "Leo Verner",
+        "fahrzeug": "GT3",
+        "nr": null
+      },
+      {
+        "platz": 11,
+        "fahrer": "Kevin Böhm",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 94,
+        "quali": 3
+      },
+      {
+        "platz": 12,
+        "fahrer": "Matthias Drißen",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 180
+      },
+      {
+        "platz": 13,
+        "fahrer": "Alexander Friedl",
+        "fahrzeug": "Ford Mustang GT3",
+        "nr": 15
+      },
+      {
+        "platz": 14,
+        "fahrer": "Michel Friedli",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 5
+      },
+      {
+        "platz": 15,
+        "fahrer": "Elias Schneider",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 3
+      }
     ],
     "redbullring": [
-      { "platz": 1, "fahrer": "Chad Wilmott", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 199, "quali": 1 },
-      { "platz": 2, "fahrer": "Eric Sprott", "fahrzeug": "BMW M4 GT3", "nr": 1 },
-      { "platz": 3, "fahrer": "Kevin Böhm", "fahrzeug": "BMW M4 GT3", "nr": 94, "quali": 2 },
-      { "platz": 4, "fahrer": "Yann Guillaume", "fahrzeug": "Ferrari 296 GT3", "nr": 55 },
-      { "platz": 5, "fahrer": "Lukas Knips", "fahrzeug": "BMW M4 GT3", "nr": 98, "quali": 3 },
-      { "platz": 6, "fahrer": "Noel Pfeiffer", "fahrzeug": "Ferrari 296 GT3", "nr": 53 },
-      { "platz": 7, "fahrer": "Lennard Petrov", "fahrzeug": "BMW M4 GT3", "nr": 93 },
-      { "platz": 8, "fahrer": "Leon Nierhaus", "fahrzeug": "AMR V8 Vantage", "nr": 4 },
-      { "platz": 9, "fahrer": "Sebastian Röber", "fahrzeug": "BMW M4 GT3", "nr": 16 },
-      { "platz": 10, "fahrer": "Matthias Drißen", "fahrzeug": "BMW M4 GT3", "nr": 180 },
-      { "platz": 11, "fahrer": "Mike Dohnt", "fahrzeug": "Ford Mustang GT3", "nr": 800 },
-      { "platz": 12, "fahrer": "Mika Ackermann", "fahrzeug": "Ferrari 296 GT3", "nr": 510 },
-      { "platz": 13, "fahrer": "Jens Krauser", "fahrzeug": "Porsche 992 GT3", "nr": 579 },
-      { "platz": 14, "fahrer": "M. Corvin", "fahrzeug": "Porsche 992 GT3", "nr": 88 },
-      { "platz": 15, "fahrer": "Valentino Böhm", "fahrzeug": "Ford Mustang GT3", "nr": 37 }
+      {
+        "platz": 1,
+        "fahrer": "Chad Wilmott",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 199,
+        "quali": 1
+      },
+      {
+        "platz": 2,
+        "fahrer": "Eric Sprott",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 1
+      },
+      {
+        "platz": 3,
+        "fahrer": "Kevin Böhm",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 94,
+        "quali": 2
+      },
+      {
+        "platz": 4,
+        "fahrer": "Yann Guillaume",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 55
+      },
+      {
+        "platz": 5,
+        "fahrer": "Lukas Knips",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 98,
+        "quali": 3
+      },
+      {
+        "platz": 6,
+        "fahrer": "Noel Pfeiffer",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 53
+      },
+      {
+        "platz": 7,
+        "fahrer": "Lennard Petrov",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 93
+      },
+      {
+        "platz": 8,
+        "fahrer": "Leon Nierhaus",
+        "fahrzeug": "AMR V8 Vantage",
+        "nr": 4
+      },
+      {
+        "platz": 9,
+        "fahrer": "Sebastian Röber",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 16
+      },
+      {
+        "platz": 10,
+        "fahrer": "Matthias Drißen",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 180
+      },
+      {
+        "platz": 11,
+        "fahrer": "Mike Dohnt",
+        "fahrzeug": "Ford Mustang GT3",
+        "nr": 800
+      },
+      {
+        "platz": 12,
+        "fahrer": "Mika Ackermann",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 510
+      },
+      {
+        "platz": 13,
+        "fahrer": "Jens Krauser",
+        "fahrzeug": "Porsche 992 GT3",
+        "nr": 579
+      },
+      {
+        "platz": 14,
+        "fahrer": "M. Corvin",
+        "fahrzeug": "Porsche 992 GT3",
+        "nr": 88
+      },
+      {
+        "platz": 15,
+        "fahrer": "Valentino Böhm",
+        "fahrzeug": "Ford Mustang GT3",
+        "nr": 37
+      }
     ],
     "lagunaseca": [
-      { "platz": 1, "fahrer": "Chad Wilmott", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 199, "quali": 1 },
-      { "platz": 2, "fahrer": "Eric Sprott", "fahrzeug": "BMW M4 GT3", "nr": 1, "quali": 2 },
-      { "platz": 3, "fahrer": "Leon Nierhaus", "fahrzeug": "AMR V8 Vantage (2019)", "nr": 4, "quali": 3 },
-      { "platz": 4, "fahrer": "Noel Pfeiffer", "fahrzeug": "Ferrari 296 GT3", "nr": 53 },
-      { "platz": 5, "fahrer": "Yann Guillaume", "fahrzeug": "Ferrari 296 GT3", "nr": 55 },
-      { "platz": 6, "fahrer": "Alex Fox", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 71 },
-      { "platz": 7, "fahrer": "Tom Engemann", "fahrzeug": "Ferrari 296 GT3", "nr": 22 },
-      { "platz": 8, "fahrer": "T. Lüthke", "fahrzeug": "BMW M4 GT3", "nr": 50 },
-      { "platz": 9, "fahrer": "Lennard Petrov", "fahrzeug": "BMW M4 GT3", "nr": 93 },
-      { "platz": 10, "fahrer": "Alexander Friedl", "fahrzeug": "Ford Mustang GT3", "nr": 15 },
-      { "platz": 11, "fahrer": "Matthias Drißen", "fahrzeug": "BMW M4 GT3", "nr": 180 },
-      { "platz": 12, "fahrer": "D. Dridiger", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 777 },
-      { "platz": 13, "fahrer": "L. Fradl", "fahrzeug": "Porsche 992 GT3 R", "nr": 911 },
-      { "platz": 14, "fahrer": "M. Corvin", "fahrzeug": "Porsche 992 GT3 R", "nr": 88 },
-      { "platz": 15, "fahrer": "T. Hoffmann", "fahrzeug": "Lamborghini Huracan Evo2", "nr": 892 },
-      { "platz": 16, "fahrer": "K. Sintke", "fahrzeug": "Ferrari 296 GT3", "nr": 87 },
-      { "platz": 17, "fahrer": "F. Hübner", "fahrzeug": "Ford Mustang GT3", "nr": 40 },
-      { "platz": 18, "fahrer": "Kevin Böhm", "fahrzeug": "BMW M4 GT3", "nr": 94 },
-      { "platz": 19, "fahrer": "Valentino Böhm", "fahrzeug": "BMW M4 GT3", "nr": 37 },
-      { "platz": 20, "fahrer": "R. Knoch", "fahrzeug": "Ford Mustang GT3", "nr": 667 },
-      { "platz": 21, "fahrer": "Ferrix", "fahrzeug": "AMR V8 Vantage (2019)", "nr": 73 },
-      { "platz": 22, "fahrer": "T. Scheibe", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 922 },
-      { "platz": 23, "fahrer": "A. Chillo", "fahrzeug": "Ferrari 296 GT3", "nr": 12 },
-      { "platz": 24, "fahrer": "Mika Ackermann", "fahrzeug": "Ferrari 296 GT3", "nr": 510 },
-      { "platz": 25, "fahrer": "Elias Schneider", "fahrzeug": "Ferrari 296 GT3", "nr": 3 },
-      { "platz": 26, "fahrer": "M. Windisch", "fahrzeug": "McLaren 720S GT3 Evo 2023", "nr": 65 },
-      { "platz": 27, "fahrer": "M. Liebisch", "fahrzeug": "BMW M4 GT3", "nr": 19 },
-      { "platz": 28, "fahrer": "M. Maurer", "fahrzeug": "Audi R8 LMS Evo (2019)", "nr": 174 },
-      { "platz": 29, "fahrer": "Sebastian Röber", "fahrzeug": "BMW M4 GT3", "nr": 16 },
-      { "platz": 30, "fahrer": "U. Kirchheim", "fahrzeug": "Porsche 992 GT3 R", "nr": 14 },
-      { "platz": 31, "fahrer": "C. Deller", "fahrzeug": "AMR V8 Vantage (2019)", "nr": 77 }
+      {
+        "platz": 1,
+        "fahrer": "Chad Wilmott",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 199,
+        "quali": 1
+      },
+      {
+        "platz": 2,
+        "fahrer": "Eric Sprott",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 1,
+        "quali": 2
+      },
+      {
+        "platz": 3,
+        "fahrer": "Leon Nierhaus",
+        "fahrzeug": "AMR V8 Vantage (2019)",
+        "nr": 4,
+        "quali": 3
+      },
+      {
+        "platz": 4,
+        "fahrer": "Noel Pfeiffer",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 53
+      },
+      {
+        "platz": 5,
+        "fahrer": "Yann Guillaume",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 55
+      },
+      {
+        "platz": 6,
+        "fahrer": "Alex Fox",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 71
+      },
+      {
+        "platz": 7,
+        "fahrer": "Tom Engemann",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 22
+      },
+      {
+        "platz": 8,
+        "fahrer": "T. Lüthke",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 50
+      },
+      {
+        "platz": 9,
+        "fahrer": "Lennard Petrov",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 93
+      },
+      {
+        "platz": 10,
+        "fahrer": "Alexander Friedl",
+        "fahrzeug": "Ford Mustang GT3",
+        "nr": 15
+      },
+      {
+        "platz": 11,
+        "fahrer": "Matthias Drißen",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 180
+      },
+      {
+        "platz": 12,
+        "fahrer": "D. Dridiger",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 777
+      },
+      {
+        "platz": 13,
+        "fahrer": "L. Fradl",
+        "fahrzeug": "Porsche 992 GT3 R",
+        "nr": 911
+      },
+      {
+        "platz": 14,
+        "fahrer": "M. Corvin",
+        "fahrzeug": "Porsche 992 GT3 R",
+        "nr": 88
+      },
+      {
+        "platz": 15,
+        "fahrer": "T. Hoffmann",
+        "fahrzeug": "Lamborghini Huracan Evo2",
+        "nr": 892
+      },
+      {
+        "platz": 16,
+        "fahrer": "K. Sintke",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 87
+      },
+      {
+        "platz": 17,
+        "fahrer": "F. Hübner",
+        "fahrzeug": "Ford Mustang GT3",
+        "nr": 40
+      },
+      {
+        "platz": 18,
+        "fahrer": "Kevin Böhm",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 94
+      },
+      {
+        "platz": 19,
+        "fahrer": "Valentino Böhm",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 37
+      },
+      {
+        "platz": 20,
+        "fahrer": "R. Knoch",
+        "fahrzeug": "Ford Mustang GT3",
+        "nr": 667
+      },
+      {
+        "platz": 21,
+        "fahrer": "Ferrix",
+        "fahrzeug": "AMR V8 Vantage (2019)",
+        "nr": 73
+      },
+      {
+        "platz": 22,
+        "fahrer": "T. Scheibe",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 922
+      },
+      {
+        "platz": 23,
+        "fahrer": "A. Chillo",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 12
+      },
+      {
+        "platz": 24,
+        "fahrer": "Mika Ackermann",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 510
+      },
+      {
+        "platz": 25,
+        "fahrer": "Elias Schneider",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 3
+      },
+      {
+        "platz": 26,
+        "fahrer": "M. Windisch",
+        "fahrzeug": "McLaren 720S GT3 Evo 2023",
+        "nr": 65
+      },
+      {
+        "platz": 27,
+        "fahrer": "M. Liebisch",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 19
+      },
+      {
+        "platz": 28,
+        "fahrer": "M. Maurer",
+        "fahrzeug": "Audi R8 LMS Evo (2019)",
+        "nr": 174
+      },
+      {
+        "platz": 29,
+        "fahrer": "Sebastian Röber",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 16
+      },
+      {
+        "platz": 30,
+        "fahrer": "U. Kirchheim",
+        "fahrzeug": "Porsche 992 GT3 R",
+        "nr": 14
+      },
+      {
+        "platz": 31,
+        "fahrer": "C. Deller",
+        "fahrzeug": "AMR V8 Vantage (2019)",
+        "nr": 77
+      }
     ]
   }
 }

@@ -1,0 +1,65 @@
+{
+  "saisonId": "saison3",
+  "saisonName": "Saison 3",
+  "seriesId": "team",
+  "seriesName": "Team-Series",
+  "sortierung": 2,
+  "comingSoon": false,
+  "hinweis": "Alle Rennen samstags — Quali 20:00",
+  "hinweis_en": "All races on Saturdays — quali 20:00",
+  "zeiten": {
+    "training": "19:00",
+    "quali": "20:00",
+    "rennstart": "20:20"
+  },
+  "eintraege": [
+    {
+      "typ": "rennen",
+      "runde": "R1",
+      "streckeId": "zolder",
+      "datum": "2026-09-19"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R2",
+      "streckeId": "oultonpark",
+      "datum": "2026-09-26"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R3",
+      "streckeId": "zandvoort",
+      "datum": "2026-10-03"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R4",
+      "streckeId": "silverstone",
+      "datum": "2026-10-10"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R5",
+      "streckeId": "spa",
+      "datum": "2026-10-17"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R6",
+      "streckeId": "hungaroring",
+      "datum": "2026-10-24"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R7",
+      "streckeId": "misano",
+      "datum": "2026-10-31"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R8",
+      "streckeId": "cota",
+      "datum": "2026-11-07"
+    }
+  ]
+}

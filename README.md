@@ -22,6 +22,31 @@ die Seite baut und aktualisiert sich selbst.
   `src/data/kalender/` anlegen — sie erscheint automatisch in den Selektoren
   (kein Code noetig). `"comingSoon": true` zeigt den Coming-Soon-Screen.
 - **Strecken-Stammdaten** (Koordinaten, Bilder, Streckendaten): `src/data/strecken.json`.
+- **Rennergebnisse**: in `src/data/ergebnisse/<saison>-<series>.json` unter `strecken`
+  je Strecke eine Liste mit `platz`, `fahrer`, `team`, `fahrzeug`, `nr` und optional
+  `quali`. Die Meisterschaftstabelle rechnet sich daraus von selbst.
+- **Tabelle direkt hinterlegen**: Liegt zu einem Rennen kein Einzelergebnis vor, die
+  Liga aber eine fertige Tabelle veroeffentlicht hat, kommt sie in derselben Datei
+  unter `wertung` — sie hat dann Vorrang vor der Berechnung:
+
+  ```jsonc
+  "wertung": {
+    "quelle": "ASPL Liga-Tabelle",
+    "fahrer": {
+      "stand": "Endstand", "stand_en": "Final standings",
+      "final": true,                     // true -> Champion wird gefeiert
+      "eintraege": [{ "platz": 1, "fahrer": "Eric Sprott", "punkte": 164 }]
+    },
+    "teams": { "stand": "Endstand", "final": true, "eintraege": [
+      { "platz": 1, "team": "Golden Dynasty", "punkte": 266 }
+    ]}
+  }
+  ```
+
+  `final: true` blendet den Meister animiert ueber der Tabelle ein — in der
+  Team-Series den Teammeister, sonst den Fahrer-Champion. Damit der Klick auf einen
+  Fahrer seinen Saisonverlauf zeigt, muss der Name genauso geschrieben sein wie in
+  den Rennergebnissen.
 - Der Status (GEFAHREN / AUSSTEHEND) wird automatisch aus dem Datum berechnet.
 
 ## Lokal entwickeln

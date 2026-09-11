@@ -1,40 +1,461 @@
 {
   "saisonId": "saison2",
   "seriesId": "team",
+  "wertung": {
+    "quelle": "ASPL Liga-Tabelle",
+    "fahrer": {
+      "stand": "Stand nach R8",
+      "stand_en": "After round 8",
+      "final": false,
+      "eintraege": [
+        {
+          "platz": 1,
+          "fahrer": "Eric Sprott",
+          "punkte": 134,
+          "team": "Golden Dynasty Racing"
+        },
+        {
+          "platz": 2,
+          "fahrer": "Manoa Verner",
+          "punkte": 80,
+          "team": "Chronos Motorsport"
+        },
+        {
+          "platz": 3,
+          "fahrer": "Kevin Böhm",
+          "punkte": 65,
+          "team": "Golden Dynasty Racing"
+        },
+        {
+          "platz": 4,
+          "fahrer": "Lukas Knips",
+          "punkte": 54,
+          "team": "Golden Dynasty Racing"
+        },
+        {
+          "platz": 5,
+          "fahrer": "Noel Pfeiffer",
+          "punkte": 53,
+          "team": "Chronos Motorsport"
+        },
+        {
+          "platz": 6,
+          "fahrer": "Tom Engemann",
+          "punkte": 45,
+          "team": "Toxic Racing Academy"
+        },
+        {
+          "platz": 7,
+          "fahrer": "Leon Nierhaus",
+          "punkte": 42,
+          "team": "Toxic Racing Team"
+        },
+        {
+          "platz": 8,
+          "fahrer": "Alexander Friedl",
+          "punkte": 39,
+          "team": "Silver Dynasty Racing"
+        },
+        {
+          "platz": 9,
+          "fahrer": "Alex Fox",
+          "punkte": 38,
+          "team": "Racing Team Langsam"
+        },
+        {
+          "platz": 10,
+          "fahrer": "M. Diaconu",
+          "punkte": 37,
+          "team": "Nussy Motorsport"
+        },
+        {
+          "platz": 11,
+          "fahrer": "J. Jooeell",
+          "punkte": 34,
+          "team": "Carbon Dynasty Racing"
+        },
+        {
+          "platz": 12,
+          "fahrer": "Finn Hübner",
+          "punkte": 31
+        },
+        {
+          "platz": 13,
+          "fahrer": "Erik Schneider",
+          "punkte": 24
+        },
+        {
+          "platz": 14,
+          "fahrer": "Chad Wilmott",
+          "punkte": 21,
+          "team": "Nussy Motorsport"
+        },
+        {
+          "platz": 15,
+          "fahrer": "T. Seefeldt",
+          "punkte": 20,
+          "team": "Racing Team Langsam"
+        },
+        {
+          "platz": 16,
+          "fahrer": "M. Liebisch",
+          "punkte": 17,
+          "team": "LFA Kult Competition"
+        },
+        {
+          "platz": 17,
+          "fahrer": "Lukas Moser",
+          "punkte": 15
+        },
+        {
+          "platz": 18,
+          "fahrer": "Lennard Petrov",
+          "punkte": 14,
+          "team": "Development Team Langsam"
+        },
+        {
+          "platz": 19,
+          "fahrer": "Yann Guillaume",
+          "punkte": 13
+        },
+        {
+          "platz": 20,
+          "fahrer": "David Suess",
+          "punkte": 13,
+          "team": "Racing Team Langsam"
+        },
+        {
+          "platz": 21,
+          "fahrer": "Sebastian Röber",
+          "punkte": 11,
+          "team": "Carbon Dynasty Racing"
+        },
+        {
+          "platz": 22,
+          "fahrer": "Mike Dohnt",
+          "punkte": 10
+        },
+        {
+          "platz": 23,
+          "fahrer": "Leo Verner",
+          "punkte": 9,
+          "team": "Chronos Omega Racing"
+        },
+        {
+          "platz": 24,
+          "fahrer": "Tim Lüthke",
+          "punkte": 8
+        },
+        {
+          "platz": 25,
+          "fahrer": "F. Ferrix73",
+          "punkte": 8
+        }
+      ]
+    },
+    "teams": {
+      "stand": "Endstand",
+      "stand_en": "Final standings",
+      "final": true,
+      "eintraege": [
+        {
+          "platz": 1,
+          "team": "Golden Dynasty",
+          "punkte": 266
+        },
+        {
+          "platz": 2,
+          "team": "Chronos Motorsport",
+          "punkte": 130
+        },
+        {
+          "platz": 3,
+          "team": "Toxic Racing",
+          "punkte": 125
+        },
+        {
+          "platz": 4,
+          "team": "Racing Team Langsam",
+          "punkte": 74
+        },
+        {
+          "platz": 5,
+          "team": "LFA Kult Competition",
+          "punkte": 61
+        },
+        {
+          "platz": 6,
+          "team": "Silver Dynasty",
+          "punkte": 61
+        },
+        {
+          "platz": 7,
+          "team": "Nussy Motorsport",
+          "punkte": 58
+        },
+        {
+          "platz": 8,
+          "team": "Carbon Dynasty",
+          "punkte": 23
+        },
+        {
+          "platz": 9,
+          "team": "Toxic Psychos",
+          "punkte": 23
+        },
+        {
+          "platz": 10,
+          "team": "LuMo Racing",
+          "punkte": 15
+        },
+        {
+          "platz": 11,
+          "team": "Development Langsam",
+          "punkte": 11
+        },
+        {
+          "platz": 12,
+          "team": "Toxic Academy",
+          "punkte": 10
+        },
+        {
+          "platz": 13,
+          "team": "Chronos Academy",
+          "punkte": 9
+        },
+        {
+          "platz": 14,
+          "team": "Cosmos Motorsport",
+          "punkte": 8
+        },
+        {
+          "platz": 15,
+          "team": "Cosmos Future",
+          "punkte": 2
+        }
+      ]
+    }
+  },
   "strecken": {
     "imola": [
-      { "platz": 1, "fahrer": "Lukas Knips", "team": "Golden Dynasty Racing", "fahrzeug": "BMW M4 GT3", "nr": 98, "quali": 1 },
-      { "platz": 2, "fahrer": "Eric Sprott", "team": "Golden Dynasty Racing", "fahrzeug": "BMW M4 GT3", "nr": 420, "quali": 2 },
-      { "platz": 3, "fahrer": "Kevin Böhm", "team": "Golden Dynasty Racing", "fahrzeug": "BMW M4 GT3", "nr": 94 },
-      { "platz": 4, "fahrer": "Noel Pfeiffer", "team": "Chronos Motorsport", "fahrzeug": "Ferrari 296 GT3", "nr": 53 },
-      { "platz": 5, "fahrer": "Manoa Verner", "team": "Chronos Motorsport", "fahrzeug": "Ferrari 296 GT3", "nr": 26 },
-      { "platz": 6, "fahrer": "Tom Engemann", "team": "Toxic Racing Academy", "fahrzeug": "Ferrari 296 GT3", "nr": 22 },
-      { "platz": 7, "fahrer": "Leon Nierhaus", "team": "Toxic Racing Team", "fahrzeug": "AMR V8 Vantage", "nr": 4 },
-      { "platz": 8, "fahrer": "M. Diaconu", "team": "Nussy Motorsport", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 9 },
-      { "platz": 9, "fahrer": "Chad Wilmott", "team": "Nussy Motorsport", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": null, "quali": 3 },
-      { "platz": 10, "fahrer": "L. Fox", "team": "Silver Dynasty Racing", "fahrzeug": "Ferrari 296 GT3", "nr": 333 },
-      { "platz": 11, "fahrer": "J. Jooeell", "team": "Carbon Dynasty Racing", "fahrzeug": "BMW M4 GT3", "nr": 145 },
-      { "platz": 12, "fahrer": "David Suess", "team": "Racing Team Langsam", "fahrzeug": "Honda NSX GT3 Evo", "nr": 47 },
-      { "platz": 13, "fahrer": "Alex Fox", "team": "Racing Team Langsam", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 71 },
-      { "platz": 14, "fahrer": "Lennard Petrov", "team": "Development Team Langsam", "fahrzeug": "BMW M4 GT3", "nr": 93 },
-      { "platz": 15, "fahrer": "Alexander Friedl", "team": "Silver Dynasty Racing", "fahrzeug": "Ford Mustang GT3", "nr": 15 }
+      {
+        "platz": 1,
+        "fahrer": "Lukas Knips",
+        "team": "Golden Dynasty Racing",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 98,
+        "quali": 1
+      },
+      {
+        "platz": 2,
+        "fahrer": "Eric Sprott",
+        "team": "Golden Dynasty Racing",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 420,
+        "quali": 2
+      },
+      {
+        "platz": 3,
+        "fahrer": "Kevin Böhm",
+        "team": "Golden Dynasty Racing",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 94
+      },
+      {
+        "platz": 4,
+        "fahrer": "Noel Pfeiffer",
+        "team": "Chronos Motorsport",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 53
+      },
+      {
+        "platz": 5,
+        "fahrer": "Manoa Verner",
+        "team": "Chronos Motorsport",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 26
+      },
+      {
+        "platz": 6,
+        "fahrer": "Tom Engemann",
+        "team": "Toxic Racing Academy",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 22
+      },
+      {
+        "platz": 7,
+        "fahrer": "Leon Nierhaus",
+        "team": "Toxic Racing Team",
+        "fahrzeug": "AMR V8 Vantage",
+        "nr": 4
+      },
+      {
+        "platz": 8,
+        "fahrer": "M. Diaconu",
+        "team": "Nussy Motorsport",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 9
+      },
+      {
+        "platz": 9,
+        "fahrer": "Chad Wilmott",
+        "team": "Nussy Motorsport",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": null,
+        "quali": 3
+      },
+      {
+        "platz": 10,
+        "fahrer": "L. Fox",
+        "team": "Silver Dynasty Racing",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 333
+      },
+      {
+        "platz": 11,
+        "fahrer": "J. Jooeell",
+        "team": "Carbon Dynasty Racing",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 145
+      },
+      {
+        "platz": 12,
+        "fahrer": "David Suess",
+        "team": "Racing Team Langsam",
+        "fahrzeug": "Honda NSX GT3 Evo",
+        "nr": 47
+      },
+      {
+        "platz": 13,
+        "fahrer": "Alex Fox",
+        "team": "Racing Team Langsam",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 71
+      },
+      {
+        "platz": 14,
+        "fahrer": "Lennard Petrov",
+        "team": "Development Team Langsam",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 93
+      },
+      {
+        "platz": 15,
+        "fahrer": "Alexander Friedl",
+        "team": "Silver Dynasty Racing",
+        "fahrzeug": "Ford Mustang GT3",
+        "nr": 15
+      }
     ],
     "barcelona": [
-      { "platz": 1, "fahrer": "Kevin Böhm", "team": "Golden Dynasty Racing", "fahrzeug": "BMW M4 GT3", "nr": 94 },
-      { "platz": 2, "fahrer": "Manoa Verner", "team": "Chronos Motorsport", "fahrzeug": "Ferrari 296 GT3", "nr": 26, "quali": 1 },
-      { "platz": 3, "fahrer": "J. Jooeell", "team": "Carbon Dynasty Racing", "fahrzeug": "BMW M4 GT3", "nr": 145 },
-      { "platz": 4, "fahrer": "Eric Sprott", "team": "Golden Dynasty Racing", "fahrzeug": "BMW M4 GT3", "nr": 420 },
-      { "platz": 5, "fahrer": "Chad Wilmott", "team": "Nussy Motorsport", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": null, "quali": 2 },
-      { "platz": 6, "fahrer": "T. Seefeldt", "team": "Racing Team Langsam", "fahrzeug": "Audi R8 LMS evo II", "nr": 882 },
-      { "platz": 7, "fahrer": "Leo Verner", "team": "Chronos Omega Racing", "fahrzeug": "Ferrari 296 GT3", "nr": 44 },
-      { "platz": 8, "fahrer": "M. Diaconu", "team": "Nussy Motorsport", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 9 },
-      { "platz": 9, "fahrer": "Alexander Friedl", "team": "Silver Dynasty Racing", "fahrzeug": "Ford Mustang GT3", "nr": 15 },
-      { "platz": 10, "fahrer": "Lukas Knips", "team": "Golden Dynasty Racing", "fahrzeug": "BMW M4 GT3", "nr": 98, "quali": 3 },
-      { "platz": 11, "fahrer": "Alex Fox", "team": "Racing Team Langsam", "fahrzeug": "Mercedes-AMG GT3 2020", "nr": 71 },
-      { "platz": 12, "fahrer": "Lennard Petrov", "team": "Development Team Langsam", "fahrzeug": "BMW M4 GT3", "nr": 93 },
-      { "platz": 13, "fahrer": "David Suess", "team": "Racing Team Langsam", "fahrzeug": "Honda NSX GT3 Evo", "nr": 47 },
-      { "platz": 14, "fahrer": "M. Liebisch", "team": "LFA Kult Competition", "fahrzeug": "BMW M4 GT3", "nr": 19 },
-      { "platz": 15, "fahrer": "Sebastian Röber", "team": "Carbon Dynasty Racing", "fahrzeug": "BMW M4 GT3", "nr": 16 }
+      {
+        "platz": 1,
+        "fahrer": "Kevin Böhm",
+        "team": "Golden Dynasty Racing",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 94
+      },
+      {
+        "platz": 2,
+        "fahrer": "Manoa Verner",
+        "team": "Chronos Motorsport",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 26,
+        "quali": 1
+      },
+      {
+        "platz": 3,
+        "fahrer": "J. Jooeell",
+        "team": "Carbon Dynasty Racing",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 145
+      },
+      {
+        "platz": 4,
+        "fahrer": "Eric Sprott",
+        "team": "Golden Dynasty Racing",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 420
+      },
+      {
+        "platz": 5,
+        "fahrer": "Chad Wilmott",
+        "team": "Nussy Motorsport",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": null,
+        "quali": 2
+      },
+      {
+        "platz": 6,
+        "fahrer": "T. Seefeldt",
+        "team": "Racing Team Langsam",
+        "fahrzeug": "Audi R8 LMS evo II",
+        "nr": 882
+      },
+      {
+        "platz": 7,
+        "fahrer": "Leo Verner",
+        "team": "Chronos Omega Racing",
+        "fahrzeug": "Ferrari 296 GT3",
+        "nr": 44
+      },
+      {
+        "platz": 8,
+        "fahrer": "M. Diaconu",
+        "team": "Nussy Motorsport",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 9
+      },
+      {
+        "platz": 9,
+        "fahrer": "Alexander Friedl",
+        "team": "Silver Dynasty Racing",
+        "fahrzeug": "Ford Mustang GT3",
+        "nr": 15
+      },
+      {
+        "platz": 10,
+        "fahrer": "Lukas Knips",
+        "team": "Golden Dynasty Racing",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 98,
+        "quali": 3
+      },
+      {
+        "platz": 11,
+        "fahrer": "Alex Fox",
+        "team": "Racing Team Langsam",
+        "fahrzeug": "Mercedes-AMG GT3 2020",
+        "nr": 71
+      },
+      {
+        "platz": 12,
+        "fahrer": "Lennard Petrov",
+        "team": "Development Team Langsam",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 93
+      },
+      {
+        "platz": 13,
+        "fahrer": "David Suess",
+        "team": "Racing Team Langsam",
+        "fahrzeug": "Honda NSX GT3 Evo",
+        "nr": 47
+      },
+      {
+        "platz": 14,
+        "fahrer": "M. Liebisch",
+        "team": "LFA Kult Competition",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 19
+      },
+      {
+        "platz": 15,
+        "fahrer": "Sebastian Röber",
+        "team": "Carbon Dynasty Racing",
+        "fahrzeug": "BMW M4 GT3",
+        "nr": 16
+      }
     ]
   }
 }
