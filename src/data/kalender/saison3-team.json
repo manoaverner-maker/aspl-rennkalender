@@ -23,7 +23,10 @@
       "typ": "rennen",
       "runde": "R2",
       "streckeId": "oultonpark",
-      "datum": "2026-09-26"
+      "datum": "2026-09-26",
+      "verschobenAuf": "TBD",
+      "grund": "Server abgestürzt — wird ans Saisonende verschoben",
+      "grund_en": "Server crashed — moved to the end of the season"
     },
     {
       "typ": "rennen",

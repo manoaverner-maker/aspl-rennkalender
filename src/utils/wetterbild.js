@@ -1,11 +1,17 @@
 // Fertiges Wetterbild zum Weitergeben im Discord. Gezeichnet wird auf ein Canvas
 // und als PNG zurueckgegeben — kein Server, keine Bibliothek.
 //
-// Format 1200x560: breit genug fuer Discords Vorschau, ohne leere Flaeche unten.
+// Das Bild deckt die ganze Woche ab: je Series das naechste Rennen (Solo am
+// Mittwoch, Team am Samstag), damit montags ein Bild fuer alles reicht.
 import { beschreibeWetter } from './wetter.js'
 
 const BREITE = 1200
-const HOEHE = 560
+const RAND = 64
+const KOPF_HOEHE = 150
+const BLOCK_HOEHE = 302
+const KACHEL_HOEHE = 176
+const BLOCK_ABSTAND = 24
+const FUSS_HOEHE = 86
 
 const FARBE = {
   grund: '#0a0a0c',
@@ -35,10 +41,13 @@ function kasten(ctx, x, y, b, h, r) {
   ctx.closePath()
 }
 
-function block(ctx, x, y, b, h, titel, w, sprache) {
+// Eine Wetterkachel (Quali oder Rennstart)
+function kachel(ctx, x, y, b, h, titel, w, sprache) {
   const be = beschreibeWetter(w.code, sprache)
-  ctx.fillStyle = FARBE.karte
-  kasten(ctx, x, y, b, h, 20)
+  const t = TEXTE[sprache === 'en' ? 'en' : 'de']
+
+  ctx.fillStyle = 'rgba(255,255,255,0.03)'
+  kasten(ctx, x, y, b, h, 16)
   ctx.fill()
   ctx.strokeStyle = FARBE.linie
   ctx.lineWidth = 1
@@ -46,28 +55,66 @@ function block(ctx, x, y, b, h, titel, w, sprache) {
 
   ctx.textAlign = 'left'
   ctx.fillStyle = FARBE.grau
-  ctx.font = '600 20px Rajdhani, Inter, sans-serif'
-  ctx.fillText(titel.toUpperCase() + '  ·  ' + w.zeit, x + 28, y + 46)
+  ctx.font = '600 18px Rajdhani, Inter, sans-serif'
+  ctx.fillText(titel.toUpperCase() + '  ·  ' + w.zeit, x + 22, y + 36)
 
-  ctx.font = '56px sans-serif'
-  ctx.fillText(be.symbol, x + 28, y + 118)
+  ctx.font = '44px sans-serif'
+  ctx.fillText(be.symbol, x + 22, y + 92)
 
   ctx.fillStyle = FARBE.weiss
-  ctx.font = '700 54px Orbitron, Rajdhani, sans-serif'
-  ctx.fillText(w.temperatur + '°C', x + 110, y + 118)
+  ctx.font = '700 42px Orbitron, Rajdhani, sans-serif'
+  ctx.fillText(w.temperatur + '°C', x + 86, y + 92)
 
   ctx.fillStyle = FARBE.grau
-  ctx.font = '500 22px Rajdhani, Inter, sans-serif'
-  ctx.fillText(be.text, x + 28, y + 158)
+  ctx.font = '500 20px Rajdhani, Inter, sans-serif'
+  ctx.fillText(be.text, x + 22, y + 124)
 
-  const t = TEXTE[sprache === 'en' ? 'en' : 'de']
   const zeile = []
   if (w.regen != null) zeile.push(t.regen + ' ' + w.regen + '%')
   if (w.wind != null) zeile.push(t.wind + ' ' + w.wind + ' km/h')
   if (zeile.length) {
     ctx.fillStyle = FARBE.weiss
-    ctx.font = '600 22px Rajdhani, Inter, sans-serif'
-    ctx.fillText(zeile.join('   ·   '), x + 28, y + 196)
+    ctx.font = '600 20px Rajdhani, Inter, sans-serif'
+    ctx.fillText(zeile.join('   ·   '), x + 22, y + 156)
+  }
+}
+
+// Ein Serien-Block: Kopfzeile mit Strecke und Termin, darunter die Kacheln
+function serienBlock(ctx, y, { serienName, rennen, strecke, wetter, datumText }, sprache) {
+  const t = TEXTE[sprache === 'en' ? 'en' : 'de']
+  const b = BREITE - RAND * 2
+
+  ctx.fillStyle = FARBE.karte
+  kasten(ctx, RAND, y, b, BLOCK_HOEHE, 22)
+  ctx.fill()
+  ctx.strokeStyle = FARBE.linie
+  ctx.lineWidth = 1
+  ctx.stroke()
+
+  ctx.textAlign = 'left'
+  ctx.fillStyle = FARBE.rot
+  ctx.font = '700 20px Orbitron, Rajdhani, sans-serif'
+  ctx.fillText((serienName ?? '').toUpperCase(), RAND + 26, y + 40)
+
+  ctx.fillStyle = FARBE.weiss
+  ctx.font = '700 40px Orbitron, Rajdhani, sans-serif'
+  const titel = (strecke?.flagge ? strecke.flagge + '  ' : '') + (strecke?.kurzname ?? '')
+  ctx.fillText(titel, RAND + 26, y + 86)
+
+  ctx.textAlign = 'right'
+  ctx.fillStyle = FARBE.gold
+  ctx.font = '600 24px Rajdhani, Inter, sans-serif'
+  ctx.fillText((rennen?.runde ? rennen.runde + '  ·  ' : '') + (datumText ?? ''), BREITE - RAND - 26, y + 40)
+  ctx.textAlign = 'left'
+
+  // Kacheln: beide nebeneinander, oder eine ueber die ganze Breite
+  const vorhanden = [['quali', wetter.quali], ['rennen', wetter.rennen]].filter(([, w]) => w)
+  const innen = b - 52
+  const kachelBreite = vorhanden.length > 1 ? (innen - 20) / 2 : innen
+  let x = RAND + 26
+  for (const [art, w] of vorhanden) {
+    kachel(ctx, x, y + 104, kachelBreite, KACHEL_HOEHE, art === 'quali' ? t.quali : t.rennen, w, sprache)
+    x += kachelBreite + 20
   }
 }
 
@@ -76,62 +123,52 @@ function block(ctx, x, y, b, h, titel, w, sprache) {
  * Download ein await eingeschoben, verliert der Browser die Nutzergeste und
  * verweigert den Download stillschweigend. Schriften werden darum vorher
  * geladen (siehe schriftenBereit).
+ *
+ * @param bloecke [{ serienName, rennen, strecke, wetter, datumText }]
  */
-export function zeichneWetterbild(canvas, { strecke, rennen, wetter, seriesName, sprache, datumText }) {
+export function zeichneWetterbild(canvas, { bloecke, sprache }) {
   const t = TEXTE[sprache === 'en' ? 'en' : 'de']
+  const hoehe = KOPF_HOEHE + bloecke.length * (BLOCK_HOEHE + BLOCK_ABSTAND) - BLOCK_ABSTAND + FUSS_HOEHE
   canvas.width = BREITE
-  canvas.height = HOEHE
+  canvas.height = hoehe
   const ctx = canvas.getContext('2d')
 
-  // Hintergrund mit leichtem Verlauf
   ctx.fillStyle = FARBE.grund
-  ctx.fillRect(0, 0, BREITE, HOEHE)
-  const verlauf = ctx.createLinearGradient(0, 0, BREITE, HOEHE)
+  ctx.fillRect(0, 0, BREITE, hoehe)
+  const verlauf = ctx.createLinearGradient(0, 0, BREITE, hoehe)
   verlauf.addColorStop(0, 'rgba(225, 6, 0, 0.14)')
   verlauf.addColorStop(0.55, 'rgba(225, 6, 0, 0)')
   ctx.fillStyle = verlauf
-  ctx.fillRect(0, 0, BREITE, HOEHE)
+  ctx.fillRect(0, 0, BREITE, hoehe)
 
   // Kopf
   ctx.textAlign = 'left'
   ctx.fillStyle = FARBE.rot
-  ctx.font = '700 26px Orbitron, Rajdhani, sans-serif'
-  ctx.fillText('ASPL', 64, 76)
-  ctx.fillStyle = FARBE.grau
-  ctx.font = '600 22px Rajdhani, Inter, sans-serif'
-  ctx.fillText(t.titel + '   ·   ' + (seriesName ?? ''), 150, 76)
+  ctx.font = '700 30px Orbitron, Rajdhani, sans-serif'
+  ctx.fillText('ASPL', RAND, 72)
+  ctx.fillStyle = FARBE.weiss
+  ctx.font = '600 26px Rajdhani, Inter, sans-serif'
+  ctx.fillText(t.titel, RAND + 110, 72)
 
   ctx.strokeStyle = FARBE.linie
+  ctx.lineWidth = 1
   ctx.beginPath()
-  ctx.moveTo(64, 100)
-  ctx.lineTo(BREITE - 64, 100)
+  ctx.moveTo(RAND, 104)
+  ctx.lineTo(BREITE - RAND, 104)
   ctx.stroke()
 
-  // Strecke und Termin
-  ctx.fillStyle = FARBE.weiss
-  ctx.font = '700 62px Orbitron, Rajdhani, sans-serif'
-  const titel = (strecke?.flagge ? strecke.flagge + '  ' : '') + (strecke?.kurzname ?? '')
-  ctx.fillText(titel, 64, 186)
-
-  ctx.fillStyle = FARBE.gold
-  ctx.font = '600 28px Rajdhani, Inter, sans-serif'
-  ctx.fillText((rennen?.runde ? rennen.runde + '  ·  ' : '') + (datumText ?? rennen?.datum ?? ''), 64, 232)
-
-  // Quali und Rennstart nebeneinander
-  const kartenBreite = (BREITE - 64 * 2 - 32) / 2
-  let x = 64
-  for (const [art, w] of [['quali', wetter.quali], ['rennen', wetter.rennen]]) {
-    if (!w) continue
-    block(ctx, x, 268, kartenBreite, 222, art === 'quali' ? t.quali : t.rennen, w, sprache)
-    x += kartenBreite + 32
+  let y = KOPF_HOEHE
+  for (const block of bloecke) {
+    serienBlock(ctx, y, block, sprache)
+    y += BLOCK_HOEHE + BLOCK_ABSTAND
   }
 
-  // Fuss
   ctx.fillStyle = FARBE.grau
   ctx.font = '500 19px Rajdhani, Inter, sans-serif'
-  ctx.fillText(t.quelle, 64, HOEHE - 42)
+  ctx.textAlign = 'left'
+  ctx.fillText(t.quelle, RAND, hoehe - 36)
   ctx.textAlign = 'right'
-  ctx.fillText('asplracing.com', BREITE - 64, HOEHE - 42)
+  ctx.fillText('asplracing.com', BREITE - RAND, hoehe - 36)
 
   return canvas
 }
