@@ -6,6 +6,7 @@ import SeriesAuswahl from './komponenten/SeriesAuswahl.jsx'
 import ComingSoon from './komponenten/ComingSoon.jsx'
 import Bildnachweise from './komponenten/Bildnachweise.jsx'
 import Leaderboard from './komponenten/Leaderboard.jsx'
+import Wetterbericht from './komponenten/Wetterbericht.jsx'
 import BesucherZaehler from './komponenten/BesucherZaehler.jsx'
 import streckenDaten from './data/strecken.json'
 import { annotiereEintraege } from './utils/status.js'
@@ -18,6 +19,21 @@ const kalenderModule = import.meta.glob('./data/kalender/*.json', { eager: true 
 const alleKalender = Object.values(kalenderModule)
   .map((m) => m.default)
   .sort((a, b) => (a.sortierung ?? 99) - (b.sortierung ?? 99))
+
+// Series mit "ohneSaison" laufen in eigenem Rhythmus (Endurance) und haengen an
+// keiner Saison: sie stehen abgesetzt und zeigen immer denselben Kalender.
+const saisonKalender = alleKalender.filter((k) => !k.ohneSaison)
+const freieKalender = alleKalender.filter((k) => k.ohneSaison)
+
+// Nummer aus "saison3" ziehen, um die neueste Saison zu finden.
+const saisonNummer = (id) => Number(String(id).replace(/\D+/g, '')) || 0
+
+// Beim Oeffnen die neueste Saison zeigen — nicht die aelteste.
+const neuesteSaison = saisonKalender
+  .map((k) => k.saisonId)
+  .sort((a, b) => saisonNummer(b) - saisonNummer(a))[0]
+const startKalender =
+  saisonKalender.find((k) => k.saisonId === neuesteSaison) ?? alleKalender[0]
 
 // Rennergebnisse: pro Saison+Series eine JSON-Datei unter src/data/ergebnisse/ —
 // neue Rennen sind nur ein weiterer Strecken-Key, neue Saisons eine neue Datei
@@ -35,11 +51,12 @@ function aktuelleRoute() {
 export default function App() {
   const { t, feld, sprache, umschalten } = useSprache()
   const [route, setRoute] = useState(aktuelleRoute)
-  const [saisonId, setSaisonId] = useState(alleKalender[0]?.saisonId)
-  const [seriesId, setSeriesId] = useState(alleKalender[0]?.seriesId)
+  const [saisonId, setSaisonId] = useState(startKalender?.saisonId)
+  const [seriesId, setSeriesId] = useState(startKalender?.seriesId)
   const [aktivesRennen, setAktivesRennen] = useState(null)
   const [flyZiel, setFlyZiel] = useState(null)
   const [leaderboardOffen, setLeaderboardOffen] = useState(false)
+  const [wetterOffen, setWetterOffen] = useState(false)
   const [neueVersion, setNeueVersion] = useState(false)
   // Alle ACC-Strecken sind standardmaessig sichtbar und klickbar;
   // der Toggle blendet sie bei Bedarf aus (?alle=0 als Deep-Link)
@@ -108,16 +125,21 @@ export default function App() {
   // Auswahl-Listen fuer die Selektoren (rein datengetrieben)
   const saisons = useMemo(() => {
     const gesehen = new Map()
-    alleKalender.forEach((k) => gesehen.set(k.saisonId, k.saisonName))
-    return [...gesehen.entries()].map(([id, name]) => ({ id, name }))
+    saisonKalender.forEach((k) => gesehen.set(k.saisonId, k.saisonName))
+    return [...gesehen.entries()]
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => saisonNummer(b.id) - saisonNummer(a.id))
   }, [])
 
   const seriesInSaison = useMemo(
-    () => alleKalender.filter((k) => k.saisonId === saisonId),
+    () => saisonKalender.filter((k) => k.saisonId === saisonId),
     [saisonId]
   )
 
-  const kalender = seriesInSaison.find((k) => k.seriesId === seriesId) ?? seriesInSaison[0]
+  // Die saisonlosen Series sind von jeder Saison aus erreichbar.
+  const kalender =
+    [...seriesInSaison, ...freieKalender].find((k) => k.seriesId === seriesId) ?? seriesInSaison[0]
+  const freieSeriesAktiv = !!kalender?.ohneSaison
 
   // Ergebnisse der aktuell gewaehlten Saison+Series (kann fehlen)
   const ergebnisse = alleErgebnisse.find(
@@ -225,6 +247,8 @@ export default function App() {
             saisons={saisons}
             saisonId={saisonId}
             series={seriesInSaison.map((k) => ({ id: k.seriesId, name: k.seriesName }))}
+            freieSeries={freieKalender.map((k) => ({ id: k.seriesId, name: k.seriesName }))}
+            freieAktiv={freieSeriesAktiv}
             seriesId={kalender?.seriesId}
             onSaison={wechsleSaison}
             onSeries={wechsleSeries}
@@ -237,7 +261,10 @@ export default function App() {
               onClick={() => setAlleStrecken(!alleStrecken)}
             >
               <span className="toggle-punkt" aria-hidden="true" />
-              {t('alleAcc')}
+              {/* Auf schmalen Bildschirmen nur "ACC" — die Kopfzeile traegt jetzt
+                  einen Knopf mehr und soll trotzdem einzeilig bleiben. */}
+              <span className="toggle-lang">{t('alleAcc')}</span>
+              <span className="toggle-kurz">ACC</span>
             </button>
           )}
           <button
@@ -250,6 +277,17 @@ export default function App() {
             }}
           >
             🏆
+          </button>
+          <button
+            className="pokal-button"
+            aria-label={t('wetterberichtAria')}
+            title={t('wetterbericht')}
+            onClick={() => {
+              setAktivesRennen(null)
+              setWetterOffen(true)
+            }}
+          >
+            🌦️
           </button>
           <button
             className="sprache-button"
@@ -340,6 +378,16 @@ export default function App() {
           )}
           punkteSystem={punkteSystem}
           onClose={() => setLeaderboardOffen(false)}
+        />
+      )}
+
+      {wetterOffen && (
+        <Wetterbericht
+          seriesName={kalender?.seriesName}
+          rennen={eintraege}
+          streckenMap={streckenMap}
+          zeiten={kalender?.zeiten}
+          onClose={() => setWetterOffen(false)}
         />
       )}
 

@@ -1,8 +1,7 @@
 {
-  "saisonId": "saison2",
-  "saisonName": "Saison 2",
   "seriesId": "endurance",
   "seriesName": "Endurance-Series",
+  "ohneSaison": true,
   "sortierung": 3,
   "comingSoon": false,
   "hinweis": "Startzeit je nach Renndauer: 3 h → 18:00 · 4 h → 17:00 · 6 h → 15:00",
