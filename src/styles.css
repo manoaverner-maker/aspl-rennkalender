@@ -1498,6 +1498,21 @@ a {
 .wetter-kurz-symbol { font-size: 1.2rem; }
 .wetter-kurz.leer { color: var(--grau); font-size: 0.78rem; }
 
+.wetter-canvas { display: none; }
+
+/* Nur sichtbar, wenn der Download nicht durchging — dann zum Sichern antippen. */
+.wetter-canvas.sichtbar {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 0.7rem;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  -webkit-user-select: auto;
+  user-select: auto;
+  -webkit-touch-callout: default;
+}
+
 .wetter-hinweis {
   margin: 0.4rem 0;
   color: var(--grau);

@@ -72,9 +72,12 @@ function block(ctx, x, y, b, h, titel, w, sprache) {
 }
 
 /**
- * Zeichnet das Bild und gibt eine Data-URL (PNG) zurueck.
+ * Zeichnet das Bild auf das Canvas. Bewusst SYNCHRON: wird zwischen Klick und
+ * Download ein await eingeschoben, verliert der Browser die Nutzergeste und
+ * verweigert den Download stillschweigend. Schriften werden darum vorher
+ * geladen (siehe schriftenBereit).
  */
-export async function zeichneWetterbild(canvas, { strecke, rennen, wetter, seriesName, sprache, datumText }) {
+export function zeichneWetterbild(canvas, { strecke, rennen, wetter, seriesName, sprache, datumText }) {
   const t = TEXTE[sprache === 'en' ? 'en' : 'de']
   canvas.width = BREITE
   canvas.height = HOEHE
@@ -130,7 +133,23 @@ export async function zeichneWetterbild(canvas, { strecke, rennen, wetter, serie
   ctx.textAlign = 'right'
   ctx.fillText('asplracing.com', BREITE - 64, HOEHE - 42)
 
-  // Schriften koennen noch laden — ein Tick warten, dann erst ausgeben.
-  if (document.fonts?.ready) { try { await document.fonts.ready } catch { /* egal */ } }
-  return canvas.toDataURL('image/png')
+  return canvas
+}
+
+/** Einmal vorab abwarten, damit Orbitron/Rajdhani beim Zeichnen bereitstehen. */
+export async function schriftenBereit() {
+  try { await document.fonts?.ready } catch { /* dann eben mit Ersatzschrift */ }
+}
+
+/**
+ * Canvas -> Blob, ohne Umweg ueber eine Promise. toBlob() waere asynchron und
+ * damit wieder ausserhalb der Nutzergeste; grosse data:-URLs wiederum lehnt
+ * Chrome als Download ab. Darum die Data-URL synchron in einen Blob umbauen.
+ */
+export function canvasAlsBlob(canvas) {
+  const datenUrl = canvas.toDataURL('image/png')
+  const roh = atob(datenUrl.split(',')[1])
+  const bytes = new Uint8Array(roh.length)
+  for (let i = 0; i < roh.length; i += 1) bytes[i] = roh.charCodeAt(i)
+  return new Blob([bytes], { type: 'image/png' })
 }
