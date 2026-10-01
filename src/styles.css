@@ -15,6 +15,11 @@
   --weiss: #f5f5f7;
   --titel-font: 'Orbitron', sans-serif;
   --text-font: 'Rajdhani', sans-serif;
+  /* Etwas weichere Ecken und ruhigere Kanten — gleiche Formensprache ueberall. */
+  --r-klein: 12px;
+  --r-mittel: 16px;
+  --r-gross: 20px;
+  --r-pille: 999px;
 }
 
 * {
@@ -29,6 +34,9 @@ body {
   color: var(--weiss);
   font-family: var(--text-font);
   font-size: 17px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
   /* Kiosk-artige App: kein versehentliches Text-Markieren (blaue Auswahl) und
      kein iOS-Long-Press-Callout ("Kopieren/Teilen") beim Wischen/Drehen —
      genau das war auf dem iPhone stoerend. Tap-Highlight ebenfalls aus. */
@@ -79,7 +87,7 @@ a {
 .kopf-innen {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 0.8rem;
   flex-wrap: wrap;
   padding: 0.7rem 1.2rem;
 }
@@ -95,7 +103,7 @@ a {
 .logo-icon {
   width: 40px;
   height: 40px;
-  border-radius: 9px;
+  border-radius: var(--r-mittel);
   flex: none;
 }
 
@@ -147,7 +155,7 @@ a {
 .sprache-button {
   background: var(--karte);
   border: 1px solid var(--linie);
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   height: 40px;
   min-width: 40px;
   padding: 0 0.6rem;
@@ -177,7 +185,7 @@ a {
   font-weight: 700;
   letter-spacing: 1px;
   padding: 0.5rem 0.95rem;
-  border-radius: 6px;
+  border-radius: var(--r-klein);
   white-space: nowrap;
   box-shadow: 0 0 14px rgba(225, 6, 0, 0.45);
   transition: transform 0.12s, box-shadow 0.12s;
@@ -187,6 +195,16 @@ a {
   transform: translateY(-1px);
   box-shadow: 0 0 22px rgba(225, 6, 0, 0.7);
 }
+
+/* Mit Pokal UND Wetter-Knopf wird die Kopfzeile eng. Die Domain steht auch im
+   Fussbereich — unter 1400 px weicht sie, damit alles einzeilig bleibt. */
+@media (max-width: 1400px) {
+  .kopf-domain { display: none; }
+  .toggle-lang { display: none; }
+  .toggle-kurz { display: inline; }
+}
+
+.toggle-kurz { display: none; }
 
 .kopf-domain {
   color: var(--grau);
@@ -219,7 +237,7 @@ a {
 .auswahl {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.55rem;
   flex-wrap: wrap;
 }
 
@@ -227,8 +245,8 @@ a {
   background: var(--karte);
   color: var(--weiss);
   border: 1px solid var(--linie);
-  border-radius: 6px;
-  padding: 0.45rem 0.7rem;
+  border-radius: var(--r-pille);
+  padding: 0.42rem 0.75rem;
   font-family: var(--text-font);
   font-size: 0.95rem;
   font-weight: 600;
@@ -237,25 +255,24 @@ a {
 
 .series-buttons {
   display: flex;
+  gap: 2px;
+  padding: 3px;
   border: 1px solid var(--linie);
-  border-radius: 6px;
-  overflow: hidden;
+  border-radius: var(--r-pille);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .series-button {
   background: transparent;
   border: none;
-  padding: 0.45rem 0.9rem;
+  border-radius: var(--r-pille);
+  padding: 0.4rem 0.78rem;
   font-size: 0.92rem;
   font-weight: 600;
   letter-spacing: 0.5px;
   color: var(--grau);
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
-}
-
-.series-button + .series-button {
-  border-left: 1px solid var(--linie);
 }
 
 .series-button:hover {
@@ -265,6 +282,7 @@ a {
 .series-button.aktiv {
   background: var(--rot);
   color: #fff;
+  box-shadow: 0 1px 6px rgba(225, 6, 0, 0.35);
 }
 
 /* ===== Globus ===== */
@@ -507,7 +525,7 @@ a {
   width: 100%;
   background: var(--karte);
   border: 1px solid var(--linie);
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   color: var(--weiss);
   font-family: var(--text-font);
   font-size: 0.95rem;
@@ -552,7 +570,7 @@ a {
   font-size: 0.9rem;
   color: var(--grau);
   border: 1px dashed var(--linie);
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   padding: 0.5rem 0.7rem;
   margin-bottom: 0.8rem;
 }
@@ -592,7 +610,7 @@ a {
   background: var(--karte);
   border: 1px solid var(--linie);
   border-left: 3px solid transparent;
-  border-radius: 10px;
+  border-radius: var(--r-mittel);
   padding: 0.55rem;
   cursor: pointer;
   transition: transform 0.12s, border-color 0.12s, background 0.12s;
@@ -617,7 +635,7 @@ a {
   width: 104px;
   height: 68px;
   flex: none;
-  border-radius: 6px;
+  border-radius: var(--r-klein);
   overflow: hidden;
 }
 
@@ -687,7 +705,7 @@ a {
   gap: 0.7rem;
   background: repeating-linear-gradient(45deg, #141419 0 12px, #191920 12px 24px);
   border: 1px dashed var(--linie);
-  border-radius: 10px;
+  border-radius: var(--r-mittel);
   padding: 0.7rem 0.9rem;
   color: var(--grau);
 }
@@ -717,7 +735,7 @@ a {
     rgba(225, 6, 0, 0.08) 12px 24px
   );
   border: 1px dashed rgba(225, 6, 0, 0.45);
-  border-radius: 10px;
+  border-radius: var(--r-mittel);
   padding: 0.7rem 0.9rem;
   color: var(--grau);
 }
@@ -767,7 +785,7 @@ a {
 .verschoben-hinweis {
   background: rgba(255, 152, 0, 0.1);
   border: 1px solid rgba(255, 152, 0, 0.45);
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   color: #ffb74d;
   font-weight: 600;
   padding: 0.5rem 0.7rem;
@@ -874,7 +892,7 @@ a {
   font-size: 1.1rem;
   background: var(--rot);
   padding: 3px 10px;
-  border-radius: 5px;
+  border-radius: var(--r-klein);
 }
 
 .panel-inhalt {
@@ -920,7 +938,7 @@ a {
   font-weight: 700;
   letter-spacing: 1.5px;
   padding: 0.7rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   margin-bottom: 0.9rem;
   box-shadow: 0 0 16px rgba(225, 6, 0, 0.4);
   transition: transform 0.12s, box-shadow 0.12s;
@@ -935,7 +953,7 @@ a {
 .wetter-box {
   background: var(--karte);
   border: 1px solid var(--linie);
-  border-radius: 10px;
+  border-radius: var(--r-mittel);
   padding: 0.7rem 0.8rem;
 }
 
@@ -1027,7 +1045,7 @@ a {
   height: 95px;
   flex: none;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   scroll-snap-align: start;
   cursor: zoom-in;
   border: 1px solid var(--linie);
@@ -1058,7 +1076,7 @@ a {
 .daten-raster > div {
   background: var(--karte);
   border: 1px solid var(--linie);
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   padding: 0.5rem 0.7rem;
 }
 
@@ -1100,7 +1118,7 @@ a {
   gap: 0.6rem;
   background: var(--karte);
   border: 1px solid var(--linie);
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   padding: 0.45rem 0.7rem;
   font-size: 0.95rem;
 }
@@ -1133,7 +1151,7 @@ a {
   background: var(--karte);
   border: 1px solid var(--linie);
   border-left: 4px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   padding: 0.5rem 0.7rem;
   animation: sanftRein 0.35s ease-out both;
 }
@@ -1210,7 +1228,7 @@ a {
   width: 100%;
   background: transparent;
   border: 1px dashed var(--linie);
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   color: var(--grau);
   font-family: var(--text-font);
   font-size: 0.92rem;
@@ -1295,7 +1313,7 @@ a {
   color: var(--grau);
   padding: 1.6rem 1rem;
   border: 1px dashed var(--linie);
-  border-radius: 10px;
+  border-radius: var(--r-mittel);
 }
 
 .leaderboard-leer span {
@@ -1304,6 +1322,186 @@ a {
 
 .leaderboard-inhalt {
   padding-top: 3rem;
+}
+
+/* Series ohne Saisonbezug (Endurance) stehen abgesetzt — sie laufen in eigenem
+   Rhythmus und wechseln nicht mit der Saison. */
+.series-frei {
+  position: relative;
+  margin-left: 0.45rem;
+  padding-left: 0.45rem;
+}
+
+.series-frei::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  background: var(--linie);
+}
+
+@media (max-width: 760px) {
+  .series-frei {
+    margin-left: 0;
+    padding-left: 0;
+  }
+  .series-frei::before { display: none; }
+}
+
+/* ===== Wetterbericht-Panel ===== */
+.wetter-naechstes {
+  margin-bottom: 1.2rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--linie);
+  border-radius: 16px;
+  background: var(--karte);
+}
+
+.wetter-label {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rot);
+}
+
+.wetter-strecke {
+  margin: 0.2rem 0 0;
+  font-family: var(--titel-font);
+  font-size: 1.5rem;
+  color: var(--weiss);
+}
+
+.wetter-datum {
+  margin: 0.15rem 0 0.9rem;
+  color: var(--grau);
+  font-size: 0.9rem;
+}
+
+.wetter-zeiten {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.7rem;
+}
+
+.wetter-slot {
+  padding: 0.85rem 0.95rem;
+  border: 1px solid var(--linie);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.wetter-slot-titel {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grau);
+}
+
+.wetter-symbol {
+  margin: 0.3rem 0 0;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.wetter-text {
+  margin: 0.1rem 0 0.35rem;
+  font-size: 0.85rem;
+  color: var(--grau);
+}
+
+.wetter-werte {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--weiss);
+}
+
+.wetter-werte strong {
+  font-family: var(--titel-font);
+  font-size: 1.15rem;
+}
+
+.wetter-bild-knopf {
+  margin-top: 0.9rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-mittel);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--weiss);
+  font-family: var(--text-font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.wetter-bild-knopf:hover:not(:disabled) {
+  background: rgba(225, 6, 0, 0.14);
+  border-color: rgba(225, 6, 0, 0.5);
+}
+
+.wetter-bild-knopf:disabled { opacity: 0.6; cursor: default; }
+
+.wetter-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.wetter-liste li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.2rem;
+  border-bottom: 1px solid var(--linie);
+}
+
+.wetter-liste li:last-child { border-bottom: none; }
+
+.wetter-runde {
+  flex-shrink: 0;
+  min-width: 2.2rem;
+  font-family: var(--titel-font);
+  font-size: 0.75rem;
+  color: var(--grau);
+}
+
+.wetter-ort {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  color: var(--weiss);
+  font-size: 0.95rem;
+}
+
+.wetter-ort small {
+  color: var(--grau);
+  font-size: 0.75rem;
+}
+
+.wetter-kurz {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--weiss);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.wetter-kurz-symbol { font-size: 1.2rem; }
+.wetter-kurz.leer { color: var(--grau); font-size: 0.78rem; }
+
+.wetter-hinweis {
+  margin: 0.4rem 0;
+  color: var(--grau);
+  font-size: 0.9rem;
 }
 
 /* ===== Champion-Banner (abgeschlossene Saison) ===== */
@@ -1316,7 +1514,7 @@ a {
   margin-bottom: 1rem;
   padding: 1rem 1.1rem;
   border: 1px solid rgba(212, 175, 55, 0.45);
-  border-radius: 12px;
+  border-radius: var(--r-mittel);
   background:
     linear-gradient(120deg, rgba(212, 175, 55, 0.16), rgba(212, 175, 55, 0.03) 55%),
     var(--karte);
@@ -1436,7 +1634,7 @@ a {
 .lightbox img {
   max-width: 92vw;
   max-height: 84vh;
-  border-radius: 6px;
+  border-radius: var(--r-klein);
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
 }
 
@@ -1619,7 +1817,7 @@ a {
   width: 84px;
   height: 56px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: var(--r-klein);
   flex: none;
   border: 1px solid var(--linie);
 }
@@ -1671,7 +1869,7 @@ a {
   background: linear-gradient(135deg, rgba(0, 230, 118, 0.1), var(--karte) 55%);
   border: 1px solid rgba(0, 230, 118, 0.45);
   border-left: 4px solid var(--gruen);
-  border-radius: 10px;
+  border-radius: var(--r-mittel);
   padding: 0.6rem 0.8rem;
   margin-bottom: 0.8rem;
   cursor: pointer;
@@ -1720,7 +1918,7 @@ a {
   margin-left: auto;
   background: var(--karte);
   border: 1px solid var(--linie);
-  border-radius: 6px;
+  border-radius: var(--r-klein);
   color: var(--grau);
   font-family: var(--text-font);
   font-size: 0.85rem;
@@ -1760,7 +1958,7 @@ a {
 .zurueck-button {
   background: transparent;
   border: 1px solid var(--linie);
-  border-radius: 6px;
+  border-radius: var(--r-klein);
   color: var(--grau);
   font-family: var(--text-font);
   font-size: 0.88rem;
@@ -1791,7 +1989,7 @@ a {
 .fahrer-kennzahlen span {
   background: var(--karte);
   border: 1px solid var(--linie);
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   padding: 0.3rem 0.6rem;
   font-size: 0.85rem;
   color: var(--grau);
@@ -1820,7 +2018,7 @@ a {
   gap: 0.5rem;
   background: var(--karte);
   border: 1px solid var(--linie);
-  border-radius: 8px;
+  border-radius: var(--r-klein);
   padding: 0.42rem 0.65rem;
   font-size: 0.92rem;
 }
@@ -1959,7 +2157,7 @@ a {
 
 ::-webkit-scrollbar-thumb {
   background: #2e2e36;
-  border-radius: 5px;
+  border-radius: var(--r-klein);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -2072,7 +2270,7 @@ a {
     flex-wrap: wrap;
     row-gap: 3px;
     margin: 0.4rem 0.8rem 0;
-    border-radius: 10px;
+    border-radius: var(--r-mittel);
     justify-content: flex-start;
   }
 
@@ -2154,7 +2352,17 @@ a {
     height: 190px;
   }
 
-  .kopf-domain {
+  /* Mit Pokal UND Wetter-Knopf wird die Kopfzeile eng. Die Domain steht auch im
+   Fussbereich — unter 1400 px weicht sie, damit alles einzeilig bleibt. */
+@media (max-width: 1400px) {
+  .kopf-domain { display: none; }
+  .toggle-lang { display: none; }
+  .toggle-kurz { display: inline; }
+}
+
+.toggle-kurz { display: none; }
+
+.kopf-domain {
     display: none;
   }
 }

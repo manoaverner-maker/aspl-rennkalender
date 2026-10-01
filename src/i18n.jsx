@@ -132,6 +132,18 @@ const T = {
     // Hinterlegte Tabelle (statt aus Rennergebnissen gerechnet) — 'quelle' steht
     // schon weiter unten bei den Bildnachweisen und wird mitbenutzt.
     champion: 'Champion',
+    // Wetterbericht
+    wetterbericht: '🌦️ Wetterbericht',
+    wetterberichtAria: 'Wetterbericht anzeigen',
+    naechstesRennen: 'Naechstes Rennen',
+    qualifying: 'Qualifying',
+    rennstart: 'Rennstart',
+    keineVorhersage: 'Fuer diesen Termin liegt noch keine Vorhersage vor.',
+    nochKeineVorhersage: 'noch keine Vorhersage',
+    keineKommenden: 'Keine kommenden Rennen in dieser Series.',
+    bildHerunterladen: '🖼️ Bild fuer Discord',
+    bildLaeuft: 'Bild wird erstellt …',
+    wetterQuelle: 'Daten: Open-Meteo · Zeiten in Liga-Zeit · Vorhersage bis 16 Tage im Voraus',
     teammeister: 'Teammeister',
     keinVerlauf: 'Zu diesem Fahrer liegen noch keine Einzelergebnisse vor.',
     nurTeilrennen: 'Zahlen nur aus den {n} Rennen mit hinterlegtem Einzelergebnis — die Tabelle zeigt den vollen Punktestand.',
@@ -269,6 +281,18 @@ const T = {
     // Published table (instead of computed from race results)
     champion: 'Champion',
     teammeister: 'Teams champion',
+    // Weather report
+    wetterbericht: '🌦️ Weather report',
+    wetterberichtAria: 'Show weather report',
+    naechstesRennen: 'Next race',
+    qualifying: 'Qualifying',
+    rennstart: 'Race start',
+    keineVorhersage: 'No forecast available for this date yet.',
+    nochKeineVorhersage: 'no forecast yet',
+    keineKommenden: 'No upcoming races in this series.',
+    bildHerunterladen: '🖼️ Image for Discord',
+    bildLaeuft: 'Creating image …',
+    wetterQuelle: 'Data: Open-Meteo · times in league time · forecast up to 16 days ahead',
     keinVerlauf: 'No individual results on record for this driver yet.',
     nurTeilrennen: 'Figures cover only the {n} races with individual results on record — the table shows the full points total.',
     // WeatherBox
