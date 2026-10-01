@@ -7,8 +7,8 @@ import { useSprache } from '../i18n.jsx'
 // WMO-Wettercodes -> Symbol + [deutscher Text, englischer Text]
 const WETTER_CODES = {
   0: ['☀️', 'Klar', 'Clear'],
-  1: ['🌤️', 'Ueberwiegend klar', 'Mainly clear'],
-  2: ['⛅', 'Teils bewoelkt', 'Partly cloudy'],
+  1: ['🌤️', 'Überwiegend klar', 'Mainly clear'],
+  2: ['⛅', 'Teils bewölkt', 'Partly cloudy'],
   3: ['☁️', 'Bedeckt', 'Overcast'],
   45: ['🌫️', 'Nebel', 'Fog'],
   48: ['🌫️', 'Reifnebel', 'Rime fog'],

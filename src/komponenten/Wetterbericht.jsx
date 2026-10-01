@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSprache } from '../i18n.jsx'
 import { beschreibeWetter, holeRennwetter, inVorhersage } from '../utils/wetter.js'
-import { zeichneWetterbild } from '../utils/wetterbild.js'
+import { canvasAlsBlob, schriftenBereit, zeichneWetterbild } from '../utils/wetterbild.js'
 
 // Wetterbericht-Panel (🌦️): die Liga faehrt mit echtem Wetter, darum hier die
 // Vorhersage fuer die kommenden Rennen auf einen Blick — und ein fertiges Bild
@@ -10,8 +10,10 @@ export default function Wetterbericht({ seriesName, rennen, streckenMap, zeiten,
   const { t, sprache, feld, datum: formatiereDatum } = useSprache()
   const [wetter, setWetter] = useState({})
   const [laedt, setLaedt] = useState(true)
-  const [bildLaeuft, setBildLaeuft] = useState(false)
+  const [bildFehler, setBildFehler] = useState(false)
   const canvasRef = useRef(null)
+
+  useEffect(() => { schriftenBereit() }, [])
 
   useEffect(() => {
     const onKey = (e) => e.key === 'Escape' && onClose()
@@ -54,21 +56,34 @@ export default function Wetterbericht({ seriesName, rennen, streckenMap, zeiten,
   const naechstes = kommende[0]
   const naechstesWetter = naechstes ? wetter[naechstes.runde] : null
 
-  const bildErzeugen = async () => {
+  // Komplett synchron bis zum Klick auf den Link: jedes await dazwischen beendet
+  // die Nutzergeste, und der Browser verwirft den Download ohne Meldung.
+  const bildErzeugen = () => {
     if (!naechstes || !naechstesWetter) return
-    setBildLaeuft(true)
     try {
-      const strecke = streckenMap?.[naechstes.streckeId]
-      const url = await zeichneWetterbild(canvasRef.current, {
-        strecke, rennen: naechstes, wetter: naechstesWetter, seriesName, sprache,
+      zeichneWetterbild(canvasRef.current, {
+        strecke: streckenMap?.[naechstes.streckeId],
+        rennen: naechstes,
+        wetter: naechstesWetter,
+        seriesName,
+        sprache,
         datumText: formatiereDatum(naechstes.datum),
       })
+      const blob = canvasAlsBlob(canvasRef.current)
+      const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
       a.download = `aspl-wetter-${naechstes.streckeId}-${naechstes.datum}.png`
+      // Der Link muss im Dokument haengen, sonst ignorieren ihn manche Browser.
+      document.body.appendChild(a)
       a.click()
-    } finally {
-      setBildLaeuft(false)
+      a.remove()
+      setTimeout(() => URL.revokeObjectURL(url), 10000)
+      setBildFehler(false)
+    } catch {
+      // Laesst der Browser den Download nicht zu, wenigstens das Bild zeigen —
+      // auf dem Handy reicht langes Antippen zum Sichern.
+      setBildFehler(true)
     }
   }
 
@@ -127,9 +142,14 @@ export default function Wetterbericht({ seriesName, rennen, streckenMap, zeiten,
                   )}
 
                   {naechstesWetter && (
-                    <button className="wetter-bild-knopf" onClick={bildErzeugen} disabled={bildLaeuft}>
-                      {bildLaeuft ? t('bildLaeuft') : t('bildHerunterladen')}
-                    </button>
+                    <>
+                      <button className="wetter-bild-knopf" onClick={bildErzeugen}>
+                        {t('bildHerunterladen')}
+                      </button>
+                      {bildFehler && (
+                        <p className="wetter-hinweis">{t('bildFehler')}</p>
+                      )}
+                    </>
                   )}
                 </div>
               )}
@@ -168,8 +188,9 @@ export default function Wetterbericht({ seriesName, rennen, streckenMap, zeiten,
           )}
         </div>
       </section>
-      {/* Zeichenflaeche fuer das Discord-Bild — nie sichtbar, nur zum Rendern. */}
-      <canvas ref={canvasRef} style={{ display: 'none' }} />
+      {/* Zeichenflaeche fuer das Bild. Normalerweise unsichtbar; lehnt der Browser
+          den Download ab, wird sie eingeblendet, damit man das Bild sichern kann. */}
+      <canvas ref={canvasRef} className={'wetter-canvas' + (bildFehler ? ' sichtbar' : '')} />
     </>
   )
 }
