@@ -387,6 +387,16 @@ export default function App() {
           rennen={eintraege}
           streckenMap={streckenMap}
           zeiten={kalender?.zeiten}
+          /* Fuers Wochenbild: bei einer Saison beide Series (Mittwoch + Samstag),
+             bei einer saisonlosen Series nur diese. */
+          serien={(freieSeriesAktiv ? [kalender] : seriesInSaison)
+            .filter(Boolean)
+            .map((k) => ({
+              id: k.seriesId,
+              name: k.seriesName,
+              zeiten: k.zeiten,
+              eintraege: k.eintraege,
+            }))}
           onClose={() => setWetterOffen(false)}
         />
       )}

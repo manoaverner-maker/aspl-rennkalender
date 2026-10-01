@@ -6,7 +6,10 @@ import { canvasAlsBlob, schriftenBereit, zeichneWetterbild } from '../utils/wett
 // Wetterbericht-Panel (🌦️): die Liga faehrt mit echtem Wetter, darum hier die
 // Vorhersage fuer die kommenden Rennen auf einen Blick — und ein fertiges Bild
 // zum Weitergeben im Discord.
-export default function Wetterbericht({ seriesName, rennen, streckenMap, zeiten, onClose }) {
+// "serien" traegt alle Serien, die ins Bild sollen: montags wird ein Bild fuer die
+// ganze Woche gepostet, also Solo (Mittwoch) und Team (Samstag) zusammen. Das Panel
+// selbst zeigt weiter die gerade gewaehlte Serie.
+export default function Wetterbericht({ seriesName, rennen, streckenMap, zeiten, serien = [], onClose }) {
   const { t, sprache, feld, datum: formatiereDatum } = useSprache()
   const [wetter, setWetter] = useState({})
   const [laedt, setLaedt] = useState(true)
@@ -31,49 +34,75 @@ export default function Wetterbericht({ seriesName, rennen, streckenMap, zeiten,
       .sort((a, b) => a.datum.localeCompare(b.datum))
   }, [rennen])
 
+  // Je Serie das naechste Rennen — daraus entsteht das Wochenbild.
+  const naechstesJeSerie = useMemo(() => {
+    const heute = new Date().toISOString().slice(0, 10)
+    return serien
+      .map((s) => {
+        const r = (s.eintraege ?? [])
+          .filter((e) => e.typ === 'rennen' && (e.verschobenAuf ?? e.datum) >= heute
+                         && (e.verschobenAuf ?? e.datum) !== 'TBD')
+          .map((e) => ({ ...e, datum: e.verschobenAuf ?? e.datum }))
+          .sort((a, b) => a.datum.localeCompare(b.datum))[0]
+        return r ? { serie: s, rennen: r } : null
+      })
+      .filter(Boolean)
+  }, [serien])
+
   useEffect(() => {
     let abgebrochen = false
     const laden = async () => {
       setLaedt(true)
       const ergebnis = {}
-      for (const r of kommende) {
-        if (!inVorhersage(r.datum)) continue
-        const strecke = streckenMap?.[r.streckeId]
+      // Alles einsammeln, was Wetter braucht: die Liste der gewaehlten Serie und
+      // je Serie das naechste Rennen fuers Bild. Doppelte fallen ueber den
+      // Schluessel heraus, der Cache in wetter.js faengt den Rest ab.
+      const aufgaben = [
+        ...kommende.map((r) => ({ schluessel: r.runde, rennen: r, zeiten })),
+        ...naechstesJeSerie.map(({ serie, rennen: r }) =>
+          ({ schluessel: serie.id + ':' + r.runde, rennen: r, zeiten: serie.zeiten })),
+      ]
+      for (const a of aufgaben) {
+        if (ergebnis[a.schluessel] || !inVorhersage(a.rennen.datum)) continue
         try {
-          const w = await holeRennwetter(strecke, r.datum, {
-            quali: zeiten?.quali,
-            rennstart: r.startzeit ?? zeiten?.rennstart,
+          const w = await holeRennwetter(streckenMap?.[a.rennen.streckeId], a.rennen.datum, {
+            quali: a.zeiten?.quali,
+            rennstart: a.rennen.startzeit ?? a.zeiten?.rennstart,
           })
-          if (w) ergebnis[r.runde] = w
+          if (w) ergebnis[a.schluessel] = w
         } catch { /* einzelner Ausfall soll den Rest nicht verhindern */ }
       }
       if (!abgebrochen) { setWetter(ergebnis); setLaedt(false) }
     }
     laden()
     return () => { abgebrochen = true }
-  }, [kommende, streckenMap, zeiten])
+  }, [kommende, naechstesJeSerie, streckenMap, zeiten])
 
   const naechstes = kommende[0]
   const naechstesWetter = naechstes ? wetter[naechstes.runde] : null
 
+  // Fuers Bild: nur Serien, zu denen es auch eine Vorhersage gibt.
+  const bildBloecke = naechstesJeSerie
+    .map(({ serie, rennen: r }) => ({
+      serienName: serie.name,
+      rennen: r,
+      strecke: streckenMap?.[r.streckeId],
+      wetter: wetter[serie.id + ':' + r.runde],
+      datumText: formatiereDatum(r.datum),
+    }))
+    .filter((b) => b.wetter)
+
   // Komplett synchron bis zum Klick auf den Link: jedes await dazwischen beendet
   // die Nutzergeste, und der Browser verwirft den Download ohne Meldung.
   const bildErzeugen = () => {
-    if (!naechstes || !naechstesWetter) return
+    if (bildBloecke.length === 0) return
     try {
-      zeichneWetterbild(canvasRef.current, {
-        strecke: streckenMap?.[naechstes.streckeId],
-        rennen: naechstes,
-        wetter: naechstesWetter,
-        seriesName,
-        sprache,
-        datumText: formatiereDatum(naechstes.datum),
-      })
+      zeichneWetterbild(canvasRef.current, { bloecke: bildBloecke, sprache })
       const blob = canvasAlsBlob(canvasRef.current)
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `aspl-wetter-${naechstes.streckeId}-${naechstes.datum}.png`
+      a.download = `aspl-wetter-${bildBloecke[0].rennen.datum}.png`
       // Der Link muss im Dokument haengen, sonst ignorieren ihn manche Browser.
       document.body.appendChild(a)
       a.click()
@@ -141,7 +170,7 @@ export default function Wetterbericht({ seriesName, rennen, streckenMap, zeiten,
                     </div>
                   )}
 
-                  {naechstesWetter && (
+                  {bildBloecke.length > 0 && (
                     <>
                       <button className="wetter-bild-knopf" onClick={bildErzeugen}>
                         {t('bildHerunterladen')}
