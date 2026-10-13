@@ -1,0 +1,357 @@
+{
+  "saisonId": "saison1",
+  "seriesId": "team",
+  "wertung": {
+    "quelle": "ASPL Liga-Tabelle",
+    "fahrer": {
+      "stand": "Endstand",
+      "stand_en": "Final standings",
+      "final": true,
+      "eintraege": [
+        {
+          "platz": 1,
+          "fahrer": "Ikevii_rulez",
+          "punkte": 108
+        },
+        {
+          "platz": 2,
+          "fahrer": "xZeRo98-",
+          "punkte": 102
+        },
+        {
+          "platz": 3,
+          "fahrer": "Djlowtom",
+          "punkte": 94
+        },
+        {
+          "platz": 4,
+          "fahrer": "KiNecTx_Tn",
+          "punkte": 73
+        },
+        {
+          "platz": 5,
+          "fahrer": "Caaaaapitaain",
+          "punkte": 45
+        },
+        {
+          "platz": 6,
+          "fahrer": "ToxicTommy22",
+          "punkte": 42
+        },
+        {
+          "platz": 7,
+          "fahrer": "WRL_Jerry",
+          "punkte": 41
+        },
+        {
+          "platz": 8,
+          "fahrer": "URF1 Megaapfel",
+          "punkte": 38
+        },
+        {
+          "platz": 9,
+          "fahrer": "LegenderyFox",
+          "punkte": 32
+        },
+        {
+          "platz": 10,
+          "fahrer": "Streapz_YT",
+          "punkte": 27
+        },
+        {
+          "platz": 11,
+          "fahrer": "Alex Fox",
+          "punkte": 23
+        },
+        {
+          "platz": 12,
+          "fahrer": "ds_darby",
+          "punkte": 21
+        },
+        {
+          "platz": 13,
+          "fahrer": "RSC_Algovic",
+          "punkte": 19
+        },
+        {
+          "platz": 14,
+          "fahrer": "GG wow",
+          "punkte": 17
+        },
+        {
+          "platz": 15,
+          "fahrer": "Blv_ckm",
+          "punkte": 16
+        },
+        {
+          "platz": 16,
+          "fahrer": "iPrime2Eu",
+          "punkte": 15
+        },
+        {
+          "platz": 17,
+          "fahrer": "Banni05",
+          "punkte": 15
+        },
+        {
+          "platz": 18,
+          "fahrer": "FaZe7Mio",
+          "punkte": 12
+        },
+        {
+          "platz": 19,
+          "fahrer": "F1tus2012",
+          "punkte": 10
+        },
+        {
+          "platz": 20,
+          "fahrer": "AlpineMigu",
+          "punkte": 8
+        },
+        {
+          "platz": 21,
+          "fahrer": "HighJoemax",
+          "punkte": 7
+        },
+        {
+          "platz": 22,
+          "fahrer": "Mustang",
+          "punkte": 6
+        },
+        {
+          "platz": 23,
+          "fahrer": "Haaseb",
+          "punkte": 4
+        },
+        {
+          "platz": 24,
+          "fahrer": "ValeRulez",
+          "punkte": 4
+        },
+        {
+          "platz": 25,
+          "fahrer": "Grello",
+          "punkte": 4
+        },
+        {
+          "platz": 26,
+          "fahrer": "GMSxPeiXo88",
+          "punkte": 4
+        },
+        {
+          "platz": 27,
+          "fahrer": "clemens1403",
+          "punkte": 2
+        },
+        {
+          "platz": 28,
+          "fahrer": "papa_fuego27",
+          "punkte": 2
+        },
+        {
+          "platz": 29,
+          "fahrer": "Rostergrenadier",
+          "punkte": 2
+        },
+        {
+          "platz": 30,
+          "fahrer": "Tobiobi92",
+          "punkte": 1
+        },
+        {
+          "platz": 31,
+          "fahrer": "iCrank",
+          "punkte": 1
+        },
+        {
+          "platz": 32,
+          "fahrer": "Robin LME",
+          "punkte": 1
+        },
+        {
+          "platz": 33,
+          "fahrer": "LMoser43",
+          "punkte": 0
+        },
+        {
+          "platz": 34,
+          "fahrer": "Vertroxo",
+          "punkte": 0
+        },
+        {
+          "platz": 35,
+          "fahrer": "AeS Chillo",
+          "punkte": 0
+        },
+        {
+          "platz": 36,
+          "fahrer": "J0Oeell_19",
+          "punkte": 0
+        },
+        {
+          "platz": 37,
+          "fahrer": "x_nexus_xx",
+          "punkte": 0
+        },
+        {
+          "platz": 38,
+          "fahrer": "Locke_NHM",
+          "punkte": 0
+        },
+        {
+          "platz": 39,
+          "fahrer": "Felix#9421",
+          "punkte": 0
+        },
+        {
+          "platz": 40,
+          "fahrer": "Kiripirma",
+          "punkte": 0
+        },
+        {
+          "platz": 41,
+          "fahrer": "domisf01",
+          "punkte": 0
+        },
+        {
+          "platz": 42,
+          "fahrer": "Tavelias993",
+          "punkte": 0
+        },
+        {
+          "platz": 43,
+          "fahrer": "Crackydechse",
+          "punkte": 0
+        },
+        {
+          "platz": 44,
+          "fahrer": "Lenn.kn",
+          "punkte": 0
+        },
+        {
+          "platz": 45,
+          "fahrer": "luke_Mei23",
+          "punkte": 0
+        },
+        {
+          "platz": 46,
+          "fahrer": "Simon29dez",
+          "punkte": 0
+        },
+        {
+          "platz": 47,
+          "fahrer": "Cala82",
+          "punkte": 0
+        },
+        {
+          "platz": 48,
+          "fahrer": "Survivalgamer_19",
+          "punkte": 0
+        }
+      ]
+    },
+    "teams": {
+      "stand": "Endstand",
+      "stand_en": "Final standings",
+      "final": true,
+      "eintraege": [
+        {
+          "platz": 1,
+          "team": "Chronos Motorsport",
+          "punkte": 216
+        },
+        {
+          "platz": 2,
+          "team": "Golden Dynasty Racing",
+          "punkte": 214
+        },
+        {
+          "platz": 3,
+          "team": "Silver Dynasty Racing",
+          "punkte": 119
+        },
+        {
+          "platz": 4,
+          "team": "Cosmos Motorsport",
+          "punkte": 53
+        },
+        {
+          "platz": 5,
+          "team": "Racing Team Langsam",
+          "punkte": 46
+        },
+        {
+          "platz": 6,
+          "team": "Shiggy Racing",
+          "punkte": 36
+        },
+        {
+          "platz": 7,
+          "team": "Prototyp Racing",
+          "punkte": 36
+        },
+        {
+          "platz": 8,
+          "team": "Carbon Dynasty",
+          "punkte": 32
+        },
+        {
+          "platz": 9,
+          "team": "Chronos Motorsport Academy",
+          "punkte": 32
+        },
+        {
+          "platz": 10,
+          "team": "Toxic Racing Team",
+          "punkte": 12
+        },
+        {
+          "platz": 11,
+          "team": "Cosmos Motorsport Academy",
+          "punkte": 4
+        },
+        {
+          "platz": 12,
+          "team": "LFA Kult Competition",
+          "punkte": 4
+        },
+        {
+          "platz": 13,
+          "team": "Toxic Racing Academy",
+          "punkte": 2
+        },
+        {
+          "platz": 14,
+          "team": "Development Team Langsam",
+          "punkte": 1
+        },
+        {
+          "platz": 15,
+          "team": "Toxic Psychos Racing",
+          "punkte": 0
+        },
+        {
+          "platz": 16,
+          "team": "Shiggy Racing Academy",
+          "punkte": 0
+        },
+        {
+          "platz": 17,
+          "team": "LuMo Racing",
+          "punkte": 0
+        },
+        {
+          "platz": 18,
+          "team": "Apex Predators Racing Team",
+          "punkte": 0
+        },
+        {
+          "platz": 19,
+          "team": "Winkler Racing",
+          "punkte": 0
+        }
+      ]
+    }
+  },
+  "strecken": {}
+}

@@ -1,0 +1,230 @@
+{
+  "saisonId": "saison1",
+  "seriesId": "solo",
+  "wertung": {
+    "quelle": "ASPL Liga-Tabelle",
+    "fahrer": {
+      "stand": "Endstand",
+      "stand_en": "Final standings",
+      "final": true,
+      "eintraege": [
+        {
+          "platz": 1,
+          "fahrer": "KiNecTx_Tn",
+          "punkte": 73
+        },
+        {
+          "platz": 2,
+          "fahrer": "URF1 Megaapfel",
+          "punkte": 70
+        },
+        {
+          "platz": 3,
+          "fahrer": "xZeRo98-",
+          "punkte": 68
+        },
+        {
+          "platz": 4,
+          "fahrer": "iPrime2Eu",
+          "punkte": 68
+        },
+        {
+          "platz": 5,
+          "fahrer": "Caaaaapitaain",
+          "punkte": 56
+        },
+        {
+          "platz": 6,
+          "fahrer": "Djlowtom",
+          "punkte": 52
+        },
+        {
+          "platz": 7,
+          "fahrer": "ToxicTommy22",
+          "punkte": 48
+        },
+        {
+          "platz": 8,
+          "fahrer": "Streapz",
+          "punkte": 38
+        },
+        {
+          "platz": 9,
+          "fahrer": "LegendaryFox420",
+          "punkte": 31
+        },
+        {
+          "platz": 10,
+          "fahrer": "ds_darby",
+          "punkte": 26
+        },
+        {
+          "platz": 11,
+          "fahrer": "Sneax",
+          "punkte": 24
+        },
+        {
+          "platz": 12,
+          "fahrer": "GG wow",
+          "punkte": 18
+        },
+        {
+          "platz": 13,
+          "fahrer": "Grello",
+          "punkte": 16
+        },
+        {
+          "platz": 14,
+          "fahrer": "WRL_Jerry",
+          "punkte": 15
+        },
+        {
+          "platz": 15,
+          "fahrer": "ValeRulez",
+          "punkte": 14
+        },
+        {
+          "platz": 16,
+          "fahrer": "Alex Fox",
+          "punkte": 12
+        },
+        {
+          "platz": 17,
+          "fahrer": "AeS Chillo",
+          "punkte": 11
+        },
+        {
+          "platz": 18,
+          "fahrer": "Xplex",
+          "punkte": 10
+        },
+        {
+          "platz": 19,
+          "fahrer": "vKovy-",
+          "punkte": 10
+        },
+        {
+          "platz": 20,
+          "fahrer": "AlpineMigu",
+          "punkte": 10
+        },
+        {
+          "platz": 21,
+          "fahrer": "Ikevii_rulez",
+          "punkte": 6
+        },
+        {
+          "platz": 22,
+          "fahrer": "Eat_My_R2",
+          "punkte": 6
+        },
+        {
+          "platz": 23,
+          "fahrer": "FaZe7Mio",
+          "punkte": 6
+        },
+        {
+          "platz": 24,
+          "fahrer": "El-Staschi7",
+          "punkte": 4
+        },
+        {
+          "platz": 25,
+          "fahrer": "LECLERC_16F",
+          "punkte": 4
+        },
+        {
+          "platz": 26,
+          "fahrer": "Kxntomzie",
+          "punkte": 4
+        },
+        {
+          "platz": 27,
+          "fahrer": "MattiGuRa",
+          "punkte": 4
+        },
+        {
+          "platz": 28,
+          "fahrer": "Banni05",
+          "punkte": 2
+        },
+        {
+          "platz": 29,
+          "fahrer": "LMoser43",
+          "punkte": 2
+        },
+        {
+          "platz": 30,
+          "fahrer": "MrNobody",
+          "punkte": 1
+        },
+        {
+          "platz": 31,
+          "fahrer": "Mike1109li",
+          "punkte": 1
+        },
+        {
+          "platz": 32,
+          "fahrer": "F1tus2012",
+          "punkte": 0
+        },
+        {
+          "platz": 33,
+          "fahrer": "J0Oeell_19",
+          "punkte": 0
+        },
+        {
+          "platz": 34,
+          "fahrer": "Locke_NHM",
+          "punkte": 0
+        },
+        {
+          "platz": 35,
+          "fahrer": "Felix#9421",
+          "punkte": 0
+        },
+        {
+          "platz": 36,
+          "fahrer": "domisf01",
+          "punkte": 0
+        },
+        {
+          "platz": 37,
+          "fahrer": "Crackydechse",
+          "punkte": 0
+        },
+        {
+          "platz": 38,
+          "fahrer": "Lenn.kn",
+          "punkte": 0
+        },
+        {
+          "platz": 39,
+          "fahrer": "luke_Mei23",
+          "punkte": 0
+        },
+        {
+          "platz": 40,
+          "fahrer": "Simon29dez",
+          "punkte": 0
+        },
+        {
+          "platz": 41,
+          "fahrer": "Cala82",
+          "punkte": 0
+        },
+        {
+          "platz": 42,
+          "fahrer": "Vertroxo",
+          "punkte": 0
+        },
+        {
+          "platz": 43,
+          "fahrer": "papa_fuego27",
+          "punkte": 0
+        }
+      ]
+    }
+  },
+  "strecken": {}
+}
