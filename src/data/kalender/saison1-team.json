@@ -1,0 +1,65 @@
+{
+  "saisonId": "saison1",
+  "saisonName": "Saison 1",
+  "seriesId": "team",
+  "seriesName": "Team-Series",
+  "sortierung": 2,
+  "comingSoon": false,
+  "hinweis": "Alle Rennen samstags — Quali 19:00",
+  "hinweis_en": "All races on Saturdays — quali 19:00",
+  "zeiten": {
+    "training": "18:30",
+    "quali": "19:00",
+    "rennstart": "19:20"
+  },
+  "eintraege": [
+    {
+      "typ": "rennen",
+      "runde": "R1",
+      "streckeId": "paulricard",
+      "datum": "2026-03-28"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R2",
+      "streckeId": "spa",
+      "datum": "2026-04-04"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R3",
+      "streckeId": "valencia",
+      "datum": "2026-04-11"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R4",
+      "streckeId": "silverstone",
+      "datum": "2026-04-18"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R5",
+      "streckeId": "suzuka",
+      "datum": "2026-04-25"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R6",
+      "streckeId": "kyalami",
+      "datum": "2026-05-02"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R7",
+      "streckeId": "watkinsglen",
+      "datum": "2026-05-09"
+    },
+    {
+      "typ": "rennen",
+      "runde": "R8",
+      "streckeId": "nordschleife",
+      "datum": "2026-05-16"
+    }
+  ]
+}
