@@ -457,5 +457,14 @@
         "nr": 16
       }
     ]
+  },
+  "driverOfTheDay": {
+    "R1": "Lukas Knips",
+    "R2": "Eric Sprott",
+    "R3": "T. Seefeldt",
+    "R5": "T. Hoffmann",
+    "R6": "Eric Sprott",
+    "R7": "Alex Fox",
+    "R8": "Alexander Friedl"
   }
 }

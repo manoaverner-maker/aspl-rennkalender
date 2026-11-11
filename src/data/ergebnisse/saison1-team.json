@@ -353,5 +353,9 @@
       ]
     }
   },
-  "strecken": {}
+  "strecken": {},
+  "driverOfTheDay": {
+    "R7": "Lukas Knips",
+    "R8": "Noel Pfeiffer"
+  }
 }

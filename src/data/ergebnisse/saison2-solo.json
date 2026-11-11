@@ -593,5 +593,15 @@
         "nr": 77
       }
     ]
+  },
+  "driverOfTheDay": {
+    "R1": "Lukas Knips",
+    "R2": "Noel Pfeiffer",
+    "R3": "Lukas Knips",
+    "R4": "Alex Fox",
+    "R5": "Yann Guillaume",
+    "R6": "Noel Pfeiffer",
+    "R7": "Mike Dohnt",
+    "R8": "E. Schneider"
   }
 }
