@@ -94,75 +94,115 @@ export default function WallOfChampions({ kalender, ergebnisse }) {
           <p className="woc-intro">{t('wocIntro')}</p>
         </section>
 
-        {/* Saisons: neueste zuerst */}
-        {wall.saisons.map((s) => (
-          <section key={s.id} className="woc-saison">
-            <h2 className="woc-saison-titel">{saison(s.name)}</h2>
+        {/* Saisons: neueste zuerst — jede Saison ein eigener Block */}
+        <h2 className="woc-kapitel">{t('wocKapitelSaisons')}</h2>
+        {wall.saisons.map((s) => {
+          const fertig = s.solo?.final && s.konstrukteur?.final
+          return (
+            <section key={s.id} className={'woc-block' + (fertig ? '' : ' offen')}>
+              <header className="woc-block-kopf">
+                <span className="woc-block-nr">S{s.id.replace(/\D+/g, '')}</span>
+                <div>
+                  <h3 className="woc-block-titel">{saison(s.name)}</h3>
+                  <p className="woc-block-status">{fertig ? t('wocAbgeschlossen') : t('wocLaeuft')}</p>
+                </div>
+              </header>
+              <div className="woc-raster">
+                <MeisterKarte
+                  label={t('wocKonstrukteur')}
+                  icon="🏁"
+                  meister={s.konstrukteur}
+                  offenText={t('wocLaeuft')}
+                />
+                <MeisterKarte
+                  label={t('wocSolo')}
+                  icon="👑"
+                  meister={s.solo}
+                  offenText={t('wocLaeuft')}
+                />
+              </div>
+            </section>
+          )
+        })}
+
+        {wall.endurance.map((e) => (
+          <section key={e.id} className={'woc-block' + (e.meister?.final ? '' : ' offen')}>
+            <header className="woc-block-kopf">
+              <span className="woc-block-nr">E</span>
+              <div>
+                <h3 className="woc-block-titel">
+                  Endurance{e.jahr ? ' ' + e.jahr : ''}
+                </h3>
+                <p className="woc-block-status">
+                  {e.meister?.final ? t('wocAbgeschlossen') : e.abgeschlossen ? t('wocFolgt') : t('wocLaeuft')}
+                </p>
+              </div>
+            </header>
             <div className="woc-raster">
               <MeisterKarte
-                label={t('wocKonstrukteur')}
-                icon="🏁"
-                meister={s.konstrukteur}
-                offenText={t('wocLaeuft')}
-              />
-              <MeisterKarte
-                label={t('wocSolo')}
-                icon="👑"
-                meister={s.solo}
-                offenText={t('wocLaeuft')}
+                label={t('wocEndurance')}
+                icon="⏱️"
+                meister={e.meister}
+                offenText={e.abgeschlossen ? t('wocFolgt') : t('wocLaeuft')}
               />
             </div>
           </section>
         ))}
 
-        {wall.endurance.length > 0 && (
-          <section className="woc-saison">
-            <h2 className="woc-saison-titel">Endurance</h2>
-            <div className="woc-raster">
-              {wall.endurance.map((e) => (
-                <MeisterKarte
-                  key={e.id}
-                  label={e.name + (e.jahr ? ' ' + e.jahr : '')}
-                  icon="⏱️"
-                  meister={e.meister}
-                  offenText={e.abgeschlossen ? t('wocFolgt') : t('wocLaeuft')}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Ewige Bestenliste */}
-        <section className="woc-saison">
-          <h2 className="woc-saison-titel">
-            {t('wocEwig').replace('{n}', wall.bestenliste.length)}
-          </h2>
-          <p className="woc-tabelle-info">
-            {t('wocEwigInfo').replace('{series}', seriesLabel)}
-          </p>
-          <ol className="woc-bestenliste">
-            {wall.bestenliste.map((f) => (
-              <li key={f.fahrer} className={f.rang <= 3 ? 'top-' + f.rang : ''}>
-                <span className="woc-rang">{f.rang}</span>
-                <span className="woc-fahrer">
-                  <span className="woc-fahrer-name">
-                    {f.fahrer}
-                    <TitelAbzeichen titel={f.titel} />
+        {/* All-Time: separat ganz unten */}
+        <h2 className="woc-kapitel">{t('wocKapitelAllTime')}</h2>
+        <div className="woc-alltime">
+          <section className="woc-block">
+            <h3 className="woc-block-titel">
+              {t('wocEwig').replace('{n}', wall.bestenliste.length)}
+            </h3>
+            <p className="woc-tabelle-info">
+              {t('wocEwigInfo').replace('{series}', seriesLabel)}
+            </p>
+            <ol className="woc-bestenliste">
+              {wall.bestenliste.map((f) => (
+                <li key={f.fahrer} className={f.rang <= 3 ? 'top-' + f.rang : ''}>
+                  <span className="woc-rang">{f.rang}</span>
+                  <span className="woc-fahrer">
+                    <span className="woc-fahrer-name">
+                      {f.fahrer}
+                      <TitelAbzeichen titel={f.titel} />
+                    </span>
+                    <small>
+                      {wall.series
+                        .filter((s) => f.proSeries[s])
+                        .map((s) => (s === 'solo' ? 'Solo' : s === 'team' ? 'Team' : 'Endurance') + ' ' + f.proSeries[s])
+                        .join(' · ')}
+                      {' · '}
+                      {f.saisons} {f.saisons === 1 ? t('wocSaison') : t('wocSaisons')}
+                    </small>
                   </span>
-                  <small>
-                    {wall.series
-                      .filter((s) => f.proSeries[s])
-                      .map((s) => (s === 'solo' ? 'Solo' : s === 'team' ? 'Team' : 'Endurance') + ' ' + f.proSeries[s])
-                      .join(' · ')}
-                    {' · '}
-                    {f.saisons} {f.saisons === 1 ? t('wocSaison') : t('wocSaisons')}
-                  </small>
-                </span>
-                <span className="woc-gesamt">{f.punkte}</span>
-              </li>
-            ))}
-          </ol>
-        </section>
+                  <span className="woc-gesamt">{f.punkte}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section className="woc-block woc-dotd">
+            <h3 className="woc-block-titel">{t('wocDotd')}</h3>
+            <p className="woc-tabelle-info">{t('wocDotdInfo')}</p>
+            {wall.driverOfTheDay.length === 0 ? (
+              <p className="woc-leer">{t('wocDotdLeer')}</p>
+            ) : (
+              <ol className="woc-bestenliste">
+                {wall.driverOfTheDay.map((f) => (
+                  <li key={f.fahrer} className={f.rang <= 3 ? 'top-' + f.rang : ''}>
+                    <span className="woc-rang">{['🥇', '🥈', '🥉'][f.rang - 1] ?? f.rang}</span>
+                    <span className="woc-fahrer">
+                      <span className="woc-fahrer-name">{f.fahrer}</span>
+                    </span>
+                    <span className="woc-gesamt">{f.anzahl}×</span>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
+        </div>
       </main>
 
       <footer className="fuss">

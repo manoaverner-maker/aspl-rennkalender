@@ -55,6 +55,9 @@ die Seite baut und aktualisiert sich selbst.
   optional `"fahrer": ["…"]` als Crew). In `src/data/champions.json` stehen
   Namens-Zuordnungen (Gamertag ↔ echter Name, alte ↔ neue Teamnamen) und welche
   Series in die ewige Bestenliste zählen.
+- **Driver of the Day**: in der jeweiligen Ergebnisdatei unter
+  `"driverOfTheDay": { "R1": "Name", "R2": "Name" }` eintragen (Endurance: `"E1"` …).
+  Die Top 3 auf der Wall of Champions zählen sich über alle Saisons und Series zusammen.
 - Der Status (GEFAHREN / AUSSTEHEND) wird automatisch aus dem Datum berechnet.
 
 ## Lokal entwickeln

@@ -2585,6 +2585,120 @@ a.pokal-button {
   font-size: 1.15rem;
 }
 
+/* Kapitel-Ueberschriften: Saisons oben, All-Time unten */
+.woc-kapitel {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 2.4rem 0 1rem;
+  font-family: var(--titel-font);
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--grau);
+}
+
+.woc-kapitel::before,
+.woc-kapitel::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--linie));
+}
+
+.woc-kapitel::after {
+  background: linear-gradient(90deg, var(--linie), transparent);
+}
+
+/* Ein Block pro Saison */
+.woc-block {
+  margin-bottom: 1rem;
+  padding: 1.1rem;
+  background: var(--anthrazit);
+  border: 1px solid var(--linie);
+  border-left: 3px solid var(--rot);
+  border-radius: var(--r-gross);
+}
+
+.woc-block.offen {
+  border-left-color: var(--linie);
+}
+
+.woc-block-kopf {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 0.9rem;
+}
+
+.woc-block-nr {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  flex: none;
+  border-radius: var(--r-klein);
+  background: var(--rot);
+  font-family: var(--titel-font);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.woc-block.offen .woc-block-nr {
+  background: var(--karte);
+  color: var(--grau);
+}
+
+.woc-block-titel {
+  margin: 0;
+  font-family: var(--titel-font);
+  font-size: 1.05rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.woc-block-status {
+  margin: 0.1rem 0 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grau);
+}
+
+.woc-alltime {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.woc-alltime .woc-block {
+  margin-bottom: 0;
+}
+
+.woc-alltime .woc-block-titel {
+  margin-bottom: 0.6rem;
+}
+
+@media (min-width: 860px) {
+  .woc-alltime {
+    grid-template-columns: 1.6fr 1fr;
+    align-items: start;
+  }
+}
+
+.woc-leer {
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  color: var(--grau);
+  background: var(--karte);
+  border-radius: var(--r-klein);
+}
+
+.woc-dotd .woc-rang {
+  font-size: 1.3rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .woc-hero-pokal,
   .woc-karte {

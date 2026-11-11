@@ -4,6 +4,9 @@
     "anzahl": 10,
     "series": ["solo", "team"]
   },
+  "driverOfTheDay": {
+    "anzahl": 3
+  },
   "fahrerAlias": {
     "Manoa Verner": ["Djlowtom"],
     "Streapz": ["Streapz_YT"],

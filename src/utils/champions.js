@@ -133,5 +133,31 @@ export function berechneWall({ kalender, ergebnisse, config }) {
     return { ...f, rang, saisons: f.saisons.size, titel: titel.get(f.fahrer) ?? null }
   })
 
-  return { saisons, endurance, bestenliste, series, teamTitel, titel, fahrerName, teamName }
+  // --- Driver of the Day: pro Ergebnisdatei "driverOfTheDay": { "R1": "Name", ... } ---
+  // Zaehlt ueber alle Saisons und Series (inkl. Endurance), Gleichstand = gleicher Rang.
+  const dotdAnzahl = config?.driverOfTheDay?.anzahl ?? 3
+  const dotdMap = new Map()
+  let dotdRennen = 0
+  for (const erg of ergebnisse) {
+    for (const name of Object.values(erg.driverOfTheDay ?? {})) {
+      if (!name) continue
+      const n = fahrerName(name)
+      dotdMap.set(n, (dotdMap.get(n) ?? 0) + 1)
+      dotdRennen += 1
+    }
+  }
+  const dotdSortiert = [...dotdMap.entries()]
+    .map(([fahrer, anzahl]) => ({ fahrer, anzahl }))
+    .sort((a, b) => b.anzahl - a.anzahl || a.fahrer.localeCompare(b.fahrer))
+  // Alle mit gleicher Anzahl wie der letzte Platz der Top-N bleiben drin
+  const grenze = dotdSortiert[dotdAnzahl - 1]?.anzahl
+  let dRang = 0
+  const driverOfTheDay = dotdSortiert
+    .filter((f, i) => i < dotdAnzahl || f.anzahl === grenze)
+    .map((f, i, arr) => {
+      if (i === 0 || f.anzahl !== arr[i - 1].anzahl) dRang = i + 1
+      return { ...f, rang: dRang }
+    })
+
+  return { saisons, endurance, bestenliste, driverOfTheDay, dotdRennen, series, teamTitel, titel, fahrerName, teamName }
 }
