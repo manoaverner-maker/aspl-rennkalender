@@ -47,6 +47,14 @@ die Seite baut und aktualisiert sich selbst.
   Team-Series den Teammeister, sonst den Fahrer-Champion. Damit der Klick auf einen
   Fahrer seinen Saisonverlauf zeigt, muss der Name genauso geschrieben sein wie in
   den Rennergebnissen.
+- **Wall of Champions** (`#/champions`, 👑 im Kopf): rechnet sich komplett aus den
+  Ergebnis-Dateien. Nach jeder Saison nur die Endstände mit `"final": true` eintragen —
+  Konstrukteursmeister (Team-Series), Fahrer-Champion (Solo-Series) und die ewige
+  Top 10 aktualisieren sich von selbst. Endurance-Ergebnisse kommen nach
+  `src/data/ergebnisse/endurance.json` (ohne `saisonId`, Wertung unter `teams`,
+  optional `"fahrer": ["…"]` als Crew). In `src/data/champions.json` stehen
+  Namens-Zuordnungen (Gamertag ↔ echter Name, alte ↔ neue Teamnamen) und welche
+  Series in die ewige Bestenliste zählen.
 - Der Status (GEFAHREN / AUSSTEHEND) wird automatisch aus dem Datum berechnet.
 
 ## Lokal entwickeln

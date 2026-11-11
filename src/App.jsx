@@ -8,6 +8,7 @@ import Bildnachweise from './komponenten/Bildnachweise.jsx'
 import Leaderboard from './komponenten/Leaderboard.jsx'
 import Wetterbericht from './komponenten/Wetterbericht.jsx'
 import BesucherZaehler from './komponenten/BesucherZaehler.jsx'
+import WallOfChampions from './komponenten/WallOfChampions.jsx'
 import streckenDaten from './data/strecken.json'
 import { annotiereEintraege } from './utils/status.js'
 import { SIMGRID_URL } from './utils/links.js'
@@ -43,9 +44,11 @@ const alleErgebnisse = Object.values(ergebnisModule).map((m) => m.default)
 // Strecken-Stammdaten als Map fuer schnellen Zugriff per ID
 const streckenMap = Object.fromEntries(streckenDaten.map((s) => [s.id, s]))
 
-// Einfache Hash-Route: '#/bildnachweise' zeigt die Nachweise-Seite
+// Einfache Hash-Routen: '#/bildnachweise' und '#/champions' (Wall of Champions)
 function aktuelleRoute() {
-  return window.location.hash === '#/bildnachweise' ? 'bildnachweise' : 'kalender'
+  if (window.location.hash === '#/bildnachweise') return 'bildnachweise'
+  if (window.location.hash === '#/champions') return 'champions'
+  return 'kalender'
 }
 
 export default function App() {
@@ -231,6 +234,9 @@ export default function App() {
   if (route === 'bildnachweise') {
     return <Bildnachweise />
   }
+  if (route === 'champions') {
+    return <WallOfChampions kalender={alleKalender} ergebnisse={alleErgebnisse} />
+  }
 
   return (
     <div className="app">
@@ -278,6 +284,14 @@ export default function App() {
           >
             🏆
           </button>
+          <a
+            className="pokal-button"
+            href="#/champions"
+            aria-label={t('wocAria')}
+            title="Wall of Champions"
+          >
+            👑
+          </a>
           <button
             className="pokal-button"
             aria-label={t('wetterberichtAria')}
