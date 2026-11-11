@@ -10,6 +10,9 @@
   "driverOfTheDay": {
     "anzahl": 3
   },
+  "ausblenden": [
+    "WRL_Jerry"
+  ],
   "fahrerAlias": {
     "Eric Sprott": [
       "KiNecTx_Tn"
@@ -17,10 +20,27 @@
     "Manoa Verner": [
       "Djlowtom"
     ],
-    "Streapz": [
+    "Lukas Knips": [
+      "xZeRo98-"
+    ],
+    "Alexander Friedl": [
+      "URF1 Megaapfel"
+    ],
+    "Yann Guillaume": [
+      "Caaaaapitaain"
+    ],
+    "Leon Nierhaus": [
+      "iPrime2Eu"
+    ],
+    "Noel Pfeiffer": [
+      "Streapz",
       "Streapz_YT"
     ],
-    "LegendaryFox420": [
+    "David Suess": [
+      "ds_darby"
+    ],
+    "L. Fox": [
+      "LegendaryFox420",
       "LegenderyFox"
     ],
     "Finn Hübner": [

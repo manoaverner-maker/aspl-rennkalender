@@ -125,7 +125,9 @@ export function berechneWall({ kalender, ergebnisse, config }) {
       summe.set(n, f)
     }
   }
-  const sortiert = [...summe.values()].sort((a, b) => b.punkte - a.punkte || a.fahrer.localeCompare(b.fahrer))
+  // Fahrer, die nicht mehr in der Liga fahren, werden ausgeblendet (champions.json)
+  const ausblenden = new Set((config?.ausblenden ?? []).map(fahrerName))
+  const sortiert = [...summe.values()].filter((f) => !ausblenden.has(f.fahrer)).sort((a, b) => b.punkte - a.punkte || a.fahrer.localeCompare(b.fahrer))
   // Gleiche Punkte = gleicher Rang
   let rang = 0
   const bestenliste = sortiert.slice(0, anzahl).map((f, i) => {
@@ -142,6 +144,7 @@ export function berechneWall({ kalender, ergebnisse, config }) {
     for (const name of Object.values(erg.driverOfTheDay ?? {})) {
       if (!name) continue
       const n = fahrerName(name)
+      if (ausblenden.has(n)) continue
       dotdMap.set(n, (dotdMap.get(n) ?? 0) + 1)
       dotdRennen += 1
     }
