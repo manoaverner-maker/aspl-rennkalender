@@ -2,24 +2,52 @@
   "_hinweis": "Steuerdatei der Wall of Champions. Die Meister selbst kommen automatisch aus src/data/ergebnisse/ (Tabellen mit final: true). Hier stehen nur Namens-Zuordnungen und Einstellungen.",
   "ewigeTabelle": {
     "anzahl": 10,
-    "series": ["solo", "team"]
+    "series": [
+      "solo",
+      "team"
+    ]
   },
   "driverOfTheDay": {
     "anzahl": 3
   },
   "fahrerAlias": {
-    "Manoa Verner": ["Djlowtom"],
-    "Streapz": ["Streapz_YT"],
-    "LegendaryFox420": ["LegenderyFox"],
-    "Finn Hübner": ["F. Hübner"]
+    "Eric Sprott": [
+      "KiNecTx_Tn"
+    ],
+    "Manoa Verner": [
+      "Djlowtom"
+    ],
+    "Streapz": [
+      "Streapz_YT"
+    ],
+    "LegendaryFox420": [
+      "LegenderyFox"
+    ],
+    "Finn Hübner": [
+      "F. Hübner"
+    ]
   },
   "teamAlias": {
-    "Golden Dynasty Racing": ["Golden Dynasty"],
-    "Silver Dynasty Racing": ["Silver Dynasty"],
-    "Toxic Racing Team": ["Toxic Racing"],
-    "Toxic Racing Academy": ["Toxic Academy"],
-    "Toxic Psychos Racing": ["Toxic Psychos"],
-    "Chronos Motorsport Academy": ["Chronos Academy"],
-    "Development Team Langsam": ["Development Langsam"]
+    "Golden Dynasty Racing": [
+      "Golden Dynasty"
+    ],
+    "Silver Dynasty Racing": [
+      "Silver Dynasty"
+    ],
+    "Toxic Racing Team": [
+      "Toxic Racing"
+    ],
+    "Toxic Racing Academy": [
+      "Toxic Academy"
+    ],
+    "Toxic Psychos Racing": [
+      "Toxic Psychos"
+    ],
+    "Chronos Motorsport Academy": [
+      "Chronos Academy"
+    ],
+    "Development Team Langsam": [
+      "Development Langsam"
+    ]
   }
 }
