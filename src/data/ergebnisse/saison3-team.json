@@ -1,6 +1,101 @@
 {
   "saisonId": "saison3",
   "seriesId": "team",
+  "wertung": {
+    "quelle": "ASPL Liga-Tabelle",
+    "teams": {
+      "stand": "Endstand",
+      "stand_en": "Final standings",
+      "final": true,
+      "eintraege": [
+        {
+          "platz": 1,
+          "team": "Golden Dynasty Racing",
+          "punkte": 263
+        },
+        {
+          "platz": 2,
+          "team": "DSMW Tech-no Train",
+          "punkte": 168
+        },
+        {
+          "platz": 3,
+          "team": "Carbon Dynasty Racing",
+          "punkte": 120
+        },
+        {
+          "platz": 4,
+          "team": "DS Motorwerk Performance",
+          "punkte": 108
+        },
+        {
+          "platz": 5,
+          "team": "Chronos Motorsport",
+          "punkte": 105
+        },
+        {
+          "platz": 6,
+          "team": "Gridline GT",
+          "punkte": 89
+        },
+        {
+          "platz": 7,
+          "team": "Silver Dynasty Racing",
+          "punkte": 47
+        },
+        {
+          "platz": 8,
+          "team": "Long Run Engeenering",
+          "punkte": 27
+        },
+        {
+          "platz": 9,
+          "team": "Long Run Oldies",
+          "punkte": 26
+        },
+        {
+          "platz": 10,
+          "team": "DSMW LFA Line",
+          "punkte": 25
+        },
+        {
+          "platz": 11,
+          "team": "MSC Burgring",
+          "punkte": 21
+        },
+        {
+          "platz": 12,
+          "team": "Cosmos Motorsport",
+          "punkte": 21
+        },
+        {
+          "platz": 13,
+          "team": "Chronos Omega Racing",
+          "punkte": 16
+        },
+        {
+          "platz": 14,
+          "team": "ReController Racing by LRE",
+          "punkte": 10
+        },
+        {
+          "platz": 15,
+          "team": "Cosmos Future",
+          "punkte": 8
+        },
+        {
+          "platz": 16,
+          "team": "Toxic Racing Academy",
+          "punkte": 6
+        },
+        {
+          "platz": 17,
+          "team": "Shadow Racing",
+          "punkte": 6
+        }
+      ]
+    }
+  },
   "strecken": {},
   "driverOfTheDay": {
     "R1": "Lennard Petrov",
