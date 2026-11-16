@@ -1,6 +1,231 @@
 {
   "saisonId": "saison3",
   "seriesId": "solo",
+  "wertung": {
+    "quelle": "SimGrid",
+    "fahrer": {
+      "stand": "Endstand",
+      "stand_en": "Final standings",
+      "final": true,
+      "eintraege": [
+        {
+          "platz": 1,
+          "fahrer": "Eric Sprott",
+          "punkte": 185
+        },
+        {
+          "platz": 2,
+          "fahrer": "Leon Nierhaus",
+          "punkte": 77
+        },
+        {
+          "platz": 3,
+          "fahrer": "Pascal Radatz",
+          "punkte": 74
+        },
+        {
+          "platz": 4,
+          "fahrer": "Alex Fox",
+          "punkte": 72
+        },
+        {
+          "platz": 5,
+          "fahrer": "Manoa Verner",
+          "punkte": 60
+        },
+        {
+          "platz": 6,
+          "fahrer": "Matthias Drissen",
+          "punkte": 53
+        },
+        {
+          "platz": 7,
+          "fahrer": "Finn Hübner",
+          "punkte": 52
+        },
+        {
+          "platz": 8,
+          "fahrer": "Lukas Knips",
+          "punkte": 49
+        },
+        {
+          "platz": 9,
+          "fahrer": "Lennard Petrov",
+          "punkte": 47
+        },
+        {
+          "platz": 10,
+          "fahrer": "Zovyx Fox",
+          "punkte": 45
+        },
+        {
+          "platz": 11,
+          "fahrer": "Taha Markoc",
+          "punkte": 41
+        },
+        {
+          "platz": 12,
+          "fahrer": "David Suess",
+          "punkte": 39
+        },
+        {
+          "platz": 13,
+          "fahrer": "Luca Wehldreyer",
+          "punkte": 38
+        },
+        {
+          "platz": 14,
+          "fahrer": "Ronny Schimke",
+          "punkte": 33
+        },
+        {
+          "platz": 15,
+          "fahrer": "Kevin Böhm",
+          "punkte": 28
+        },
+        {
+          "platz": 16,
+          "fahrer": "Tobias Hoffmann",
+          "punkte": 27
+        },
+        {
+          "platz": 17,
+          "fahrer": "Dominic Winterhalder",
+          "punkte": 27
+        },
+        {
+          "platz": 18,
+          "fahrer": "Tom Seefeldt",
+          "punkte": 25
+        },
+        {
+          "platz": 19,
+          "fahrer": "Alexander Friedl",
+          "punkte": 23
+        },
+        {
+          "platz": 20,
+          "fahrer": "Daniel Schalt",
+          "punkte": 20
+        },
+        {
+          "platz": 21,
+          "fahrer": "Tom Engemann",
+          "punkte": 18
+        },
+        {
+          "platz": 22,
+          "fahrer": "Lukas Moser",
+          "punkte": 14
+        },
+        {
+          "platz": 23,
+          "fahrer": "Elias Schneider",
+          "punkte": 13
+        },
+        {
+          "platz": 24,
+          "fahrer": "Pascal-Joel Bromberger",
+          "punkte": 13
+        },
+        {
+          "platz": 25,
+          "fahrer": "Alexander Rehm",
+          "punkte": 12
+        },
+        {
+          "platz": 26,
+          "fahrer": "Valentino Böhm",
+          "punkte": 12
+        },
+        {
+          "platz": 27,
+          "fahrer": "Tim Lüthke",
+          "punkte": 12
+        },
+        {
+          "platz": 28,
+          "fahrer": "Noel Pfeiffer",
+          "punkte": 11
+        },
+        {
+          "platz": 29,
+          "fahrer": "Furkan Arıman",
+          "punkte": 10
+        },
+        {
+          "platz": 30,
+          "fahrer": "Richard Döhring",
+          "punkte": 10
+        },
+        {
+          "platz": 31,
+          "fahrer": "F. Ferrix73",
+          "punkte": 10
+        },
+        {
+          "platz": 32,
+          "fahrer": "Yannik Duerr",
+          "punkte": 9
+        },
+        {
+          "platz": 33,
+          "fahrer": "F. Schäfer",
+          "punkte": 8
+        },
+        {
+          "platz": 34,
+          "fahrer": "Marco Maurer",
+          "punkte": 7
+        },
+        {
+          "platz": 35,
+          "fahrer": "Erik Schneider",
+          "punkte": 7
+        },
+        {
+          "platz": 36,
+          "fahrer": "Lavdim Pelaj",
+          "punkte": 4
+        },
+        {
+          "platz": 37,
+          "fahrer": "Kevin Sintke",
+          "punkte": 3
+        },
+        {
+          "platz": 38,
+          "fahrer": "Felix Pecaver",
+          "punkte": 3
+        },
+        {
+          "platz": 39,
+          "fahrer": "Michael Wessel",
+          "punkte": 3
+        },
+        {
+          "platz": 40,
+          "fahrer": "Freezy590 [Weedstar]",
+          "punkte": 1
+        },
+        {
+          "platz": 41,
+          "fahrer": "Sebastian Ernst",
+          "punkte": 1
+        },
+        {
+          "platz": 42,
+          "fahrer": "Junko Chest",
+          "punkte": 1
+        },
+        {
+          "platz": 43,
+          "fahrer": "Mike Liebisch",
+          "punkte": 1
+        }
+      ]
+    }
+  },
   "strecken": {},
   "driverOfTheDay": {
     "R1": "Noel Pfeiffer",
