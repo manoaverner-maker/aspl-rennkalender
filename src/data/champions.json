@@ -95,6 +95,9 @@
     ],
     "Eitan Uchuev": [
       "E. Uchuev"
+    ],
+    "Kevin Böhm": [
+      "Ikevii_rulez"
     ]
   },
   "teamAlias": {
@@ -119,5 +122,16 @@
     "Development Team Langsam": [
       "Development Langsam"
     ]
+  },
+  "bilder": {
+    "_hinweis": "Pfade relativ zu public/. Eigene ACC-Screenshots z. B. nach public/images/champions/ legen und hier eintragen.",
+    "hero": "images/strecken/spa/spa_5.jpg",
+    "rekorde": "images/strecken/redbullring/redbullring_2.jpg",
+    "saisons": {
+      "saison1": "images/strecken/zolder/zolder_4.jpg",
+      "saison2": "images/strecken/watkinsglen/watkinsglen_4.jpg",
+      "saison3": "images/strecken/donington/donington_5.jpg"
+    },
+    "standard": "images/strecken/snetterton/snetterton_3.jpg"
   }
 }

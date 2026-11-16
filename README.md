@@ -54,7 +54,9 @@ die Seite baut und aktualisiert sich selbst.
   `src/data/ergebnisse/endurance.json` (ohne `saisonId`, Wertung unter `teams`,
   optional `"fahrer": ["…"]` als Crew). In `src/data/champions.json` stehen
   Namens-Zuordnungen (Gamertag ↔ echter Name, alte ↔ neue Teamnamen) und welche
-  Series in die ewige Bestenliste zählen.
+  Series in die ewige Bestenliste zählen. Unter `bilder` stehen die Fotos des Posters
+  (Kopfbanner, je Saison, Rekorde) — eigene ACC-Screenshots einfach nach
+  `public/images/champions/` legen und dort eintragen.
 - **Driver of the Day**: in der jeweiligen Ergebnisdatei unter
   `"driverOfTheDay": { "R1": "Name", "R2": "Name" }` eintragen (Endurance: `"E1"` …).
   Die Top 3 auf der Wall of Champions zählen sich über alle Saisons und Series zusammen.

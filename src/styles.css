@@ -2382,7 +2382,7 @@ a {
   }
 }
 
-/* ===== Wall of Champions (#/champions) ===== */
+/* ===== Wall of Champions (#/champions) — Poster-Stil ===== */
 /* Der Kopf-Knopf ist ein Link: gleiche Optik wie die Pokal-Knoepfe */
 a.pokal-button {
   display: inline-flex;
@@ -2395,154 +2395,303 @@ a.pokal-button {
   margin-left: 0;
 }
 
+/* Carbon-Optik als Hintergrund statt leerer Flaeche */
+.woc-app {
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(225, 6, 0, 0.18), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 6px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.35) 0 2px, transparent 2px 6px),
+    var(--schwarz);
+}
+
 .woc {
   flex: 1;
   width: 100%;
-  max-width: 980px;
+  padding: 1.4rem 1.2rem 2rem;
+}
+
+.woc-poster {
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 1.6rem 1.2rem 3rem;
+  border: 1px solid var(--linie);
+  border-radius: var(--r-gross);
+  overflow: hidden;
+  background: rgba(10, 10, 12, 0.85);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
 }
 
+/* --- Kopfbanner --- */
 .woc-hero {
-  text-align: center;
-  padding: 1.4rem 0 0.6rem;
+  position: relative;
+  min-height: 230px;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.6rem 2rem;
+  background:
+    linear-gradient(90deg, rgba(10, 10, 12, 0.95) 0%, rgba(10, 10, 12, 0.7) 45%, rgba(10, 10, 12, 0.15) 100%),
+    linear-gradient(0deg, rgba(10, 10, 12, 0.9), transparent 55%),
+    var(--bild) center 40% / cover no-repeat;
 }
 
-.woc-hero-pokal {
-  font-size: 3rem;
-  line-height: 1;
-  animation: championPokal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+.woc-hero-inhalt {
+  position: relative;
+  z-index: 1;
 }
 
-.woc-titel {
-  margin: 0.6rem 0 0.3rem;
+.woc-hero-kicker {
+  margin: 0;
   font-family: var(--titel-font);
-  font-size: clamp(1.6rem, 5vw, 2.6rem);
-  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  background: linear-gradient(90deg, #f3d77a, #d4af37 50%, #a8842a);
+  color: var(--rot);
+}
+
+.woc-hero-titel {
+  margin: 0.2rem 0 0.25rem;
+  font-family: var(--titel-font);
+  font-weight: 900;
+  font-style: italic;
+  font-size: clamp(2rem, 5.4vw, 3.8rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--weiss);
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
+}
+
+.woc-hero-titel span {
+  background: linear-gradient(90deg, #f6dc84, #d4af37 55%, #a8842a);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-.woc-intro {
-  margin: 0 auto;
-  max-width: 560px;
-  color: var(--grau);
+.woc-hero-sub {
+  margin: 0;
+  color: #d8d8de;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
-.woc-saison {
-  margin-top: 2rem;
+/* Rot-weisse Rennstreifen schraeg rechts */
+.woc-hero-streifen {
+  position: absolute;
+  right: -40px;
+  top: 0;
+  bottom: 0;
+  width: 220px;
+  background: repeating-linear-gradient(
+    115deg,
+    transparent 0 26px,
+    var(--rot) 26px 40px,
+    transparent 40px 52px,
+    rgba(255, 255, 255, 0.9) 52px 58px,
+    transparent 58px 90px
+  );
+  opacity: 0.85;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 40%);
+  mask-image: linear-gradient(90deg, transparent, #000 40%);
 }
 
-.woc-saison-titel {
-  font-family: var(--titel-font);
-  font-size: 1.05rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--rot);
-  border-bottom: 1px solid var(--linie);
-  padding-bottom: 0.35rem;
-  margin: 0 0 0.9rem;
-}
-
-.woc-raster {
+/* --- Saisons als Zeitstrahl --- */
+.woc-saisons {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 0.9rem;
+  gap: 1rem;
+  padding: 1.2rem 1.4rem;
+  border-top: 3px solid var(--rot);
 }
 
-.woc-karte {
-  position: relative;
+.woc-saison-karte {
   overflow: hidden;
-  padding: 1rem 1.1rem;
-  border: 1px solid rgba(212, 175, 55, 0.45);
+  border: 1px solid rgba(212, 175, 55, 0.35);
   border-radius: var(--r-mittel);
-  background:
-    linear-gradient(120deg, rgba(212, 175, 55, 0.16), rgba(212, 175, 55, 0.03) 55%),
-    var(--karte);
+  background: var(--karte);
   animation: championRein 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.woc-karte.offen {
-  border-color: var(--linie);
-  background: var(--karte);
+.woc-saison-bild {
+  position: relative;
+  height: 140px;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.6rem;
+  padding: 0.7rem 0.9rem;
+  background:
+    linear-gradient(0deg, rgba(27, 27, 33, 1) 0%, rgba(27, 27, 33, 0.15) 75%),
+    var(--bild) center 58% / cover no-repeat;
 }
 
-.woc-label {
+.woc-saison-nr {
+  display: grid;
+  place-items: center;
+  width: 2.7rem;
+  height: 2.7rem;
+  border-radius: var(--r-klein);
+  background: var(--rot);
+  font-family: var(--titel-font);
+  font-weight: 900;
+  font-style: italic;
+  font-size: 1.05rem;
+  box-shadow: 0 4px 14px rgba(225, 6, 0, 0.45);
+}
+
+.woc-saison-name {
+  font-family: var(--titel-font);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.woc-saison-titel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.3rem 0.9rem 0.8rem;
+}
+
+.woc-titel-zeile {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0;
+}
+
+.woc-titel-zeile + .woc-titel-zeile {
+  border-top: 1px solid var(--linie);
+}
+
+.woc-titel-icon {
+  font-size: 1.25rem;
+  flex: none;
+}
+
+.woc-titel-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.woc-titel-label {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #d4af37;
 }
 
-.woc-karte.offen .woc-label {
-  color: var(--grau);
-}
-
-.woc-name {
-  margin: 0.25rem 0 0;
+.woc-titel-name {
+  margin: 0;
   font-family: var(--titel-font);
-  font-size: 1.35rem;
   font-weight: 700;
-  line-height: 1.15;
+  font-size: 1.08rem;
+  line-height: 1.2;
   word-break: break-word;
 }
 
-.woc-name-offen {
-  color: var(--grau);
-  font-size: 1.05rem;
+.woc-titel-punkte {
+  margin: 0;
+  text-align: right;
+  line-height: 1;
 }
 
-.woc-punkte,
-.woc-zusatz {
-  margin: 0.3rem 0 0;
-  font-size: 0.88rem;
-  color: var(--grau);
-}
-
-.woc-punkte strong {
+.woc-titel-punkte strong {
+  display: block;
+  font-family: var(--titel-font);
+  font-size: 1.15rem;
   color: #d4af37;
 }
 
-.woc-tabelle-info {
-  margin: -0.4rem 0 0.8rem;
-  font-size: 0.88rem;
+.woc-titel-punkte small {
+  color: var(--grau);
+  font-size: 0.7rem;
+}
+
+/* --- All-Time-Rekorde --- */
+.woc-rekorde {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 1.2rem 1.4rem 1.4rem;
+  background:
+    linear-gradient(rgba(10, 10, 12, 0.9), rgba(10, 10, 12, 0.94)),
+    var(--bild) center / cover no-repeat;
+  border-top: 1px solid var(--linie);
+}
+
+@media (min-width: 900px) {
+  .woc-rekorde {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.woc-rekord-block {
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--linie);
+  border-left: 3px solid var(--rot);
+  border-radius: var(--r-mittel);
+  background: rgba(19, 19, 23, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.woc-rekord-titel {
+  margin: 0;
+  font-family: var(--titel-font);
+  font-style: italic;
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.woc-rekord-info {
+  margin: 0.15rem 0 0.8rem;
+  font-size: 0.82rem;
   color: var(--grau);
 }
 
-.woc-bestenliste {
+.woc-top10-spalten {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .woc-top10-spalten {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.woc-liste {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.4rem;
 }
 
-.woc-bestenliste li {
+.woc-liste li {
   display: flex;
   align-items: center;
-  gap: 0.9rem;
-  padding: 0.6rem 0.9rem;
-  background: var(--karte);
-  border: 1px solid var(--linie);
+  gap: 0.7rem;
+  padding: 0.45rem 0.75rem;
   border-radius: var(--r-klein);
+  background: var(--karte);
+  border: 1px solid transparent;
 }
 
-.woc-bestenliste li.top-1 { border-color: rgba(212, 175, 55, 0.6); }
-.woc-bestenliste li.top-2 { border-color: rgba(192, 192, 200, 0.45); }
-.woc-bestenliste li.top-3 { border-color: rgba(205, 127, 50, 0.5); }
+.woc-liste li.top-1 { border-color: rgba(212, 175, 55, 0.65); background: linear-gradient(90deg, rgba(212, 175, 55, 0.16), var(--karte) 70%); }
+.woc-liste li.top-2 { border-color: rgba(192, 192, 200, 0.45); }
+.woc-liste li.top-3 { border-color: rgba(205, 127, 50, 0.5); }
 
 .woc-rang {
-  width: 2rem;
+  width: 1.7rem;
   flex: none;
   text-align: center;
   font-family: var(--titel-font);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-style: italic;
   color: var(--grau);
 }
 
@@ -2553,137 +2702,26 @@ a.pokal-button {
 .woc-fahrer {
   flex: 1;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.woc-fahrer-name {
   font-weight: 700;
-  font-size: 1.05rem;
-  word-break: break-word;
-}
-
-.woc-fahrer small {
-  color: var(--grau);
-  font-size: 0.8rem;
-}
-
-.woc-abzeichen {
-  margin-left: 0.5rem;
-  padding: 0.05rem 0.45rem;
-  border-radius: var(--r-pille);
-  background: rgba(212, 175, 55, 0.14);
-  color: #d4af37;
-  font-size: 0.72rem;
-  font-weight: 600;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.woc-gesamt {
+.woc-krone {
+  margin-left: 0.4rem;
+  font-size: 0.78rem;
+  color: #d4af37;
+}
+
+.woc-wert {
   font-family: var(--titel-font);
   font-weight: 700;
-  font-size: 1.15rem;
 }
 
-/* Kapitel-Ueberschriften: Saisons oben, All-Time unten */
-.woc-kapitel {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin: 2.4rem 0 1rem;
-  font-family: var(--titel-font);
-  font-size: 0.85rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--grau);
-}
-
-.woc-kapitel::before,
-.woc-kapitel::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--linie));
-}
-
-.woc-kapitel::after {
-  background: linear-gradient(90deg, var(--linie), transparent);
-}
-
-/* Ein Block pro Saison */
-.woc-block {
-  margin-bottom: 1rem;
-  padding: 1.1rem;
-  background: var(--anthrazit);
-  border: 1px solid var(--linie);
-  border-left: 3px solid var(--rot);
-  border-radius: var(--r-gross);
-}
-
-.woc-block.offen {
-  border-left-color: var(--linie);
-}
-
-.woc-block-kopf {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  margin-bottom: 0.9rem;
-}
-
-.woc-block-nr {
-  display: grid;
-  place-items: center;
-  width: 3rem;
-  height: 3rem;
-  flex: none;
-  border-radius: var(--r-klein);
-  background: var(--rot);
-  font-family: var(--titel-font);
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.woc-block.offen .woc-block-nr {
-  background: var(--karte);
-  color: var(--grau);
-}
-
-.woc-block-titel {
-  margin: 0;
-  font-family: var(--titel-font);
-  font-size: 1.05rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-.woc-block-status {
-  margin: 0.1rem 0 0;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--grau);
-}
-
-.woc-alltime {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-.woc-alltime .woc-block {
-  margin-bottom: 0;
-}
-
-.woc-alltime .woc-block-titel {
-  margin-bottom: 0.6rem;
-}
-
-@media (min-width: 860px) {
-  .woc-alltime {
-    grid-template-columns: 1.6fr 1fr;
-    align-items: start;
-  }
+.woc-dotd .woc-rang {
+  font-size: 1.2rem;
+  font-style: normal;
 }
 
 .woc-leer {
@@ -2695,13 +2733,27 @@ a.pokal-button {
   border-radius: var(--r-klein);
 }
 
-.woc-dotd .woc-rang {
-  font-size: 1.3rem;
+.woc-fotos {
+  margin: 0;
+  padding: 0.5rem 1.4rem 0.9rem;
+  font-size: 0.75rem;
+  color: var(--grau);
+  text-align: right;
+}
+
+.woc-fotos a {
+  color: var(--grau);
+}
+
+@media (max-width: 640px) {
+  .woc { padding: 0.8rem 0.6rem 1.4rem; }
+  .woc-hero { min-height: 190px; padding: 1.2rem 1.1rem; }
+  .woc-hero-streifen { width: 120px; }
+  .woc-saisons, .woc-rekorde { padding: 0.9rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .woc-hero-pokal,
-  .woc-karte {
+  .woc-saison-karte {
     animation: none;
   }
 }
