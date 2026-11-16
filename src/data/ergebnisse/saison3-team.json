@@ -2,7 +2,7 @@
   "saisonId": "saison3",
   "seriesId": "team",
   "wertung": {
-    "quelle": "ASPL Liga-Tabelle",
+    "quelle": "ASPL Liga-Tabelle / SimGrid",
     "teams": {
       "stand": "Endstand",
       "stand_en": "Final standings",
@@ -94,6 +94,218 @@
           "punkte": 6
         }
       ]
+    },
+    "fahrer": {
+      "stand": "Endstand",
+      "stand_en": "Final standings",
+      "final": true,
+      "eintraege": [
+        {
+          "platz": 1,
+          "fahrer": "Eric Sprott",
+          "punkte": 176
+        },
+        {
+          "platz": 2,
+          "fahrer": "Kevin Böhm",
+          "punkte": 96
+        },
+        {
+          "platz": 3,
+          "fahrer": "Alex Fox",
+          "punkte": 88
+        },
+        {
+          "platz": 4,
+          "fahrer": "Pascal Radatz",
+          "punkte": 84
+        },
+        {
+          "platz": 5,
+          "fahrer": "Leon Nierhaus",
+          "punkte": 64
+        },
+        {
+          "platz": 6,
+          "fahrer": "Janus Schneppat",
+          "punkte": 51
+        },
+        {
+          "platz": 7,
+          "fahrer": "Lennard Petrov",
+          "punkte": 49
+        },
+        {
+          "platz": 8,
+          "fahrer": "Alexander Friedl",
+          "punkte": 46
+        },
+        {
+          "platz": 9,
+          "fahrer": "Zovyx Fox",
+          "punkte": 42
+        },
+        {
+          "platz": 10,
+          "fahrer": "Manoa Verner",
+          "punkte": 41
+        },
+        {
+          "platz": 11,
+          "fahrer": "Matthias Drissen",
+          "punkte": 39
+        },
+        {
+          "platz": 12,
+          "fahrer": "David Suess",
+          "punkte": 33
+        },
+        {
+          "platz": 13,
+          "fahrer": "Lukas Moser",
+          "punkte": 29
+        },
+        {
+          "platz": 14,
+          "fahrer": "Finn Hübner",
+          "punkte": 28
+        },
+        {
+          "platz": 15,
+          "fahrer": "Yann Guillaume",
+          "punkte": 24
+        },
+        {
+          "platz": 16,
+          "fahrer": "Dominic Winterhalder",
+          "punkte": 24
+        },
+        {
+          "platz": 17,
+          "fahrer": "Tobias Hoffmann",
+          "punkte": 24
+        },
+        {
+          "platz": 18,
+          "fahrer": "Ronny Schimke",
+          "punkte": 21
+        },
+        {
+          "platz": 19,
+          "fahrer": "Tom Seefeldt",
+          "punkte": 19
+        },
+        {
+          "platz": 20,
+          "fahrer": "Tim Lüthke",
+          "punkte": 17
+        },
+        {
+          "platz": 21,
+          "fahrer": "Elias Schneider",
+          "punkte": 15
+        },
+        {
+          "platz": 22,
+          "fahrer": "Lukas Knips",
+          "punkte": 11
+        },
+        {
+          "platz": 23,
+          "fahrer": "Erik Schneider",
+          "punkte": 10
+        },
+        {
+          "platz": 24,
+          "fahrer": "Valentino Böhm",
+          "punkte": 10
+        },
+        {
+          "platz": 25,
+          "fahrer": "Tom Engemann",
+          "punkte": 9
+        },
+        {
+          "platz": 26,
+          "fahrer": "F. Schäfer",
+          "punkte": 8
+        },
+        {
+          "platz": 27,
+          "fahrer": "F. Ferrix73",
+          "punkte": 7
+        },
+        {
+          "platz": 28,
+          "fahrer": "Tom Keipp",
+          "punkte": 6
+        },
+        {
+          "platz": 29,
+          "fahrer": "Mike Dohnt",
+          "punkte": 6
+        },
+        {
+          "platz": 30,
+          "fahrer": "Haseeb Abbas",
+          "punkte": 6
+        },
+        {
+          "platz": 31,
+          "fahrer": "Lavdim Pelaj",
+          "punkte": 5
+        },
+        {
+          "platz": 32,
+          "fahrer": "Domenic Grkinic",
+          "punkte": 5
+        },
+        {
+          "platz": 33,
+          "fahrer": "Sebastian Röber",
+          "punkte": 4
+        },
+        {
+          "platz": 34,
+          "fahrer": "Luca Wehldreyer",
+          "punkte": 4
+        },
+        {
+          "platz": 35,
+          "fahrer": "Pascal-Joel Bromberger",
+          "punkte": 4
+        },
+        {
+          "platz": 36,
+          "fahrer": "Eitan Uchuev",
+          "punkte": 2
+        },
+        {
+          "platz": 37,
+          "fahrer": "Junko Chest",
+          "punkte": 2
+        },
+        {
+          "platz": 38,
+          "fahrer": "Mike Liebisch",
+          "punkte": 1
+        },
+        {
+          "platz": 39,
+          "fahrer": "Kevin Sintke",
+          "punkte": 1
+        },
+        {
+          "platz": 40,
+          "fahrer": "Noah Eggert",
+          "punkte": 1
+        },
+        {
+          "platz": 41,
+          "fahrer": "Angelo Chillo",
+          "punkte": 1
+        }
+      ]
     }
   },
   "strecken": {},
@@ -103,6 +315,7 @@
     "R5": "L. Fox",
     "R6": "L. Fox",
     "R7": "T. Hoffmann",
-    "R8": "Finn Hübner"
+    "R8": "Finn Hübner",
+    "Finale": "F. Ferrix73"
   }
 }
