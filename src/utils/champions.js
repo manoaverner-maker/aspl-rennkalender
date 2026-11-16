@@ -57,11 +57,18 @@ export function berechneWall({ kalender, ergebnisse, config }) {
       const name = kalender.find((k) => k.saisonId === id)?.saisonName ?? id
       const solo = finde(id, 'solo')
       const team = finde(id, 'team')
+      // Angezeigt werden immer die aktuellen Namen (Gamertag -> echter Name)
+      const umbenennen = (m, nameFn) =>
+        m && {
+          ...m,
+          name: nameFn(m.name),
+          zweiter: m.zweiter && { ...m.zweiter, name: nameFn(m.zweiter.name) },
+        }
       return {
         id,
         name,
-        solo: solo ? meisterAus(fahrerTabelle(solo, systemVon(solo)), 'fahrer') : null,
-        konstrukteur: team ? meisterAus(teamTabelle(team, systemVon(team)), 'team') : null,
+        solo: solo ? umbenennen(meisterAus(fahrerTabelle(solo, systemVon(solo)), 'fahrer'), fahrerName) : null,
+        konstrukteur: team ? umbenennen(meisterAus(teamTabelle(team, systemVon(team)), 'team'), teamName) : null,
       }
     })
     // Saisons ohne jegliche Ergebnisse (noch nicht gestartet) nicht zeigen
