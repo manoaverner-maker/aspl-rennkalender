@@ -4,7 +4,16 @@ import { berechneWall } from '../utils/champions.js'
 import config from '../data/champions.json'
 
 const BASIS = import.meta.env.BASE_URL
-const bild = (pfad) => (pfad ? BASIS + pfad : undefined)
+// Bild-Eintrag aus champions.json: Pfad-String oder { pfad, position, zoom }.
+// Liefert die CSS-Variablen fuer Hintergrundbild, Ausschnitt und Vergroesserung.
+function bildStil(eintrag) {
+  if (!eintrag) return {}
+  const e = typeof eintrag === 'string' ? { pfad: eintrag } : eintrag
+  const stil = { '--bild': `url(${BASIS + e.pfad})` }
+  if (e.position) stil['--pos'] = e.position
+  if (e.zoom) stil['--zoom'] = e.zoom
+  return stil
+}
 
 // Ein Titel innerhalb einer Saisonkarte (Konstrukteur bzw. Solo-Champion)
 function Titel({ label, icon, meister }) {
@@ -73,7 +82,7 @@ export default function WallOfChampions({ kalender, ergebnisse }) {
       <main className="woc">
         <div className="woc-poster">
           {/* Kopfbanner mit Rennfoto */}
-          <section className="woc-hero" style={{ '--bild': `url(${bild(bilder.hero)})` }}>
+          <section className="woc-hero" style={bildStil(bilder.hero)}>
             <div className="woc-hero-inhalt">
               <p className="woc-hero-kicker">ASPL GT3 Racing Series</p>
               <h1 className="woc-hero-titel">
@@ -97,7 +106,7 @@ export default function WallOfChampions({ kalender, ergebnisse }) {
               <article key={s.id} className="woc-saison-karte">
                 <div
                   className="woc-saison-bild"
-                  style={{ '--bild': `url(${bild(bilder.saisons?.[s.id] ?? bilder.standard)})` }}
+                  style={bildStil(bilder.saisons?.[s.id] ?? bilder.standard)}
                 >
                   <span className="woc-saison-nr">S{s.id.replace(/\D+/g, '')}</span>
                   <span className="woc-saison-name">{saison(s.name)}</span>
@@ -112,7 +121,7 @@ export default function WallOfChampions({ kalender, ergebnisse }) {
               <article key={e.id} className="woc-saison-karte">
                 <div
                   className="woc-saison-bild"
-                  style={{ '--bild': `url(${bild(bilder.endurance ?? bilder.standard)})` }}
+                  style={bildStil(bilder.endurance ?? bilder.standard)}
                 >
                   <span className="woc-saison-nr">E</span>
                   <span className="woc-saison-name">Endurance{e.jahr ? ' ' + e.jahr : ''}</span>
@@ -125,7 +134,7 @@ export default function WallOfChampions({ kalender, ergebnisse }) {
           </section>
 
           {/* All-Time-Rekorde: Top 10 + Driver of the Day */}
-          <section className="woc-rekorde" style={{ '--bild': `url(${bild(bilder.rekorde)})` }}>
+          <section className="woc-rekorde" style={bildStil(bilder.rekorde)}>
             <div className="woc-rekord-block woc-top10">
               <h2 className="woc-rekord-titel">
                 {t('wocEwig').replace('{n}', wall.bestenliste.length)}
@@ -173,7 +182,7 @@ export default function WallOfChampions({ kalender, ergebnisse }) {
           </section>
 
           <p className="woc-fotos">
-            {t('wocFotos')} · <a href="#/bildnachweise">{t('bildnachweise')}</a>
+            {t('wocFotos')}
           </p>
         </div>
       </main>

@@ -124,14 +124,29 @@
     ]
   },
   "bilder": {
-    "_hinweis": "Pfade relativ zu public/. Eigene ACC-Screenshots z. B. nach public/images/champions/ legen und hier eintragen.",
-    "hero": "images/strecken/spa/spa_5.jpg",
-    "rekorde": "images/strecken/redbullring/redbullring_2.jpg",
-    "saisons": {
-      "saison1": "images/strecken/zolder/zolder_4.jpg",
-      "saison2": "images/strecken/watkinsglen/watkinsglen_4.jpg",
-      "saison3": "images/strecken/donington/donington_5.jpg"
+    "_hinweis": "Pfade relativ zu public/. Entweder nur der Pfad oder { pfad, position, zoom } — position = Bildausschnitt (z. B. '45% 55%'), zoom = Vergroesserung (z. B. '170%').",
+    "hero": {
+      "pfad": "images/champions/hero-spa-nacht.jpg",
+      "position": "62% 60%"
     },
-    "standard": "images/strecken/snetterton/snetterton_3.jpg"
+    "rekorde": "images/champions/rekorde-bmw-cota.jpg",
+    "saisons": {
+      "saison1": {
+        "pfad": "images/champions/saison1-ferrari-chronos.jpg",
+        "position": "46% 52%",
+        "zoom": "190%"
+      },
+      "saison2": {
+        "pfad": "images/champions/saison2-bmw-golden-dynasty.jpg",
+        "position": "60% 52%",
+        "zoom": "115%"
+      },
+      "saison3": {
+        "pfad": "images/champions/saison3-mclaren-golden-dynasty.jpg",
+        "position": "48% 50%",
+        "zoom": "175%"
+      }
+    },
+    "standard": "images/champions/rekorde-bmw-cota.jpg"
   }
 }
